@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <style name="TextAppearance.MealMate.Title">
+        <item name="fontFamily">@font/work_sans_bold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextAppearance.MealMate.Subtitle">
+        <item name="fontFamily">@font/work_sans_semibold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextAppearance.MealMate.Body">
+        <item name="fontFamily">@font/work_sans_regular</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.MealMate.Caption">
+        <item name="fontFamily">@font/work_sans_light</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+</resources>
