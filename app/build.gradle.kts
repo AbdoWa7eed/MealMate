@@ -8,6 +8,10 @@ android {
         version = release(36)
     }
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.iti.mealmate"
         minSdk = 24
@@ -41,4 +45,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    runtimeOnly(libs.core.splashscreen)
 }
