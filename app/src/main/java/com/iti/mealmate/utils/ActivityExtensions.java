@@ -1,0 +1,67 @@
+package com.iti.mealmate.utils;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
+import com.iti.mealmate.R;
+import com.google.android.material.appbar.MaterialToolbar;
+
+public class ActivityExtensions {
+    public static void setStatusBarColor(Activity activity, int colorRes, boolean lightIcons) {
+        int color = ContextCompat.getColor(activity, colorRes);
+        if (Build.VERSION.SDK_INT < 35) {
+            activity.getWindow().setStatusBarColor(color);
+        } else {
+            activity.getWindow().getDecorView().setBackgroundColor(color);
+        }
+        WindowInsetsControllerCompat insetsController =
+                new WindowInsetsControllerCompat(activity.getWindow(), activity.getWindow().getDecorView());
+        insetsController.setAppearanceLightStatusBars(lightIcons);
+    }
+
+    public static void setStatusBarColor(Activity activity) {
+        setStatusBarColor(activity, R.color.colorBackground, false);
+    }
+
+    public static void navigateToActivity(Activity activity, Class<?> target, Bundle extras) {
+        Intent intent = new Intent(activity, target);
+        if (extras != null) {
+            intent.putExtras(extras);
+        }
+        activity.startActivity(intent);
+    }
+
+    public static void navigateToActivity(Activity activity, Class<?> target) {
+        navigateToActivity(activity, target, null);
+    }
+
+    public static void showToast(Context activity, String msg) {
+        Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void enableBackButton(AppCompatActivity activity, MaterialToolbar toolbar) {
+        activity.setSupportActionBar(toolbar);
+        if (activity.getSupportActionBar() != null) {
+            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        toolbar.setNavigationIconTint(
+                ContextCompat.getColor(activity, android.R.color.white)
+        );
+        toolbar.setNavigationOnClickListener(v ->
+                activity.getOnBackPressedDispatcher().onBackPressed()
+        );
+    }
+
+    public static void setupToolbar(AppCompatActivity activity, int id) {
+        MaterialToolbar toolbar = activity.findViewById(id);
+        ActivityExtensions.enableBackButton(activity, toolbar);
+        ActivityExtensions.setStatusBarColor(activity);
+    }
+}
