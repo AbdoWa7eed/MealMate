@@ -12,7 +12,7 @@ import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.onboarding.OnboardingContract;
 import com.iti.mealmate.ui.onboarding.OnboardingPresenter;
 import com.iti.mealmate.ui.onboarding.model.OnboardingPage;
-import com.iti.mealmate.utils.ActivityExtensions;
+import com.iti.mealmate.ui.utils.ActivityExtensions;
 
 import java.util.List;
 
