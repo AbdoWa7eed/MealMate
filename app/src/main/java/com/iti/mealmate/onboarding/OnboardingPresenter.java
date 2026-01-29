@@ -1,5 +1,6 @@
 package com.iti.mealmate.onboarding;
 import com.iti.mealmate.R;
+import com.iti.mealmate.data.repo.AppStartupRepository;
 import com.iti.mealmate.onboarding.model.OnboardingPage;
 
 import java.util.ArrayList;
@@ -8,11 +9,13 @@ import java.util.List;
 public class OnboardingPresenter implements OnboardingContract.Presenter, OnboardingContract.PagePresenter {
 
     private final OnboardingContract.View view;
+    private final AppStartupRepository appStartupRepository;
     private List<OnboardingPage> onboardingPages;
 
 
-    public OnboardingPresenter(OnboardingContract.View view) {
+    public OnboardingPresenter(OnboardingContract.View view, AppStartupRepository appStartupRepository) {
         this.view = view;
+        this.appStartupRepository = appStartupRepository;
         initializePages();
     }
 
@@ -46,7 +49,7 @@ public class OnboardingPresenter implements OnboardingContract.Presenter, Onboar
         if (currentPage < onboardingPages.size() - 1) {
             view.navigateToNextPage();
         } else {
-            view.navigateToMainActivity();
+            completeOnboarding();
         }
     }
 
@@ -82,7 +85,13 @@ public class OnboardingPresenter implements OnboardingContract.Presenter, Onboar
     }
 
     @Override
-    public void onSkipClicked() {
-        view.navigateToMainActivity();
+    public void completeOnboarding() {
+        appStartupRepository.setOnboardingCompleted();
+        view.navigateToLogin();
+    }
+
+    @Override
+    public void onDestroy() {
+
     }
 }

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.iti.mealmate.databinding.ActivityOnboardingBinding;
+import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.onboarding.OnboardingContract;
 import com.iti.mealmate.onboarding.OnboardingPresenter;
 import com.iti.mealmate.onboarding.model.OnboardingPage;
@@ -20,26 +21,32 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingC
     private ActivityOnboardingBinding binding;
     private OnboardingPresenter presenter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initializeUI();
+        initializePresenter();
+        setupListeners();
+        presenter.onViewCreated();
+    }
+
+    private void initializeUI() {
         binding = ActivityOnboardingBinding.inflate(getLayoutInflater());
         EdgeToEdge.enable(this);
         setContentView(binding.getRoot());
         ActivityExtensions.setStatusBarColor(this, android.R.color.white, true);
-        presenter = new OnboardingPresenter(this);
-        presenter.onViewCreated();
-        setupButtonsClicks();
-        setupPageChangeListener();
     }
 
-    @Override
-    public void setupViewPager(List<OnboardingPage> pages) {
-        OnboardingAdapter adapter =
-                new OnboardingAdapter(this, presenter.getPageCount(), presenter);
-        binding.viewPager.setAdapter(adapter);
-        binding.dotsIndicator.attachTo(binding.viewPager);
+    private void initializePresenter() {
+        presenter = new OnboardingPresenter(
+                this,
+                ServiceLocator.getAppStartupRepository()
+        );
+    }
+
+    private void setupListeners() {
+        setupButtonsClicks();
+        setupPageChangeListener();
     }
 
     private void setupButtonsClicks() {
@@ -48,7 +55,7 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingC
             presenter.onNextClicked(currentPage);
         });
 
-        binding.btnSkip.setOnClickListener(v -> presenter.onSkipClicked());
+        binding.btnSkip.setOnClickListener(v -> presenter.completeOnboarding());
     }
 
     private void setupPageChangeListener() {
@@ -62,19 +69,29 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingC
     }
 
     @Override
+    public void setupViewPager(List<OnboardingPage> pages) {
+        OnboardingAdapter adapter = new OnboardingAdapter(
+                this, presenter.getPageCount(), presenter
+        );
+        binding.viewPager.setAdapter(adapter);
+        binding.dotsIndicator.attachTo(binding.viewPager);
+    }
+
+    @Override
     public void navigateToNextPage() {
         int nextItem = binding.viewPager.getCurrentItem() + 1;
         binding.viewPager.setCurrentItem(nextItem, true);
     }
 
     @Override
-    public void navigateToMainActivity() {
+    public void navigateToLogin() {
+        // TODO: Navigate to login activity
         finish();
     }
 
     @Override
     public void updateButtonText(int stringResId) {
-        binding.btnNext.setText(getString(stringResId));
+        binding.btnNext.setText(stringResId);
     }
 
     @Override
@@ -82,9 +99,9 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingC
         binding.btnSkip.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
 
-
     @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-        super.onPointerCaptureChanged(hasCapture);
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }
