@@ -46,4 +46,6 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     runtimeOnly(libs.core.splashscreen)
+    implementation(libs.navigation.fragment)
+    implementation(libs.dotsindicator)
 }

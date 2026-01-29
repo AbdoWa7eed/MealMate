@@ -1,5 +1,6 @@
 package com.iti.mealmate;
 
+import android.content.Intent;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
 import android.view.animation.Animation;
@@ -8,6 +9,7 @@ import android.view.animation.AnimationUtils;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import com.iti.mealmate.databinding.ActivityMainBinding;
+import com.iti.mealmate.onboarding.view.OnboardingActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         startAnimations();
+        navigateToNextActivity();
     }
 
     private void startAnimations() {
@@ -37,5 +40,12 @@ public class MainActivity extends AppCompatActivity {
 
         Animation sloganAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_slogan_slide);
         binding.tvSlogan.startAnimation(sloganAnimation);
+    }
+
+    private void navigateToNextActivity() {
+        binding.getRoot().postDelayed(() -> {
+            startActivity(new Intent(this, OnboardingActivity.class));
+            finish();
+        }, 2500);
     }
 }

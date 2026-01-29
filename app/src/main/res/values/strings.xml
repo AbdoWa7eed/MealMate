@@ -2,4 +2,17 @@
     <string name="app_name">MealMate</string>
     <string name="app_title">MealMate</string>
     <string name="app_slogan">Plan smarter. Eat better.</string>
+    <string name="next">Next</string>
+    <string name="get_started">Get Started</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="skip">Skip</string>
+
+    <string name="onboarding_title_1">Thousands of Recipes Await</string>
+    <string name="onboarding_description_1">Search by ingredient, country, or category to find the perfect meal for any occasion.</string>
+
+    <string name="onboarding_title_2">Weekly Meal Planning Made Easy</string>
+    <string name="onboarding_description_2">Say goodbye to meal planning stress. Organize your entire week in minutes.</string>
+
+    <string name="onboarding_title_3">Your Recipes, Everywhere</string>
+    <string name="onboarding_description_3">Bookmark favorites and sync across devices. Cook offline whenever you need.</string>
 </resources>
