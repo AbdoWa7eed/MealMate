@@ -15,4 +15,5 @@
 
     <string name="onboarding_title_3">Your Recipes, Everywhere</string>
     <string name="onboarding_description_3">Bookmark favorites and sync across devices. Cook offline whenever you need.</string>
+    <string name="onboarding_image_decription">Onboarding Image</string>
 </resources>

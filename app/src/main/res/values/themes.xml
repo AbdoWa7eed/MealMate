@@ -1,7 +1,7 @@
 <resources>
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/colorPrimary</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_circled</item>
         <item name="postSplashScreenTheme">@style/Theme.MealMate</item>
     </style>
     <style name="Theme.MealMate" parent="Theme.Material3.Light.NoActionBar">

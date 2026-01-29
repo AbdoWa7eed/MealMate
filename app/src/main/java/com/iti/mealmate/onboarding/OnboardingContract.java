@@ -1,7 +1,5 @@
 package com.iti.mealmate.onboarding;
 
-import android.content.Context;
-
 import com.iti.mealmate.onboarding.model.OnboardingPage;
 
 import java.util.List;

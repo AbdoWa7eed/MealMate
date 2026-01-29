@@ -1,6 +1,5 @@
 package com.iti.mealmate.onboarding.view;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
@@ -49,9 +48,7 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingC
             presenter.onNextClicked(currentPage);
         });
 
-        binding.btnSkip.setOnClickListener(v -> {
-            presenter.onSkipClicked();
-        });
+        binding.btnSkip.setOnClickListener(v -> presenter.onSkipClicked());
     }
 
     private void setupPageChangeListener() {
