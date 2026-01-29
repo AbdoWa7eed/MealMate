@@ -4,24 +4,21 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
-import com.iti.mealmate.onboarding.OnboardingContract;
 
 
 public class OnboardingAdapter extends FragmentStateAdapter {
 
     private final int pageCount;
-    private final OnboardingContract.PagePresenter presenter;
 
-    public OnboardingAdapter(@NonNull FragmentActivity fragmentActivity, int pageCount, OnboardingContract.PagePresenter presenter) {
+    public OnboardingAdapter(@NonNull FragmentActivity fragmentActivity, int pageCount) {
         super(fragmentActivity);
         this.pageCount = pageCount;
-        this.presenter = presenter;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return OnboardingPageFragment.newInstance(presenter, position);
+        return OnboardingPageFragment.newInstance(position);
     }
 
     @Override
