@@ -3,28 +3,41 @@ package com.iti.mealmate;
 import android.content.Intent;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import com.iti.mealmate.databinding.ActivityMainBinding;
-import com.iti.mealmate.onboarding.view.OnboardingActivity;
 
-public class MainActivity extends AppCompatActivity {
+import com.iti.mealmate.databinding.ActivityMainBinding;
+import com.iti.mealmate.di.ServiceLocator;
+import com.iti.mealmate.onboarding.view.OnboardingActivity;
+import com.iti.mealmate.splash.SplashContract;
+import com.iti.mealmate.splash.SplashPresenter;
+
+public class MainActivity extends AppCompatActivity implements SplashContract.View {
+
+    private static final int SPLASH_DELAY_MS = 2500;
 
     private ActivityMainBinding binding;
+    private SplashContract.Presenter presenter;
+    private Handler handler;
+    private Runnable navigationRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        startAnimations();
-        navigateToNextActivity();
+        presenter = new SplashPresenter(this, ServiceLocator.getAppStartupRepository());
+        presenter.onViewCreated();
+        scheduleNavigation();
     }
 
-    private void startAnimations() {
+    @Override
+    public void startSplashAnimations() {
         Animation cardAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_card_scale);
         binding.imageCard.startAnimation(cardAnimation);
 
@@ -42,10 +55,40 @@ public class MainActivity extends AppCompatActivity {
         binding.tvSlogan.startAnimation(sloganAnimation);
     }
 
-    private void navigateToNextActivity() {
-        binding.getRoot().postDelayed(() -> {
-            startActivity(new Intent(this, OnboardingActivity.class));
-            finish();
-        }, 2500);
+    private void scheduleNavigation() {
+        handler = new Handler(Looper.getMainLooper());
+        navigationRunnable = presenter::onSplashTimeout;
+        handler.postDelayed(navigationRunnable, SPLASH_DELAY_MS);
+    }
+
+    @Override
+    public void navigateToOnboarding() {
+        startActivity(new Intent(this, OnboardingActivity.class));
+        finish();
+    }
+
+    @Override
+    public void navigateToMain() {
+        // TODO: Navigate to Home/Login after onboarding is done
+        // For now, staying consistent with your determineDestination logic
+        startActivity(new Intent(this, OnboardingActivity.class));
+        finish();
+    }
+
+    @Override
+    public void navigateToLogin() {
+        // TODO: Navigate to Login after onboarding is done
+        startActivity(new Intent(this, OnboardingActivity.class));
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (handler != null && navigationRunnable != null) {
+            handler.removeCallbacks(navigationRunnable);
+        }
+        presenter.onDestroy();
+        binding = null;
     }
 }
