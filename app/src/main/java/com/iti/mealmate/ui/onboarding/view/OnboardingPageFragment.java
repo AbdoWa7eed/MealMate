@@ -1,4 +1,4 @@
-package com.iti.mealmate.onboarding.view;
+package com.iti.mealmate.ui.onboarding.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,8 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.iti.mealmate.databinding.FragmentOnboardingPageBinding;
-import com.iti.mealmate.onboarding.OnboardingContract;
-import com.iti.mealmate.onboarding.model.OnboardingPage;
+import com.iti.mealmate.ui.onboarding.OnboardingContract;
+import com.iti.mealmate.ui.onboarding.model.OnboardingPage;
 
 public class OnboardingPageFragment extends Fragment implements OnboardingContract.PageView {
 

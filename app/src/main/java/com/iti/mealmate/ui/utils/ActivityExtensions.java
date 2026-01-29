@@ -1,4 +1,4 @@
-package com.iti.mealmate.utils;
+package com.iti.mealmate.ui.utils;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.iti.mealmate.onboarding.model;
+package com.iti.mealmate.ui.onboarding.model;
 
 public class OnboardingPage {
     private final int imageResId;

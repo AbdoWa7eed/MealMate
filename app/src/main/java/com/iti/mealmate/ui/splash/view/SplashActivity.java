@@ -1,5 +1,6 @@
-package com.iti.mealmate;
+package com.iti.mealmate.ui.splash.view;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
@@ -11,17 +12,19 @@ import android.view.animation.AnimationUtils;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.iti.mealmate.databinding.ActivityMainBinding;
+import com.iti.mealmate.R;
+import com.iti.mealmate.databinding.ActivitySplashBinding;
 import com.iti.mealmate.di.ServiceLocator;
-import com.iti.mealmate.onboarding.view.OnboardingActivity;
-import com.iti.mealmate.splash.SplashContract;
-import com.iti.mealmate.splash.SplashPresenter;
+import com.iti.mealmate.ui.onboarding.view.OnboardingActivity;
+import com.iti.mealmate.ui.splash.SplashContract;
+import com.iti.mealmate.ui.splash.SplashPresenter;
 
-public class MainActivity extends AppCompatActivity implements SplashContract.View {
+@SuppressLint("CustomSplashScreen")
+public class SplashActivity extends AppCompatActivity implements SplashContract.View {
 
     private static final int SPLASH_DELAY_MS = 2500;
 
-    private ActivityMainBinding binding;
+    private ActivitySplashBinding binding;
     private SplashContract.Presenter presenter;
     private Handler handler;
     private Runnable navigationRunnable;
@@ -29,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements SplashContract.Vi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         presenter = new SplashPresenter(this, ServiceLocator.getAppStartupRepository());
         presenter.onViewCreated();

@@ -1,7 +1,7 @@
-package com.iti.mealmate.onboarding;
+package com.iti.mealmate.ui.onboarding;
 import com.iti.mealmate.R;
 import com.iti.mealmate.data.repo.AppStartupRepository;
-import com.iti.mealmate.onboarding.model.OnboardingPage;
+import com.iti.mealmate.ui.onboarding.model.OnboardingPage;
 
 import java.util.ArrayList;
 import java.util.List;

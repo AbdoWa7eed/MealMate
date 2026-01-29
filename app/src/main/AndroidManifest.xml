@@ -12,10 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MealMate">
         <activity
-            android:name=".onboarding.view.OnboardingActivity"
+            android:name=".ui.onboarding.view.OnboardingActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.splash.view.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
