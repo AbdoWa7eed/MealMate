@@ -21,11 +21,11 @@ public class OnboardingPageFragment extends Fragment implements OnboardingContra
 
     private static final String ARG_POSITION = "position";
 
-    public static OnboardingPageFragment newInstance(
-            @NonNull OnboardingContract.PagePresenter presenter, int position) {
+    public static OnboardingPageFragment newInstance(int position) {
         OnboardingPageFragment fragment = new OnboardingPageFragment();
-        fragment.presenter = presenter;
-        fragment.saveStateToBundle(position);
+        Bundle args = new Bundle();
+        args.putInt(ARG_POSITION, position);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -47,7 +47,24 @@ public class OnboardingPageFragment extends Fragment implements OnboardingContra
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter.bindView(this, position);
+        bindPresenter();
+    }
+
+    private void bindPresenter() {
+        if (getActivity() instanceof OnboardingActivity) {
+            presenter = ((OnboardingActivity) getActivity()).getPagePresenter();
+            if (presenter != null) {
+                presenter.bindView(this, position);
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (presenter == null && binding != null) {
+            bindPresenter();
+        }
     }
 
     @Override
@@ -61,11 +78,5 @@ public class OnboardingPageFragment extends Fragment implements OnboardingContra
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    private void saveStateToBundle(int position){
-        Bundle args = new Bundle();
-        args.putInt(ARG_POSITION, position);
-        setArguments(args);
     }
 }

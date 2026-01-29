@@ -71,7 +71,7 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingC
     @Override
     public void setupViewPager(List<OnboardingPage> pages) {
         OnboardingAdapter adapter = new OnboardingAdapter(
-                this, presenter.getPageCount(), presenter
+                this, presenter.getPageCount()
         );
         binding.viewPager.setAdapter(adapter);
         binding.dotsIndicator.attachTo(binding.viewPager);
@@ -97,6 +97,10 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingC
     @Override
     public void setSkipButtonVisible(boolean visible) {
         binding.btnSkip.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    public OnboardingContract.PagePresenter getPagePresenter() {
+        return presenter;
     }
 
     @Override
