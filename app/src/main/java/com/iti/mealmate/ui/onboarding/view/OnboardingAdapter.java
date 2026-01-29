@@ -1,4 +1,4 @@
-package com.iti.mealmate.onboarding.view;
+package com.iti.mealmate.ui.onboarding.view;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

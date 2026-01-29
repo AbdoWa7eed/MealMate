@@ -1,4 +1,4 @@
-package com.iti.mealmate.onboarding.view;
+package com.iti.mealmate.ui.onboarding.view;
 
 import android.os.Bundle;
 import android.view.View;
@@ -9,9 +9,9 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.iti.mealmate.databinding.ActivityOnboardingBinding;
 import com.iti.mealmate.di.ServiceLocator;
-import com.iti.mealmate.onboarding.OnboardingContract;
-import com.iti.mealmate.onboarding.OnboardingPresenter;
-import com.iti.mealmate.onboarding.model.OnboardingPage;
+import com.iti.mealmate.ui.onboarding.OnboardingContract;
+import com.iti.mealmate.ui.onboarding.OnboardingPresenter;
+import com.iti.mealmate.ui.onboarding.model.OnboardingPage;
 import com.iti.mealmate.utils.ActivityExtensions;
 
 import java.util.List;

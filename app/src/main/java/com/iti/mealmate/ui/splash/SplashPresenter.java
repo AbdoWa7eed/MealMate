@@ -1,4 +1,4 @@
-package com.iti.mealmate.splash;
+package com.iti.mealmate.ui.splash;
 
 import com.iti.mealmate.data.repo.AppStartupRepository;
 
