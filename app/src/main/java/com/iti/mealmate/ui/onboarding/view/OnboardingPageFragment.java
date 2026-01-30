@@ -41,7 +41,7 @@ public class OnboardingPageFragment extends Fragment {
 
     private void displayPageData() {
         if (getArguments() != null) {
-            OnboardingPage page = (OnboardingPage) getArguments().getSerializable(ARG_PAGE);
+            OnboardingPage page = getArguments().getParcelable(ARG_PAGE);
             if (page != null) {
                 binding.onboardingImage.setImageResource(page.getImageResId());
                 binding.titleText.setText(getString(page.getTitleResId()));
