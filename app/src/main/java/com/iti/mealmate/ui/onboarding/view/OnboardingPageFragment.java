@@ -10,31 +10,20 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.iti.mealmate.databinding.FragmentOnboardingPageBinding;
-import com.iti.mealmate.ui.onboarding.OnboardingContract;
 import com.iti.mealmate.ui.onboarding.model.OnboardingPage;
 
-public class OnboardingPageFragment extends Fragment implements OnboardingContract.PageView {
+public class OnboardingPageFragment extends Fragment {
 
     private FragmentOnboardingPageBinding binding;
-    private OnboardingContract.PagePresenter presenter;
-    private int position;
 
-    private static final String ARG_POSITION = "position";
+    private static final String ARG_PAGE = "page";
 
-    public static OnboardingPageFragment newInstance(int position) {
+    public static OnboardingPageFragment newInstance(OnboardingPage page) {
         OnboardingPageFragment fragment = new OnboardingPageFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_POSITION, position);
+        args.putParcelable(ARG_PAGE, page);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            position = getArguments().getInt(ARG_POSITION);
-        }
     }
 
     @Override
@@ -47,31 +36,18 @@ public class OnboardingPageFragment extends Fragment implements OnboardingContra
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        bindPresenter();
+        displayPageData();
     }
 
-    private void bindPresenter() {
-        if (getActivity() instanceof OnboardingActivity) {
-            presenter = ((OnboardingActivity) getActivity()).getPagePresenter();
-            if (presenter != null) {
-                presenter.bindView(this, position);
+    private void displayPageData() {
+        if (getArguments() != null) {
+            OnboardingPage page = (OnboardingPage) getArguments().getSerializable(ARG_PAGE);
+            if (page != null) {
+                binding.onboardingImage.setImageResource(page.getImageResId());
+                binding.titleText.setText(getString(page.getTitleResId()));
+                binding.subtitleText.setText(getString(page.getDescriptionResId()));
             }
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (presenter == null && binding != null) {
-            bindPresenter();
-        }
-    }
-
-    @Override
-    public void displayPageData(OnboardingPage page) {
-        binding.onboardingImage.setImageResource(page.getImageResId());
-        binding.titleText.setText(getString(page.getTitleResId()));
-        binding.subtitleText.setText(getString(page.getDescriptionResId()));
     }
 
     @Override
