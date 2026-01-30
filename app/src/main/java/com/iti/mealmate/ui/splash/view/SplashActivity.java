@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import com.iti.mealmate.R;
 import com.iti.mealmate.databinding.ActivitySplashBinding;
 import com.iti.mealmate.di.ServiceLocator;
+import com.iti.mealmate.ui.auth.AuthenticationActivity;
 import com.iti.mealmate.ui.onboarding.view.OnboardingActivity;
 import com.iti.mealmate.ui.splash.SplashContract;
 import com.iti.mealmate.ui.splash.SplashPresenter;
@@ -80,8 +81,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
 
     @Override
     public void navigateToLogin() {
-        // TODO: Navigate to Login after onboarding is done
-        startActivity(new Intent(this, OnboardingActivity.class));
+        startActivity(new Intent(this, AuthenticationActivity.class));
         finish();
     }
 

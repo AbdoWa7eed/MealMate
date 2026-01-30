@@ -34,7 +34,7 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingC
         binding = ActivityOnboardingBinding.inflate(getLayoutInflater());
         EdgeToEdge.enable(this);
         setContentView(binding.getRoot());
-        ActivityExtensions.setStatusBarColor(this, android.R.color.white, true);
+        ActivityExtensions.setStatusBarWithDarkIcons(this);
     }
 
     private void initializePresenter() {

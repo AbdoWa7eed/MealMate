@@ -21,7 +21,7 @@ public class SplashPresenter implements SplashContract.Presenter {
     public void onSplashTimeout() {
         // TODO: Navigate to Home/Login after onboarding is done
         if (appStartupRepository.isOnboardingCompleted()) {
-            view.navigateToMain();
+            view.navigateToLogin();
         } else {
             view.navigateToOnboarding();
         }
