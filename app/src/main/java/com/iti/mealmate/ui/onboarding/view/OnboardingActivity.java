@@ -1,5 +1,6 @@
 package com.iti.mealmate.ui.onboarding.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -70,9 +71,7 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingC
 
     @Override
     public void setupViewPager(List<OnboardingPage> pages) {
-        OnboardingAdapter adapter = new OnboardingAdapter(
-                this, presenter.getPageCount()
-        );
+        OnboardingAdapter adapter = new OnboardingAdapter(this, pages);
         binding.viewPager.setAdapter(adapter);
         binding.dotsIndicator.attachTo(binding.viewPager);
     }
@@ -97,10 +96,6 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingC
     @Override
     public void setSkipButtonVisible(boolean visible) {
         binding.btnSkip.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
-    }
-
-    public OnboardingContract.PagePresenter getPagePresenter() {
-        return presenter;
     }
 
     @Override
