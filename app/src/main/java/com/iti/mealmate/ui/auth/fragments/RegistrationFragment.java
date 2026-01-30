@@ -11,14 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.iti.mealmate.R;
-import com.iti.mealmate.databinding.FragmentLoginBinding;
+import com.iti.mealmate.databinding.FragmentRegistrationBinding;
 
 
-public class LoginFragment extends Fragment {
+public class RegistrationFragment extends Fragment {
 
 
-    private FragmentLoginBinding binding;
+    private FragmentRegistrationBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,18 +25,17 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = FragmentLoginBinding.inflate(inflater, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentRegistrationBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.signupLink.setOnClickListener(v ->
-                Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_registrationFragment));
+        binding.loginLink.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
     }
+
 
     @Override
     public void onDestroyView() {

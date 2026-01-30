@@ -4,12 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="none"
+    tools:context=".ui.auth.fragments.LoginFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="24dp"
-        tools:context=".ui.auth.fragments.LoginFragment">
+        android:minHeight="1px"
+        android:padding="24dp">
         <ImageView
             android:id="@+id/login_logo"
             android:layout_width="64dp"
@@ -200,7 +203,6 @@
             android:text="@string/sign_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp"
             android:minHeight="0dp"
             app:cornerRadius="8dp"
             app:layout_constraintBaseline_toBaselineOf="@+id/signup_text"
