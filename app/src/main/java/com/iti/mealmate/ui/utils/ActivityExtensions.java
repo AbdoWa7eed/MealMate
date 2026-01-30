@@ -25,6 +25,10 @@ public class ActivityExtensions {
         insetsController.setAppearanceLightStatusBars(lightIcons);
     }
 
+    public static void setStatusBarWithDarkIcons(Activity activity) {
+        ActivityExtensions.setStatusBarColor(activity, R.color.colorBackground, true);
+    }
+
     public static void setStatusBarColor(Activity activity) {
         setStatusBarColor(activity, R.color.colorBackground, false);
     }

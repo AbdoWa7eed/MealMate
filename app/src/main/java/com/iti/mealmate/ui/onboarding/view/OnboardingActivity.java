@@ -1,5 +1,6 @@
 package com.iti.mealmate.ui.onboarding.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -9,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.iti.mealmate.databinding.ActivityOnboardingBinding;
 import com.iti.mealmate.di.ServiceLocator;
+import com.iti.mealmate.ui.auth.AuthenticationActivity;
 import com.iti.mealmate.ui.onboarding.OnboardingContract;
 import com.iti.mealmate.ui.onboarding.OnboardingPresenter;
 import com.iti.mealmate.ui.onboarding.model.OnboardingPage;
@@ -34,7 +36,7 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingC
         binding = ActivityOnboardingBinding.inflate(getLayoutInflater());
         EdgeToEdge.enable(this);
         setContentView(binding.getRoot());
-        ActivityExtensions.setStatusBarColor(this, android.R.color.white, true);
+        ActivityExtensions.setStatusBarWithDarkIcons(this);
     }
 
     private void initializePresenter() {
@@ -70,9 +72,7 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingC
 
     @Override
     public void setupViewPager(List<OnboardingPage> pages) {
-        OnboardingAdapter adapter = new OnboardingAdapter(
-                this, presenter.getPageCount()
-        );
+        OnboardingAdapter adapter = new OnboardingAdapter(this, pages);
         binding.viewPager.setAdapter(adapter);
         binding.dotsIndicator.attachTo(binding.viewPager);
     }
@@ -85,7 +85,7 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingC
 
     @Override
     public void navigateToLogin() {
-        // TODO: Navigate to login activity
+        ActivityExtensions.navigateToActivity(this, AuthenticationActivity.class);
         finish();
     }
 
@@ -97,10 +97,6 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingC
     @Override
     public void setSkipButtonVisible(boolean visible) {
         binding.btnSkip.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
-    }
-
-    public OnboardingContract.PagePresenter getPagePresenter() {
-        return presenter;
     }
 
     @Override

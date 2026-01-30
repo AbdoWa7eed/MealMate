@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MealMate">
         <activity
+            android:name=".ui.auth.AuthenticationActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:exported="false" />
+        <activity
             android:name=".ui.onboarding.view.OnboardingActivity"
             android:exported="false" />
         <activity

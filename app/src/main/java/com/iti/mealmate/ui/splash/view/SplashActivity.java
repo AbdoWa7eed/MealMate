@@ -15,9 +15,11 @@ import androidx.core.content.ContextCompat;
 import com.iti.mealmate.R;
 import com.iti.mealmate.databinding.ActivitySplashBinding;
 import com.iti.mealmate.di.ServiceLocator;
+import com.iti.mealmate.ui.auth.AuthenticationActivity;
 import com.iti.mealmate.ui.onboarding.view.OnboardingActivity;
 import com.iti.mealmate.ui.splash.SplashContract;
 import com.iti.mealmate.ui.splash.SplashPresenter;
+import com.iti.mealmate.ui.utils.ActivityExtensions;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity implements SplashContract.View {
@@ -74,14 +76,13 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
     public void navigateToMain() {
         // TODO: Navigate to Home/Login after onboarding is done
         // For now, staying consistent with your determineDestination logic
-        startActivity(new Intent(this, OnboardingActivity.class));
+        ActivityExtensions.navigateToActivity(this, AuthenticationActivity.class);
         finish();
     }
 
     @Override
     public void navigateToLogin() {
-        // TODO: Navigate to Login after onboarding is done
-        startActivity(new Intent(this, OnboardingActivity.class));
+        ActivityExtensions.navigateToActivity(this, AuthenticationActivity.class);
         finish();
     }
 
