@@ -19,6 +19,7 @@ import com.iti.mealmate.ui.auth.AuthenticationActivity;
 import com.iti.mealmate.ui.onboarding.view.OnboardingActivity;
 import com.iti.mealmate.ui.splash.SplashContract;
 import com.iti.mealmate.ui.splash.SplashPresenter;
+import com.iti.mealmate.ui.utils.ActivityExtensions;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity implements SplashContract.View {
@@ -75,13 +76,13 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
     public void navigateToMain() {
         // TODO: Navigate to Home/Login after onboarding is done
         // For now, staying consistent with your determineDestination logic
-        startActivity(new Intent(this, OnboardingActivity.class));
+        ActivityExtensions.navigateToActivity(this, AuthenticationActivity.class);
         finish();
     }
 
     @Override
     public void navigateToLogin() {
-        startActivity(new Intent(this, AuthenticationActivity.class));
+        ActivityExtensions.navigateToActivity(this, AuthenticationActivity.class);
         finish();
     }
 

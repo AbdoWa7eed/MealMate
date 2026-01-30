@@ -10,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.iti.mealmate.databinding.ActivityOnboardingBinding;
 import com.iti.mealmate.di.ServiceLocator;
+import com.iti.mealmate.ui.auth.AuthenticationActivity;
 import com.iti.mealmate.ui.onboarding.OnboardingContract;
 import com.iti.mealmate.ui.onboarding.OnboardingPresenter;
 import com.iti.mealmate.ui.onboarding.model.OnboardingPage;
@@ -84,7 +85,7 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingC
 
     @Override
     public void navigateToLogin() {
-        // TODO: Navigate to login activity
+        ActivityExtensions.navigateToActivity(this, AuthenticationActivity.class);
         finish();
     }
 

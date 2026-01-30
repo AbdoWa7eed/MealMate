@@ -3,6 +3,7 @@
     <!-- Core Brand Colors -->
     <color name="colorPrimary">#F59E0B</color>
     <color name="colorSecondary">#2E7D32</color>
+    <color name="colorPrimaryLight">#1AF59E0B</color>
 
     <!-- Neutral & Surface -->
     <color name="colorBackground">#FFFFFF</color>

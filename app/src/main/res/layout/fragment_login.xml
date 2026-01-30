@@ -111,6 +111,7 @@
             android:id="@+id/forgot_password_button"
             android:text="@string/forgot_password"
             style="@style/CustomTextButton"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password_input_layout" />
 
@@ -161,48 +162,30 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/google_button"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="8dp"
+            style="@style/CustomOutlinedButton"
             android:text="@string/google"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="14sp"
-            app:cornerRadius="12dp"
             app:icon="@drawable/ic_google"
-            app:iconGravity="textStart"
-            app:iconPadding="8dp"
-            app:iconTint="@null"
-            app:strokeColor="?attr/colorOutlineVariant"
             app:layout_constraintEnd_toStartOf="@+id/facebook_button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/or_text" />
+            app:layout_constraintTop_toBottomOf="@+id/or_text"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="8dp"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/facebook_button"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_marginStart="8dp"
+            style="@style/CustomOutlinedButton"
             android:text="@string/facebook"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="14sp"
-            app:cornerRadius="12dp"
             app:icon="@drawable/ic_facebook"
-            app:iconGravity="textStart"
-            app:iconPadding="8dp"
-            app:iconTint="@null"
+            android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/google_button"
-            app:layout_constraintTop_toTopOf="@+id/google_button"
-            app:strokeColor="?attr/colorOutlineVariant" />
+            app:layout_constraintTop_toTopOf="@+id/google_button"/>
 
         <TextView
             android:id="@+id/signup_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="68dp"
+            android:layout_marginTop="24dp"
             android:text="@string/dont_have_account"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="14sp"
@@ -211,27 +194,26 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/google_button" />
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/signup_link"
+            style="@style/CustomTextButton"
+            android:text="@string/sign_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true"
-            android:text="@string/sign_up"
-            android:textColor="?attr/colorPrimary"
-            android:textSize="14sp"
-            android:textStyle="bold"
+            android:padding="4dp"
+            android:minHeight="0dp"
+            app:cornerRadius="8dp"
             app:layout_constraintBaseline_toBaselineOf="@+id/signup_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/signup_text" />
 
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/guest_button"
-            style="@style/Widget.Material3.Button.TextButton"
+            style="@style/CustomTextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="4dp"
             android:layout_marginTop="8dp"
             android:text="@string/continue_as_guest"
             android:textColor="?attr/colorOnSurfaceVariant"
