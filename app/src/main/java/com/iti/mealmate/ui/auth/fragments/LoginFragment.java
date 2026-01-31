@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 
 import com.iti.mealmate.R;
 import com.iti.mealmate.databinding.FragmentLoginBinding;
+import com.iti.mealmate.ui.home.HomeActivity;
+import com.iti.mealmate.ui.utils.ActivityExtensions;
 
 
 public class LoginFragment extends Fragment {
@@ -37,6 +39,9 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding.signupLink.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_registrationFragment));
+        binding.loginButton.setOnClickListener(v -> {
+            ActivityExtensions.navigateToActivity(requireActivity(), HomeActivity.class);
+        });
     }
 
     @Override

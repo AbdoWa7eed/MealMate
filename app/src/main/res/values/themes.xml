@@ -1,9 +1,11 @@
 <resources>
+
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/colorPrimary</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/logo_circled</item>
         <item name="postSplashScreenTheme">@style/Theme.MealMate</item>
     </style>
+
     <style name="Theme.MealMate" parent="Theme.Material3.Light.NoActionBar">
         <!-- Primary brand colors -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -20,7 +22,12 @@
         <item name="android:textColorSecondary">@color/colorTextSecondary</item>
 
         <!-- Font Family -->
-<!--        <item name="android:fontFamily">@font/work_sans</item>-->
-<!--        <item name="fontFamily">@font/work_sans</item>-->
+        <!--        <item name="android:fontFamily">@font/work_sans</item>-->
+        <!--        <item name="fontFamily">@font/work_sans</item>-->
+    </style>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.MealMate" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 </resources>
