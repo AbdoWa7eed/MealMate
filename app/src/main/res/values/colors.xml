@@ -28,4 +28,10 @@
     <!-- Ripple Effects -->
     <color name="button_ripple_color">#33FFFFFF</color>
     <color name="button_ripple_pressed">#4DFFFFFF</color>
+
+    <color name="colorBackgroundLight">#F9FAFB</color>
+    <color name="colorBorder">#9CA3AF</color>
+    <color name="colorBlue">#3B82F6</color>
+
+
 </resources>
