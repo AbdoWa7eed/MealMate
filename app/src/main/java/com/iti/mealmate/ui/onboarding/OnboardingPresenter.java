@@ -69,6 +69,4 @@ public class OnboardingPresenter implements OnboardingContract.Presenter {
         view.navigateToLogin();
     }
 
-    @Override
-    public void onDestroy() {}
 }

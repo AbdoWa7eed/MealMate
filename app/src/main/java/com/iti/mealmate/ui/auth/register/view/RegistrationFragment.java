@@ -10,20 +10,19 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
+import com.iti.mealmate.R;
 import com.iti.mealmate.data.auth.model.UserModel;
 import com.iti.mealmate.databinding.FragmentRegistrationBinding;
 import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.auth.register.RegistrationPresenter;
 import com.iti.mealmate.ui.auth.register.RegistrationView;
 import com.iti.mealmate.ui.auth.register.presenter.RegistrationPresenterImpl;
+import com.iti.mealmate.ui.utils.ActivityExtensions;
 
 import java.util.Objects;
 
 
 public class RegistrationFragment extends Fragment implements RegistrationView {
-
 
     private FragmentRegistrationBinding binding;
     private RegistrationPresenter presenter;
@@ -44,25 +43,21 @@ public class RegistrationFragment extends Fragment implements RegistrationView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.loginLink.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
-        binding.registerButton.setOnClickListener(v -> {
-            String name = Objects.requireNonNull(binding.fullNameInput.getText()).toString().trim();
-            String email = Objects.requireNonNull(binding.emailInput.getText()).toString().trim();
-            String password = Objects.requireNonNull(binding.passwordInput.getText()).toString().trim();
-            String confirmPassword = Objects.requireNonNull(binding.confirmPasswordInput.getText()).toString().trim();
-            presenter.register(name, email, password, confirmPassword);
-        });
+        binding.registerButton.setOnClickListener(v -> register());
     }
 
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+    void register() {
+        String name = Objects.requireNonNull(binding.fullNameInput.getText()).toString().trim();
+        String email = Objects.requireNonNull(binding.emailInput.getText()).toString().trim();
+        String password = Objects.requireNonNull(binding.passwordInput.getText()).toString().trim();
+        String confirmPassword = Objects.requireNonNull(binding.confirmPasswordInput.getText()).toString().trim();
+        presenter.register(name, email, password, confirmPassword);
     }
+
 
     @Override
     public void navigateToHome(UserModel user) {
-        Toast.makeText(requireContext(), "Welcome " + user.getName(), Toast.LENGTH_SHORT).show();
+        ActivityExtensions.showSuccessSnackBar(requireActivity(), "Welcome " + user.getName());
         // TODO: Navigate to Home Activity or Fragment
     }
 
@@ -78,26 +73,38 @@ public class RegistrationFragment extends Fragment implements RegistrationView {
 
     @Override
     public void showPasswordError(String message) {
-        binding.passwordInput.setError(message);
+        binding.confirmPasswordInputLayout.setError(message);
     }
 
     @Override
     public void showConfirmPasswordError(String message) {
-        binding.confirmPasswordInput.setError(message);
+        binding.confirmPasswordInputLayout.setError(message);
     }
 
     @Override
     public void showLoading() {
-        // TODO: Show loading indicator
+        binding.registerButton.setEnabled(false);
+        binding.registerButton.setText("");
+        binding.registerProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
-        // TODO: Hide loading indicator
+        binding.registerProgressBar.setVisibility(View.GONE);
+        binding.registerButton.setEnabled(true);
+        binding.registerButton.setText(R.string.login);
+        binding.registerButton.setIcon(null);
     }
 
     @Override
     public void showError(String message) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        ActivityExtensions.showErrorSnackBar(requireActivity(), message);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.onDestroy();
+        binding = null;
     }
 }

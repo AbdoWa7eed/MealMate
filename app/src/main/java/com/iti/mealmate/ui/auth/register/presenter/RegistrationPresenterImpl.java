@@ -1,5 +1,7 @@
 package com.iti.mealmate.ui.auth.register.presenter;
 
+import android.util.Patterns;
+
 import com.iti.mealmate.data.auth.model.RegisterRequest;
 import com.iti.mealmate.data.auth.repo.AuthRepository;
 import com.iti.mealmate.ui.auth.register.RegistrationPresenter;
@@ -24,43 +26,15 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     @Override
     public void register(String name, String email, String password, String confirmPassword) {
-        if (name.isEmpty()) {
-            view.showNameError("Name cannot be empty");
+        if (!validateAllFields(name, email, password, confirmPassword)) {
             return;
         }
+        performRegistration(new RegisterRequest(name, email, password));
+    }
 
-        if (email.isEmpty()) {
-            view.showEmailError("Email cannot be empty");
-            return;
-        }
-
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            view.showEmailError("Enter a valid email");
-            return;
-        }
-
-        if (password.isEmpty()) {
-            view.showPasswordError("Password cannot be empty");
-            return;
-        }
-
-        if (password.length() < 6) {
-            view.showPasswordError("Password must be at least 6 characters");
-            return;
-        }
-
-        if (confirmPassword.isEmpty()) {
-            view.showConfirmPasswordError("Confirm password cannot be empty");
-            return;
-        }
-
-        if (!password.equals(confirmPassword)) {
-            view.showConfirmPasswordError("Passwords do not match");
-            return;
-        }
-
+    private void performRegistration(RegisterRequest request) {
         view.showLoading();
-        Disposable disposable = repository.registerWithEmail(new RegisterRequest(name, email, password, confirmPassword))
+        Disposable disposable = repository.registerWithEmail(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(user -> {
@@ -70,7 +44,46 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
                     view.hideLoading();
                     view.showError(throwable.getMessage());
                 });
-
         compositeDisposable.add(disposable);
+    }
+
+    private boolean validateAllFields(String name, String email, String password, String confirmPassword) {
+        boolean isValid = true;
+
+        if (name.isEmpty()) {
+            view.showNameError("Name cannot be empty");
+            isValid = false;
+        }
+
+        if (email.isEmpty()) {
+            view.showEmailError("Email cannot be empty");
+            isValid = false;
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            view.showEmailError("Enter a valid email");
+            isValid = false;
+        }
+
+        if (password.isEmpty()) {
+            view.showPasswordError("Password cannot be empty");
+            isValid = false;
+        } else if (password.length() < 6) {
+            view.showPasswordError("Password must be at least 6 characters");
+            isValid = false;
+        }
+
+        if (confirmPassword.isEmpty()) {
+            view.showConfirmPasswordError("Confirm password cannot be empty");
+            isValid = false;
+        } else if (!password.equals(confirmPassword)) {
+            view.showConfirmPasswordError("Passwords do not match");
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    @Override
+    public void onDestroy() {
+        compositeDisposable.clear();
     }
 }

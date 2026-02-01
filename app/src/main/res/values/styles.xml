@@ -72,6 +72,11 @@
         <item name="hintTextColor">?attr/colorOnSurfaceVariant</item>
         <item name="android:layout_marginTop">8dp</item>
         <item name="hintEnabled">false</item>
+        <item name="errorEnabled">true</item>
+        <item name="errorTextColor">@color/colorError</item>
+        <item name="errorIconDrawable">@null</item>
+        <item name="errorIconTint">@color/colorError</item>
+        <item name="boxStrokeErrorColor">@color/colorError</item>
     </style>
 
     <style name="CustomFieldTitle">

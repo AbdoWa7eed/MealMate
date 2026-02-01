@@ -10,8 +10,6 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
 import com.iti.mealmate.R;
 import com.iti.mealmate.data.auth.model.UserModel;
 import com.iti.mealmate.databinding.FragmentLoginBinding;
@@ -19,6 +17,7 @@ import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.auth.login.LoginPresenter;
 import com.iti.mealmate.ui.auth.login.LoginView;
 import com.iti.mealmate.ui.auth.login.presenter.LoginPresenterImpl;
+import com.iti.mealmate.ui.utils.ActivityExtensions;
 
 import java.util.Objects;
 
@@ -53,41 +52,48 @@ public class LoginFragment extends Fragment implements LoginView {
         });
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
-
     public void navigateToRegistration() {
         Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_registrationFragment);
     }
 
     @Override
     public void navigateToHome(UserModel user) {
-        Toast.makeText(requireContext(), "User: " + user.getEmail(), Toast.LENGTH_SHORT).show();
+        ActivityExtensions.showSuccessSnackBar(requireActivity(), "Welcome " + user.getName());
     }
     @Override
     public void showEmailError(String message) {
-        binding.emailInput.setError(message);
+        binding.emailInputLayout.setError(message);
     }
 
     @Override
     public void showPasswordError(String message) {
-        binding.passwordInput.setError(message);
+        binding.passwordInputLayout.setError(message);
     }
 
     @Override
     public void showLoading() {
+        binding.loginButton.setEnabled(false);
+        binding.loginButton.setText("");
+        binding.loginProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
-
+        binding.loginProgressBar.setVisibility(View.GONE);
+        binding.loginButton.setEnabled(true);
+        binding.loginButton.setText(R.string.login);
     }
 
     @Override
     public void showError(String message) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        ActivityExtensions.showErrorSnackBar(requireActivity(), message);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.onDestroy();
+        binding = null;
+    }
+
 }

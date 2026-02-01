@@ -27,46 +27,63 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void login(String email, String password) {
-        if (email.isEmpty()) {
-            view.showEmailError("Email cannot be empty");
+        if (!validateInputs(email, password)) {
             return;
         }
 
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        performLogin(email, password);
+    }
+
+
+    private void performLogin(String email, String password) {
+        view.showLoading();
+        Disposable disposable = repository.loginWithEmail(new LoginRequest(email, password))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(userModel -> {
+                    view.hideLoading();
+                    view.navigateToHome(userModel);
+                }, throwable -> {
+                    view.hideLoading();
+                    view.showError(throwable.getMessage());
+                });
+        compositeDisposable.add(disposable);
+    }
+
+    private boolean validateInputs(String email, String password) {
+        boolean isValid = true;
+
+        if (email.isEmpty()) {
+            view.showEmailError("Email cannot be empty");
+            isValid = false;
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             view.showEmailError("Enter a valid email");
-            return;
+            isValid = false;
         }
 
         if (password.isEmpty()) {
             view.showPasswordError("Password cannot be empty");
-            return;
-        }
-
-        if (password.length() < 6) {
+            isValid = false;
+        } else if (password.length() < 6) {
             view.showPasswordError("Password must be at least 6 characters");
-            return;
+            isValid = false;
         }
 
-        view.showLoading();
-        Disposable disposable = repository.loginWithEmail(new LoginRequest(email , password))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(view::navigateToHome, throwable -> {
-                    view.hideLoading();
-                    view.showError(throwable.getMessage());
-                });
-
-        compositeDisposable.add(disposable);
-
+        return isValid;
     }
 
     @Override
     public void loginWithGoogle() {
-
+        // TODO: Implement Google login
     }
 
     @Override
     public void loginWithFacebook() {
+        // TODO: Implement Facebook login
+    }
 
+    @Override
+    public void onDestroy() {
+        compositeDisposable.clear();
     }
 }
