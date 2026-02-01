@@ -1,15 +1,15 @@
 package com.iti.mealmate.ui.splash;
 
-import com.iti.mealmate.data.repo.AppStartupRepository;
+import com.iti.mealmate.data.prefs.PreferencesHelper;
 
 public class SplashPresenter implements SplashContract.Presenter {
 
     private final SplashContract.View view;
-    private final AppStartupRepository appStartupRepository;
+    private final PreferencesHelper preferencesHelper;
 
-    public SplashPresenter(SplashContract.View view, AppStartupRepository appStartupRepository) {
+    public SplashPresenter(SplashContract.View view, PreferencesHelper preferencesHelper) {
         this.view = view;
-        this.appStartupRepository = appStartupRepository;
+        this.preferencesHelper = preferencesHelper;
     }
 
     @Override
@@ -20,7 +20,7 @@ public class SplashPresenter implements SplashContract.Presenter {
     @Override
     public void onSplashTimeout() {
         // TODO: Navigate to Home/Login after onboarding is done
-        if (appStartupRepository.isOnboardingCompleted()) {
+        if (preferencesHelper.isOnboardingCompleted()) {
             view.navigateToLogin();
         } else {
             view.navigateToOnboarding();
