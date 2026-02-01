@@ -2,7 +2,7 @@ package com.iti.mealmate.di;
 
 import android.content.Context;
 
-import com.iti.mealmate.data.prefs.PreferencesHelper;
+import com.iti.mealmate.data.source.local.prefs.PreferencesHelper;
 
 public class ServiceLocator {
     private static PreferencesHelper preferencesHelper;

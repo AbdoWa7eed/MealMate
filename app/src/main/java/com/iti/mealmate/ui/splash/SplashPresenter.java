@@ -1,6 +1,6 @@
 package com.iti.mealmate.ui.splash;
 
-import com.iti.mealmate.data.prefs.PreferencesHelper;
+import com.iti.mealmate.data.source.local.prefs.PreferencesHelper;
 
 public class SplashPresenter implements SplashContract.Presenter {
 

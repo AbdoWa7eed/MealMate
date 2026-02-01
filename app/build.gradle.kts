@@ -53,6 +53,9 @@ dependencies {
     implementation(libs.dotsindicator)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
+    implementation(libs.rxandroid)
+    implementation(libs.rxjava)
+    implementation(libs.firebase.firestore)
 
 
 }
