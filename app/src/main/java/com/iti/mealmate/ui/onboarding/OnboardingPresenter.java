@@ -6,7 +6,7 @@ import com.iti.mealmate.ui.onboarding.model.OnboardingPage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OnboardingPresenter implements OnboardingContract.Presenter, OnboardingContract.PagePresenter {
+public class OnboardingPresenter implements OnboardingContract.Presenter {
 
     private final OnboardingContract.View view;
     private final AppStartupRepository appStartupRepository;
@@ -64,34 +64,11 @@ public class OnboardingPresenter implements OnboardingContract.Presenter, Onboar
     }
 
     @Override
-    public OnboardingPage getPageData(int position) {
-        if (position >= 0 && position < onboardingPages.size()) {
-            return onboardingPages.get(position);
-        }
-        return null;
-    }
-
-    @Override
-    public int getPageCount() {
-        return onboardingPages.size();
-    }
-
-    @Override
-    public void bindView(OnboardingContract.PageView pageView, int position) {
-        OnboardingPage page = getPageData(position);
-        if (page != null) {
-            pageView.displayPageData(page);
-        }
-    }
-
-    @Override
     public void completeOnboarding() {
         appStartupRepository.setOnboardingCompleted();
         view.navigateToLogin();
     }
 
     @Override
-    public void onDestroy() {
-
-    }
+    public void onDestroy() {}
 }
