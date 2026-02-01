@@ -7,7 +7,7 @@
     android:fillViewport="true"
     android:scrollbars="none"
     android:layout_height="match_parent"
-    tools:context=".ui.auth.fragments.RegistrationFragment">
+    tools:context=".ui.auth.register.view.RegistrationFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
             style="@style/CustomFieldTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:text="@string/email"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/full_name_input_layout" />
@@ -115,7 +115,7 @@
             style="@style/CustomFieldTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:text="@string/password"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/email_input_layout" />
@@ -145,7 +145,7 @@
             style="@style/CustomFieldTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:text="@string/confirm_password"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password_input_layout" />
@@ -170,14 +170,31 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/register_button"
-            style="@style/CustomPrimaryButton"
+        <FrameLayout
+            android:id="@+id/register_button_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="@string/sign_up"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/confirm_password_input_layout" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/confirm_password_input_layout">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/register_button"
+                style="@style/CustomPrimaryButton"
+                android:layout_width="match_parent"
+                android:text="@string/sign_up" />
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/register_progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                app:indicatorSize="32dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:indicatorColor="@android:color/white"/>
+        </FrameLayout>
 
         <TextView
             android:id="@+id/login_text"
@@ -190,7 +207,7 @@
             app:layout_constraintEnd_toStartOf="@+id/login_link"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/register_button" />
+            app:layout_constraintTop_toBottomOf="@+id/register_button_container" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/login_link"

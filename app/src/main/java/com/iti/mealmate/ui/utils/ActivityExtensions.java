@@ -9,6 +9,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.iti.mealmate.R;
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -67,5 +69,19 @@ public class ActivityExtensions {
         MaterialToolbar toolbar = activity.findViewById(id);
         ActivityExtensions.enableBackButton(activity, toolbar);
         ActivityExtensions.setStatusBarColor(activity);
+    }
+
+    public static void showErrorSnackBar(Activity activity, String msg) {
+       var snackbar = Snackbar.make(activity.findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT);
+       snackbar.setBackgroundTint(activity.getColor(R.color.colorError));
+       snackbar.setTextColor(activity.getColor(R.color.colorOnPrimary));
+       snackbar.show();
+    }
+
+    public static void showSuccessSnackBar(Activity activity, String msg) {
+        var snackbar = Snackbar.make(activity.findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT);
+        snackbar.setBackgroundTint(activity.getColor(R.color.colorSuccess));
+        snackbar.setTextColor(activity.getColor(R.color.colorOnPrimary));
+        snackbar.show();
     }
 }

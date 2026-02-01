@@ -1,6 +1,6 @@
 package com.iti.mealmate.ui.onboarding;
 import com.iti.mealmate.R;
-import com.iti.mealmate.data.prefs.PreferencesHelper;
+import com.iti.mealmate.data.source.local.prefs.PreferencesHelper;
 import com.iti.mealmate.ui.onboarding.model.OnboardingPage;
 
 import java.util.ArrayList;
@@ -69,6 +69,4 @@ public class OnboardingPresenter implements OnboardingContract.Presenter {
         view.navigateToLogin();
     }
 
-    @Override
-    public void onDestroy() {}
 }

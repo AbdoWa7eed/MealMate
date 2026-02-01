@@ -1,4 +1,4 @@
-package com.iti.mealmate.data.prefs;
+package com.iti.mealmate.data.source.local.prefs;
 
 import android.content.Context;
 import android.content.SharedPreferences;
