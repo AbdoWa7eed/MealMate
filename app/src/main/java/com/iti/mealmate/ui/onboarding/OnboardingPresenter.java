@@ -1,6 +1,6 @@
 package com.iti.mealmate.ui.onboarding;
 import com.iti.mealmate.R;
-import com.iti.mealmate.data.repo.AppStartupRepository;
+import com.iti.mealmate.data.prefs.PreferencesHelper;
 import com.iti.mealmate.ui.onboarding.model.OnboardingPage;
 
 import java.util.ArrayList;
@@ -9,13 +9,13 @@ import java.util.List;
 public class OnboardingPresenter implements OnboardingContract.Presenter {
 
     private final OnboardingContract.View view;
-    private final AppStartupRepository appStartupRepository;
+    private final PreferencesHelper preferencesHelper;
     private List<OnboardingPage> onboardingPages;
 
 
-    public OnboardingPresenter(OnboardingContract.View view, AppStartupRepository appStartupRepository) {
+    public OnboardingPresenter(OnboardingContract.View view, PreferencesHelper preferencesHelper) {
         this.view = view;
-        this.appStartupRepository = appStartupRepository;
+        this.preferencesHelper = preferencesHelper;
         initializePages();
     }
 
@@ -65,7 +65,7 @@ public class OnboardingPresenter implements OnboardingContract.Presenter {
 
     @Override
     public void completeOnboarding() {
-        appStartupRepository.setOnboardingCompleted();
+        preferencesHelper.setOnboardingCompleted();
         view.navigateToLogin();
     }
 

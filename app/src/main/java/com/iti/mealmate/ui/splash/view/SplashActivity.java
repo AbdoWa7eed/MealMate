@@ -36,7 +36,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
         super.onCreate(savedInstanceState);
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        presenter = new SplashPresenter(this, ServiceLocator.getAppStartupRepository());
+        presenter = new SplashPresenter(this, ServiceLocator.getPreferencesHelper());
         presenter.onViewCreated();
         scheduleNavigation();
     }

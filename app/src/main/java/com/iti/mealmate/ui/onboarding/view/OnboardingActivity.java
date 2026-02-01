@@ -41,7 +41,7 @@ public class OnboardingActivity extends AppCompatActivity implements OnboardingC
     private void initializePresenter() {
         presenter = new OnboardingPresenter(
                 this,
-                ServiceLocator.getAppStartupRepository()
+                ServiceLocator.getPreferencesHelper()
         );
     }
 

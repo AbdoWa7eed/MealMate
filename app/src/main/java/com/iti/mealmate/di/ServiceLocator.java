@@ -2,24 +2,21 @@ package com.iti.mealmate.di;
 
 import android.content.Context;
 
-import com.iti.mealmate.data.datasource.local.prefs.PreferencesDataSource;
-import com.iti.mealmate.data.datasource.local.prefs.PreferencesDataSourceImpl;
-import com.iti.mealmate.data.repo.AppStartupRepository;
+import com.iti.mealmate.data.prefs.PreferencesHelper;
 
 public class ServiceLocator {
-    private static AppStartupRepository appStartupRepository;
+    private static PreferencesHelper preferencesHelper;
 
     public static void init(Context context) {
-        if (appStartupRepository == null) {
-            PreferencesDataSource prefs = new PreferencesDataSourceImpl(context.getApplicationContext());
-            appStartupRepository = new AppStartupRepository(prefs);
+        if (preferencesHelper == null) {
+            preferencesHelper = new PreferencesHelper(context.getApplicationContext());
         }
     }
 
-    public static AppStartupRepository getAppStartupRepository() {
-        if (appStartupRepository == null) {
+    public static PreferencesHelper getPreferencesHelper() {
+        if (preferencesHelper == null) {
             throw new IllegalStateException("ServiceLocator not initialized!");
         }
-        return appStartupRepository;
+        return preferencesHelper;
     }
 }
