@@ -18,16 +18,7 @@ public interface OnboardingContract {
     interface Presenter extends BasePresenter {
         void onNextClicked(int currentPage);
         void onPageChanged(int position);
-        OnboardingPage getPageData(int position);
-        int getPageCount();
         void completeOnboarding();
     }
 
-    interface PageView {
-        void displayPageData(OnboardingPage page);
-    }
-
-    interface PagePresenter {
-        void bindView(OnboardingContract.PageView view, int position);
-    }
 }
