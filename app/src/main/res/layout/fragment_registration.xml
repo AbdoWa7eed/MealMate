@@ -7,7 +7,7 @@
     android:fillViewport="true"
     android:scrollbars="none"
     android:layout_height="match_parent"
-    tools:context=".ui.auth.fragments.RegistrationFragment">
+    tools:context=".ui.auth.register.view.RegistrationFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
