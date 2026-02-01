@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -50,4 +51,8 @@ dependencies {
     runtimeOnly(libs.core.splashscreen)
     implementation(libs.navigation.fragment)
     implementation(libs.dotsindicator)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+
+
 }
