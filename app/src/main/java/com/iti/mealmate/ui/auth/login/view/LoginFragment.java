@@ -10,6 +10,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.iti.mealmate.R;
 import com.iti.mealmate.data.auth.model.UserModel;
 import com.iti.mealmate.databinding.FragmentLoginBinding;
@@ -22,12 +23,14 @@ import com.iti.mealmate.ui.utils.ActivityExtensions;
 import java.util.Objects;
 
 
+
 public class LoginFragment extends Fragment implements LoginView {
 
 
     private FragmentLoginBinding binding;
 
     private LoginPresenter presenter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +40,7 @@ public class LoginFragment extends Fragment implements LoginView {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
-        presenter = new LoginPresenterImpl(this, ServiceLocator.getAuthRepository());
+        presenter = new LoginPresenterImpl(requireContext(), this, ServiceLocator.getAuthRepository());
         return binding.getRoot();
     }
 
@@ -50,6 +53,7 @@ public class LoginFragment extends Fragment implements LoginView {
             String password = Objects.requireNonNull(binding.passwordInput.getText()).toString();
             presenter.login(email, password);
         });
+        binding.googleButton.setOnClickListener(v -> presenter.loginWithGoogle());
     }
 
     public void navigateToRegistration() {
@@ -60,6 +64,7 @@ public class LoginFragment extends Fragment implements LoginView {
     public void navigateToHome(UserModel user) {
         ActivityExtensions.showSuccessSnackBar(requireActivity(), "Welcome " + user.getName());
     }
+
     @Override
     public void showEmailError(String message) {
         binding.emailInputLayout.setError(message);

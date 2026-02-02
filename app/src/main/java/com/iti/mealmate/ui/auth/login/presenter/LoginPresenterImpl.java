@@ -1,9 +1,13 @@
 package com.iti.mealmate.ui.auth.login.presenter;
 
+import android.content.Context;
+import android.util.Log;
+
 import com.iti.mealmate.data.auth.model.LoginRequest;
 import com.iti.mealmate.data.auth.repo.AuthRepository;
 import com.iti.mealmate.ui.auth.login.LoginPresenter;
 import com.iti.mealmate.ui.auth.login.LoginView;
+import com.iti.mealmate.util.GoogleSignInHelper;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -18,7 +22,10 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     private final CompositeDisposable compositeDisposable;
 
-    public LoginPresenterImpl(LoginView view, AuthRepository repository) {
+    private final Context context;
+
+    public LoginPresenterImpl(Context context, LoginView view, AuthRepository repository) {
+        this.context = context;
         this.view = view;
         this.repository = repository;
         this.compositeDisposable = new CompositeDisposable();
@@ -74,7 +81,32 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void loginWithGoogle() {
-        // TODO: Implement Google login
+        var googleTokenRequest = GoogleSignInHelper
+                .signIn(context)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::completeSignIn,
+                        error -> {
+                            Log.e("LoginPresenterImpl", error.getMessage());
+                            view.showError(error.getMessage());
+                        });
+        compositeDisposable.add(googleTokenRequest);
+    }
+
+    private void completeSignIn(String idToken) {
+        var googleSignInRequest = repository
+                .signInWithGoogle(idToken)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(userModel -> {
+                    Log.d("LoginPresenterImpl", "Google User: " + userModel.getName());
+                    },
+                error -> {
+                    Log.e("LoginPresenterImpl", error.getMessage());
+                    view.showError(error.getMessage());
+                });
+
+        compositeDisposable.add(googleSignInRequest);
     }
 
     @Override
