@@ -8,15 +8,17 @@ import com.iti.mealmate.data.auth.model.UserModel;
 import com.iti.mealmate.data.auth.repo.AuthRepository;
 import com.iti.mealmate.ui.auth.login.LoginPresenter;
 import com.iti.mealmate.ui.auth.login.LoginView;
+import com.iti.mealmate.util.FacebookLoginProvider;
+import com.iti.mealmate.util.FacebookSignInHelper;
 import com.iti.mealmate.util.GoogleSignInHelper;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class LoginPresenterImpl implements LoginPresenter {
 
+    private static final String TAG = "LoginPresenterImpl";
     private final LoginView view;
 
     private final AuthRepository repository;
@@ -80,29 +82,50 @@ public class LoginPresenterImpl implements LoginPresenter {
         var googleTokenRequest = GoogleSignInHelper.signIn(context)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::completeSignIn,
+                .subscribe(this::completeGoogleSignIn,
                         error -> view.showError(error.getMessage()));
         compositeDisposable.add(googleTokenRequest);
     }
 
-    private void completeSignIn(String idToken) {
+    private void completeGoogleSignIn(String idToken) {
         view.showLoading();
-        var googleSignInRequest = repository
+        var signInRequest = repository
                 .signInWithGoogle(idToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onSuccess, this::onError);
 
-        compositeDisposable.add(googleSignInRequest);
+        compositeDisposable.add(signInRequest);
     }
 
     @Override
     public void loginWithFacebook() {
-        // TODO: Implement Facebook login
+        if (view instanceof FacebookLoginProvider) {
+            var facebookSignInRequest = FacebookSignInHelper.signIn((FacebookLoginProvider) view)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::completeFacebookSignIn,
+                            error -> view.showError(error.getMessage()));
+            compositeDisposable.add(facebookSignInRequest);
+        } else {
+            view.showError("Facebook login not supported for this view");
+        }
+    }
+
+    private void completeFacebookSignIn(String token) {
+        view.showLoading();
+        var signInRequest = repository
+                .signInWithFacebook(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onSuccess, this::onError);
+
+        compositeDisposable.add(signInRequest);
     }
 
     private void onError(Throwable error) {
         view.hideLoading();
+        Log.e(TAG, "Error logging in", error);
         view.showError(error.getMessage());
     }
 

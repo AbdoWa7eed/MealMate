@@ -19,12 +19,13 @@ import com.iti.mealmate.ui.auth.login.LoginPresenter;
 import com.iti.mealmate.ui.auth.login.LoginView;
 import com.iti.mealmate.ui.auth.login.presenter.LoginPresenterImpl;
 import com.iti.mealmate.ui.utils.ActivityExtensions;
+import com.iti.mealmate.util.FacebookLoginProvider;
 
 import java.util.Objects;
 
 
 
-public class LoginFragment extends Fragment implements LoginView {
+public class LoginFragment extends Fragment implements LoginView, FacebookLoginProvider {
 
 
     private FragmentLoginBinding binding;
@@ -54,6 +55,7 @@ public class LoginFragment extends Fragment implements LoginView {
             presenter.login(email, password);
         });
         binding.googleButton.setOnClickListener(v -> presenter.loginWithGoogle());
+        binding.facebookButton.setOnClickListener(v -> presenter.loginWithFacebook());
     }
 
     public void navigateToRegistration() {
@@ -96,6 +98,11 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void showError(String message) {
         ActivityExtensions.showErrorSnackBar(requireActivity(), message);
+    }
+
+    @Override
+    public Fragment getFragment() {
+        return this;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.iti.mealmate.data.source.remote.firebase;
 
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -43,7 +44,14 @@ public class FirebaseAuthHelper {
     }
 
     public Single<FirebaseUser> signInWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        return signInWithCredential(GoogleAuthProvider.getCredential(idToken, null));
+    }
+
+    public Single<FirebaseUser> signInWithFacebook(String token) {
+        return signInWithCredential(FacebookAuthProvider.getCredential(token));
+    }
+
+    public Single<FirebaseUser> signInWithCredential(AuthCredential credential) {
         return RxTask.firebaseToSingleTask(
                 firebaseAuth.signInWithCredential(credential)
         ).flatMap(authResult -> {
@@ -58,4 +66,10 @@ public class FirebaseAuthHelper {
     public boolean isLoggedIn() {
         return firebaseAuth.getCurrentUser() != null;
     }
+
+    public void logout() {
+        firebaseAuth.signOut();
+    }
+
+
 }

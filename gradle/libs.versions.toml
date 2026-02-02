@@ -3,6 +3,7 @@ agp = "9.0.0"
 coreSplashscreen = "1.2.0"
 credentials = "1.5.0"
 dotsindicator = "5.1.0"
+facebookLogin = "latest.release"
 firebaseBom = "34.8.0"
 googleid = "1.2.0"
 junit = "4.13.2"
@@ -23,6 +24,7 @@ core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = 
 credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
 dotsindicator = { module = "com.tbuonomo:dotsindicator", version.ref = "dotsindicator" }
+facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebookLogin" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
