@@ -7,6 +7,8 @@ public class UserModel {
     private String email;
     private String name;
     private String imageUrl;
+
+    private AuthProvider provider;
     private long createdAt;
     private long lastLogin;
 
@@ -17,6 +19,7 @@ public class UserModel {
                      String email,
                      String name,
                      String imageUrl,
+                     AuthProvider provider,
                      long createdAt,
                      long lastLogin) {
 
@@ -24,6 +27,7 @@ public class UserModel {
         this.email = email;
         this.name = name;
         this.imageUrl = imageUrl;
+        this.provider = provider;
         this.createdAt = createdAt;
         this.lastLogin = lastLogin;
     }
@@ -31,6 +35,14 @@ public class UserModel {
 
     public String getUid() {
         return uid;
+    }
+
+    public AuthProvider getProvider() {
+        return provider;
+    }
+
+    public void setProvider(AuthProvider provider) {
+        this.provider = provider;
     }
 
     public void setUid(String uid) {

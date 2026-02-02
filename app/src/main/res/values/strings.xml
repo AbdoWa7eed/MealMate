@@ -92,4 +92,8 @@
     <string name="recipe_category">Seafood</string>
     <string name="recipe_country">China</string>
     <string name="see_all">See all</string>
+
+    <string name="facebook_app_id">1227026426198292</string>
+    <string name="fb_login_protocol_scheme">fb1227026426198292</string>
+    <string name="facebook_client_token">4669bac4375e8a6f3c60dc7e5fd67dba</string>
 </resources>

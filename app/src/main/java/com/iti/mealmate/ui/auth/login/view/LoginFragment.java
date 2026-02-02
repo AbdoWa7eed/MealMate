@@ -10,6 +10,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.iti.mealmate.R;
 import com.iti.mealmate.data.auth.model.UserModel;
 import com.iti.mealmate.databinding.FragmentLoginBinding;
@@ -18,16 +19,19 @@ import com.iti.mealmate.ui.auth.login.LoginPresenter;
 import com.iti.mealmate.ui.auth.login.LoginView;
 import com.iti.mealmate.ui.auth.login.presenter.LoginPresenterImpl;
 import com.iti.mealmate.ui.utils.ActivityExtensions;
+import com.iti.mealmate.util.FacebookLoginProvider;
 
 import java.util.Objects;
 
 
-public class LoginFragment extends Fragment implements LoginView {
+
+public class LoginFragment extends Fragment implements LoginView, FacebookLoginProvider {
 
 
     private FragmentLoginBinding binding;
 
     private LoginPresenter presenter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +41,7 @@ public class LoginFragment extends Fragment implements LoginView {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
-        presenter = new LoginPresenterImpl(this, ServiceLocator.getAuthRepository());
+        presenter = new LoginPresenterImpl(requireContext(), this, ServiceLocator.getAuthRepository());
         return binding.getRoot();
     }
 
@@ -50,6 +54,8 @@ public class LoginFragment extends Fragment implements LoginView {
             String password = Objects.requireNonNull(binding.passwordInput.getText()).toString();
             presenter.login(email, password);
         });
+        binding.googleButton.setOnClickListener(v -> presenter.loginWithGoogle());
+        binding.facebookButton.setOnClickListener(v -> presenter.loginWithFacebook());
     }
 
     public void navigateToRegistration() {
@@ -60,6 +66,7 @@ public class LoginFragment extends Fragment implements LoginView {
     public void navigateToHome(UserModel user) {
         ActivityExtensions.showSuccessSnackBar(requireActivity(), "Welcome " + user.getName());
     }
+
     @Override
     public void showEmailError(String message) {
         binding.emailInputLayout.setError(message);
@@ -73,6 +80,8 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void showLoading() {
         binding.loginButton.setEnabled(false);
+        binding.googleButton.setEnabled(false);
+        binding.facebookButton.setEnabled(false);
         binding.loginButton.setText("");
         binding.loginProgressBar.setVisibility(View.VISIBLE);
     }
@@ -80,6 +89,8 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void hideLoading() {
         binding.loginProgressBar.setVisibility(View.GONE);
+        binding.googleButton.setEnabled(true);
+        binding.facebookButton.setEnabled(true);
         binding.loginButton.setEnabled(true);
         binding.loginButton.setText(R.string.login);
     }
@@ -87,6 +98,11 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void showError(String message) {
         ActivityExtensions.showErrorSnackBar(requireActivity(), message);
+    }
+
+    @Override
+    public Fragment getFragment() {
+        return this;
     }
 
     @Override

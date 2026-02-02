@@ -1,24 +1,34 @@
 package com.iti.mealmate.ui.auth.login.presenter;
 
+import android.content.Context;
+import android.util.Log;
+
 import com.iti.mealmate.data.auth.model.LoginRequest;
+import com.iti.mealmate.data.auth.model.UserModel;
 import com.iti.mealmate.data.auth.repo.AuthRepository;
 import com.iti.mealmate.ui.auth.login.LoginPresenter;
 import com.iti.mealmate.ui.auth.login.LoginView;
+import com.iti.mealmate.util.FacebookLoginProvider;
+import com.iti.mealmate.util.FacebookSignInHelper;
+import com.iti.mealmate.util.GoogleSignInHelper;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class LoginPresenterImpl implements LoginPresenter {
 
+    private static final String TAG = "LoginPresenterImpl";
     private final LoginView view;
 
     private final AuthRepository repository;
 
     private final CompositeDisposable compositeDisposable;
 
-    public LoginPresenterImpl(LoginView view, AuthRepository repository) {
+    private final Context context;
+
+    public LoginPresenterImpl(Context context, LoginView view, AuthRepository repository) {
+        this.context = context;
         this.view = view;
         this.repository = repository;
         this.compositeDisposable = new CompositeDisposable();
@@ -37,17 +47,12 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     private void performLogin(String email, String password) {
         view.showLoading();
-        Disposable disposable = repository.loginWithEmail(new LoginRequest(email, password))
+        var loginWithEmailRequset = repository
+                .loginWithEmail(new LoginRequest(email, password))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(userModel -> {
-                    view.hideLoading();
-                    view.navigateToHome(userModel);
-                }, throwable -> {
-                    view.hideLoading();
-                    view.showError(throwable.getMessage());
-                });
-        compositeDisposable.add(disposable);
+                .subscribe(this::onSuccess, this::onError);
+        compositeDisposable.add(loginWithEmailRequset);
     }
 
     private boolean validateInputs(String email, String password) {
@@ -74,13 +79,62 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void loginWithGoogle() {
-        // TODO: Implement Google login
+        var googleTokenRequest = GoogleSignInHelper.signIn(context)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::completeGoogleSignIn,
+                        error -> view.showError(error.getMessage()));
+        compositeDisposable.add(googleTokenRequest);
+    }
+
+    private void completeGoogleSignIn(String idToken) {
+        view.showLoading();
+        var signInRequest = repository
+                .signInWithGoogle(idToken)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onSuccess, this::onError);
+
+        compositeDisposable.add(signInRequest);
     }
 
     @Override
     public void loginWithFacebook() {
-        // TODO: Implement Facebook login
+        if (view instanceof FacebookLoginProvider) {
+            var facebookSignInRequest = FacebookSignInHelper.signIn((FacebookLoginProvider) view)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::completeFacebookSignIn,
+                            error -> view.showError(error.getMessage()));
+            compositeDisposable.add(facebookSignInRequest);
+        } else {
+            view.showError("Facebook login not supported for this view");
+        }
     }
+
+    private void completeFacebookSignIn(String token) {
+        view.showLoading();
+        var signInRequest = repository
+                .signInWithFacebook(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onSuccess, this::onError);
+
+        compositeDisposable.add(signInRequest);
+    }
+
+    private void onError(Throwable error) {
+        view.hideLoading();
+        Log.e(TAG, "Error logging in", error);
+        view.showError(error.getMessage());
+    }
+
+
+    private void onSuccess(UserModel userModel) {
+        view.navigateToHome(userModel);
+        view.hideLoading();
+    }
+
 
     @Override
     public void onDestroy() {
