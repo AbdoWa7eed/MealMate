@@ -78,6 +78,8 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void showLoading() {
         binding.loginButton.setEnabled(false);
+        binding.googleButton.setEnabled(false);
+        binding.facebookButton.setEnabled(false);
         binding.loginButton.setText("");
         binding.loginProgressBar.setVisibility(View.VISIBLE);
     }
@@ -85,6 +87,8 @@ public class LoginFragment extends Fragment implements LoginView {
     @Override
     public void hideLoading() {
         binding.loginProgressBar.setVisibility(View.GONE);
+        binding.googleButton.setEnabled(true);
+        binding.facebookButton.setEnabled(true);
         binding.loginButton.setEnabled(true);
         binding.loginButton.setText(R.string.login);
     }

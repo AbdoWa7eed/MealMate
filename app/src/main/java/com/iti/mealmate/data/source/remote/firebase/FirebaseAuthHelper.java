@@ -1,7 +1,9 @@
 package com.iti.mealmate.data.source.remote.firebase;
 
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.iti.mealmate.data.auth.model.LoginRequest;
 import com.iti.mealmate.data.auth.model.RegisterRequest;
 import com.iti.mealmate.util.RxTask;
@@ -31,6 +33,19 @@ public class FirebaseAuthHelper {
 
         return RxTask.firebaseToSingleTask(
                 firebaseAuth.createUserWithEmailAndPassword(registerRequest.getEmail(), registerRequest.getPassword())
+        ).flatMap(authResult -> {
+            if (authResult.getUser() != null) {
+                return Single.just(authResult.getUser());
+            } else {
+                return Single.error(new Exception("User authentication failed"));
+            }
+        });
+    }
+
+    public Single<FirebaseUser> signInWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        return RxTask.firebaseToSingleTask(
+                firebaseAuth.signInWithCredential(credential)
         ).flatMap(authResult -> {
             if (authResult.getUser() != null) {
                 return Single.just(authResult.getUser());

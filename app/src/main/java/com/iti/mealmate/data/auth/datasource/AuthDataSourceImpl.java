@@ -36,7 +36,12 @@ public class AuthDataSourceImpl implements  AuthDataSource {
     }
     @Override
     public Single<UserModel> signInWithGoogle(String idToken) {
-        throw  new UnsupportedOperationException("Not implemented");
+        return firebaseAuthHelper.signInWithGoogle(idToken)
+                .flatMap(firebaseUser -> {
+                    UserModel newUser = AuthMapper.toUserModelFromFirebaseUser(firebaseUser);
+                    return firestoreUserHelper.saveUser(newUser)
+                            .andThen(Single.just(newUser));
+                });
     }
 
     @Override

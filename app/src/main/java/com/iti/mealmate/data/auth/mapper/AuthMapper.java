@@ -17,4 +17,15 @@ public class AuthMapper {
         );
     }
 
+    public static UserModel toUserModelFromFirebaseUser(FirebaseUser firebaseUser) {
+        return new UserModel(
+                firebaseUser.getUid(),
+                firebaseUser.getEmail(),
+                firebaseUser.getDisplayName(),
+                null,
+                System.currentTimeMillis(),
+                System.currentTimeMillis()
+        );
+    }
+
 }

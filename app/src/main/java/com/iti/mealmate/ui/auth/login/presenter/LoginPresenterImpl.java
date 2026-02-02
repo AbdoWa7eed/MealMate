@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.iti.mealmate.data.auth.model.LoginRequest;
+import com.iti.mealmate.data.auth.model.UserModel;
 import com.iti.mealmate.data.auth.repo.AuthRepository;
 import com.iti.mealmate.ui.auth.login.LoginPresenter;
 import com.iti.mealmate.ui.auth.login.LoginView;
@@ -44,17 +45,12 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     private void performLogin(String email, String password) {
         view.showLoading();
-        Disposable disposable = repository.loginWithEmail(new LoginRequest(email, password))
+        var loginWithEmailRequset = repository
+                .loginWithEmail(new LoginRequest(email, password))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(userModel -> {
-                    view.hideLoading();
-                    view.navigateToHome(userModel);
-                }, throwable -> {
-                    view.hideLoading();
-                    view.showError(throwable.getMessage());
-                });
-        compositeDisposable.add(disposable);
+                .subscribe(this::onSuccess, this::onError);
+        compositeDisposable.add(loginWithEmailRequset);
     }
 
     private boolean validateInputs(String email, String password) {
@@ -81,30 +77,21 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void loginWithGoogle() {
-        var googleTokenRequest = GoogleSignInHelper
-                .signIn(context)
+        var googleTokenRequest = GoogleSignInHelper.signIn(context)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::completeSignIn,
-                        error -> {
-                            Log.e("LoginPresenterImpl", error.getMessage());
-                            view.showError(error.getMessage());
-                        });
+                        error -> view.showError(error.getMessage()));
         compositeDisposable.add(googleTokenRequest);
     }
 
     private void completeSignIn(String idToken) {
+        view.showLoading();
         var googleSignInRequest = repository
                 .signInWithGoogle(idToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(userModel -> {
-                    Log.d("LoginPresenterImpl", "Google User: " + userModel.getName());
-                    },
-                error -> {
-                    Log.e("LoginPresenterImpl", error.getMessage());
-                    view.showError(error.getMessage());
-                });
+                .subscribe(this::onSuccess, this::onError);
 
         compositeDisposable.add(googleSignInRequest);
     }
@@ -113,6 +100,18 @@ public class LoginPresenterImpl implements LoginPresenter {
     public void loginWithFacebook() {
         // TODO: Implement Facebook login
     }
+
+    private void onError(Throwable error) {
+        view.hideLoading();
+        view.showError(error.getMessage());
+    }
+
+
+    private void onSuccess(UserModel userModel) {
+        view.navigateToHome(userModel);
+        view.hideLoading();
+    }
+
 
     @Override
     public void onDestroy() {
