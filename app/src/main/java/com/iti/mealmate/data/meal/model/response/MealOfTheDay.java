@@ -3,8 +3,11 @@ package com.iti.mealmate.data.meal.model.response;
 import androidx.annotation.NonNull;
 
 public class MealOfTheDay {
-    private final String  mealId;
-    private final String date;
+    private String mealId;
+    private String date;
+
+    public MealOfTheDay() {
+    }
 
     public MealOfTheDay(String mealId, @NonNull String date) {
         this.mealId = mealId;
@@ -15,9 +18,17 @@ public class MealOfTheDay {
         return mealId;
     }
 
+    public void setMealId(String mealId) {
+        this.mealId = mealId;
+    }
+
     @NonNull
     public String getDate() {
         return date;
+    }
+
+    public void setDate(@NonNull String date) {
+        this.date = date;
     }
 
 }

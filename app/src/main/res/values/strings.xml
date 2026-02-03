@@ -96,4 +96,12 @@
     <string name="facebook_app_id">1227026426198292</string>
     <string name="fb_login_protocol_scheme">fb1227026426198292</string>
     <string name="facebook_client_token">4669bac4375e8a6f3c60dc7e5fd67dba</string>
+
+    <!-- Error state strings -->
+    <string name="error_title_default">Something went wrong</string>
+    <string name="error_subtitle_default">We couldn\'t load the content. Please try again.</string>
+    <string name="retry_button">Retry</string>
+    <string name="error_network_title">No Internet Connection</string>
+    <string name="error_network_subtitle">Please check your connection and try again.</string>
+    <string name="error_image_description">Error illustration</string>
 </resources>

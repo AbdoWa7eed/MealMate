@@ -13,9 +13,13 @@ public class Meal {
     private final String sourceUrl;
     private final List<MealIngredient> ingredients;
 
+    private boolean isFavorite;
+
     public Meal(String id, String name, String category, String area,
                 String instructions, String thumbnailUrl, String youtubeUrl,
-                String sourceUrl, List<MealIngredient> ingredients) {
+                String sourceUrl, List<MealIngredient> ingredients,
+                boolean isFavorite
+                ) {
         this.id = id;
         this.name = name;
         this.category = category;
@@ -25,15 +29,50 @@ public class Meal {
         this.youtubeUrl = youtubeUrl;
         this.sourceUrl = sourceUrl;
         this.ingredients = ingredients;
+        this.isFavorite = isFavorite;
     }
 
-    public String getId() { return id; }
-    public String getName() { return name; }
-    public String getCategory() { return category; }
-    public String getArea() { return area; }
-    public String getInstructions() { return instructions; }
-    public String getThumbnailUrl() { return thumbnailUrl; }
-    public String getYoutubeUrl() { return youtubeUrl; }
-    public String getSourceUrl() { return sourceUrl; }
-    public List<MealIngredient> getIngredients() { return ingredients; }
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public String getInstructions() {
+        return instructions;
+    }
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
+    public String getYoutubeUrl() {
+        return youtubeUrl;
+    }
+
+    public String getSourceUrl() {
+        return sourceUrl;
+    }
+
+    public List<MealIngredient> getIngredients() {
+        return ingredients;
+    }
 }

@@ -1,9 +1,10 @@
-package com.iti.mealmate.ui.home;
+package com.iti.mealmate.ui.home.view;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -34,6 +35,7 @@ public class HomeActivity extends AppCompatActivity {
     private void setupNavigation() {
         binding.homeNavHost.post(() -> {
             navController = androidx.navigation.Navigation.findNavController(binding.homeNavHost);
+
             appBarConfiguration = new AppBarConfiguration.Builder(
                     R.id.homeFragment,
                     R.id.discoverFragment,
@@ -43,7 +45,21 @@ public class HomeActivity extends AppCompatActivity {
             ).build();
 
             NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-            NavigationUI.setupWithNavController(binding.bottomNav, navController);
+
+            binding.bottomNav.setOnItemSelectedListener(item -> {
+                NavOptions navOptions = new NavOptions.Builder()
+                        .setLaunchSingleTop(true)
+                        .setRestoreState(true)
+                        .setPopUpTo(
+                                navController.getGraph().getStartDestinationId(),
+                                false,
+                                true
+                        )
+                        .build();
+
+                navController.navigate(item.getItemId(), null, navOptions);
+                return true;
+            });
         });
     }
 

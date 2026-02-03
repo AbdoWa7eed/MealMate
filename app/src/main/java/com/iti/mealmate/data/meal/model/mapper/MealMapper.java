@@ -29,7 +29,8 @@ public class MealMapper {
                 response.getStrMealThumb(),
                 response.getStrYoutube(),
                 response.getStrSource(),
-                ingredients
+                ingredients,
+                false
         );
     }
 }

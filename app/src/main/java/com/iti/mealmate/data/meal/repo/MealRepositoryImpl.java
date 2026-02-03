@@ -7,7 +7,7 @@ import java.util.List;
 
 import io.reactivex.rxjava3.core.Single;
 
-class MealRepositoryImpl implements MealRepository {
+public class MealRepositoryImpl implements MealRepository {
 
     private final MealRemoteDataSource remoteDataSource;
 

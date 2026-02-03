@@ -1,4 +1,4 @@
-package com.iti.mealmate.ui.home.adapter;
+package com.iti.mealmate.ui.home.view.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -6,16 +6,22 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.iti.mealmate.R;
 import com.iti.mealmate.databinding.HomeCategoryItemBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
     private final List<CategoryItem> categories;
 
-    public CategoryAdapter(List<CategoryItem> categories) {
-        this.categories = categories;
+    public CategoryAdapter() {
+        this.categories = new ArrayList<>();
+        categories.add(new CategoryAdapter.CategoryItem("Breakfast", R.drawable.ic_breakfast));
+        categories.add(new CategoryAdapter.CategoryItem("Seafood", R.drawable.ic_seafood));
+        categories.add(new CategoryAdapter.CategoryItem("Vegan", R.drawable.ic_vegan));
+        categories.add(new CategoryAdapter.CategoryItem("Dessert", R.drawable.ic_desert));
     }
 
     @NonNull

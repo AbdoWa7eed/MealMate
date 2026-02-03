@@ -20,14 +20,14 @@ public class FirestoreMealHelper {
     }
 
 
-    public Single<Void> saveMealOfTheDay(String mealId) {
+    public Single<MealOfTheDay> saveMealOfTheDay(String mealId) {
         MealOfTheDay meal = new MealOfTheDay(mealId, LocalDate.now().toString());
 
         return Single.create(emitter ->
                 firestore.collection(DAILY_MEALS)
                         .document(meal.getDate())
                         .set(meal)
-                        .addOnSuccessListener(emitter::onSuccess)
+                        .addOnSuccessListener(aVoid -> emitter.onSuccess(meal))
                         .addOnFailureListener(emitter::onError)
         );
     }
