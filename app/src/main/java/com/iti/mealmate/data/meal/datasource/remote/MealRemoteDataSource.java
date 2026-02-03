@@ -11,7 +11,7 @@ public interface MealRemoteDataSource {
 
     Single<List<Meal>> getMealsByIngredient(String ingredient);
 
-    Single<Meal> getMealById(String id);
-
     Single<List<Meal>> searchMealsByName(String name);
+
+    public Single<List<Meal>> getSuggestedMeals();
 }

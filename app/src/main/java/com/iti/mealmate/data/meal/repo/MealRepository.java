@@ -12,7 +12,7 @@ public interface MealRepository {
 
     Single<List<Meal>> getMealsByIngredient(String ingredient);
 
-    Single<Meal> getMealById(String id);
+    Single<List<Meal>> getSuggestedMeals();
 
     Single<List<Meal>> searchMealsByName(String name);
 }

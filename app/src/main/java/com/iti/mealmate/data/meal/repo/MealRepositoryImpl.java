@@ -26,8 +26,8 @@ class MealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Single<Meal> getMealById(String id) {
-        return remoteDataSource.getMealById(id);
+    public Single<List<Meal>> getSuggestedMeals() {
+        return remoteDataSource.getSuggestedMeals();
     }
 
     @Override
