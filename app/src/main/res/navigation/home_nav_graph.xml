@@ -3,35 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_nav_graph"
+    app:restoreState="true"
     app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.iti.mealmate.ui.home.view.HomeFragment"
-        android:label="@string/home"
-        tools:layout="@layout/fragment_home" />
+        android:label="@string/home" />
 
     <fragment
         android:id="@+id/discoverFragment"
         android:name="com.iti.mealmate.ui.discover.DiscoverFragment"
-        android:label="@string/discover"
-        tools:layout="@layout/fragment_discover" />
+        android:label="@string/discover" />
 
     <fragment
         android:id="@+id/planFragment"
         android:name="com.iti.mealmate.ui.plan.PlanFragment"
-        android:label="@string/plan"
-        tools:layout="@layout/fragment_plan" />
+        android:label="@string/plan" />
 
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.iti.mealmate.ui.favorites.FavoritesFragment"
-        android:label="@string/favorites"
-        tools:layout="@layout/fragment_favorites" />
+        android:label="@string/favorites" />
 
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.iti.mealmate.ui.profile.ProfileFragment"
-        android:label="@string/profile"
-        tools:layout="@layout/fragment_profile" />
+        android:label="@string/profile" />
 </navigation>

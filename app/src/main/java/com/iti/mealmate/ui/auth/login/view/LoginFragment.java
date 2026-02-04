@@ -19,8 +19,8 @@ import com.iti.mealmate.ui.auth.login.LoginPresenter;
 import com.iti.mealmate.ui.auth.login.LoginView;
 import com.iti.mealmate.ui.auth.login.presenter.LoginPresenterImpl;
 import com.iti.mealmate.ui.home.view.HomeActivity;
-import com.iti.mealmate.ui.utils.ActivityExtensions;
-import com.iti.mealmate.util.FacebookLoginProvider;
+import com.iti.mealmate.ui.common.ActivityExtensions;
+import com.iti.mealmate.core.util.FacebookLoginProvider;
 
 import java.util.Objects;
 

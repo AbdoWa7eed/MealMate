@@ -1,4 +1,4 @@
-package com.iti.mealmate.util;
+package com.iti.mealmate.core.util;
 
 import android.content.Context;
 import android.os.Bundle;

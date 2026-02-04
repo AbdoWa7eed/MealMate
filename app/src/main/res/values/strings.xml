@@ -104,4 +104,11 @@
     <string name="error_network_title">No Internet Connection</string>
     <string name="error_network_subtitle">Please check your connection and try again.</string>
     <string name="error_image_description">Error illustration</string>
+
+    <!-- Discover screen -->
+    <string name="discover_search_hint">Search for recipes...</string>
+    <string name="discover_chip_category">Category</string>
+    <string name="discover_chip_country">Country</string>
+    <string name="discover_chip_ingredients">Ingredients</string>
+    <string name="discover_empty_state">Discover your next favorite meal</string>
 </resources>

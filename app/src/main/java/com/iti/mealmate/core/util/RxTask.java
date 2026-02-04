@@ -1,4 +1,4 @@
-package com.iti.mealmate.util;
+package com.iti.mealmate.core.util;
 
 import com.google.android.gms.tasks.Task;
 import com.iti.mealmate.core.network.AppConnectivityManager;

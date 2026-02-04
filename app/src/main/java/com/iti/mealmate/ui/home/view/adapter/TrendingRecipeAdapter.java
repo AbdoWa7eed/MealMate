@@ -48,7 +48,6 @@ public class TrendingRecipeAdapter extends RecyclerView.Adapter<TrendingRecipeAd
         holder.binding.buttonTrendingFavorite.setOnClickListener(v -> {
             recipe.setFavorite(!recipe.isFavorite());
 
-            // Update favorite icon
             holder.binding.buttonFavImage.setImageResource(
                     recipe.isFavorite() ? R.drawable.ic_fav_filled_primary : R.drawable.ic_fav_filled
             );

@@ -17,7 +17,7 @@ import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.auth.register.RegistrationPresenter;
 import com.iti.mealmate.ui.auth.register.RegistrationView;
 import com.iti.mealmate.ui.auth.register.presenter.RegistrationPresenterImpl;
-import com.iti.mealmate.ui.utils.ActivityExtensions;
+import com.iti.mealmate.ui.common.ActivityExtensions;
 
 import java.util.Objects;
 

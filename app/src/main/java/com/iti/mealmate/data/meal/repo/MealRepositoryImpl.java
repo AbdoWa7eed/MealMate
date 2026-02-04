@@ -4,7 +4,7 @@ import com.iti.mealmate.core.error.AppErrorHandler;
 import com.iti.mealmate.core.network.AppConnectivityManager;
 import com.iti.mealmate.data.meal.datasource.remote.MealRemoteDataSource;
 import com.iti.mealmate.data.meal.model.entity.Meal;
-import com.iti.mealmate.util.RxTask;
+import com.iti.mealmate.core.util.RxTask;
 
 import java.util.List;
 

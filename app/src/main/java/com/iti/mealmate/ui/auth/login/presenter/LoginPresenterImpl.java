@@ -9,9 +9,9 @@ import com.iti.mealmate.data.auth.model.UserModel;
 import com.iti.mealmate.data.auth.repo.AuthRepository;
 import com.iti.mealmate.ui.auth.login.LoginPresenter;
 import com.iti.mealmate.ui.auth.login.LoginView;
-import com.iti.mealmate.util.FacebookLoginProvider;
-import com.iti.mealmate.util.FacebookSignInHelper;
-import com.iti.mealmate.util.GoogleSignInHelper;
+import com.iti.mealmate.core.util.FacebookLoginProvider;
+import com.iti.mealmate.core.util.FacebookSignInHelper;
+import com.iti.mealmate.core.util.GoogleSignInHelper;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;

@@ -20,7 +20,7 @@ import com.iti.mealmate.ui.home.view.HomeActivity;
 import com.iti.mealmate.ui.onboarding.view.OnboardingActivity;
 import com.iti.mealmate.ui.splash.SplashContract;
 import com.iti.mealmate.ui.splash.SplashPresenter;
-import com.iti.mealmate.ui.utils.ActivityExtensions;
+import com.iti.mealmate.ui.common.ActivityExtensions;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity implements SplashContract.View {
