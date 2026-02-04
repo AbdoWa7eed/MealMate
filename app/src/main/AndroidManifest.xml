@@ -14,7 +14,8 @@
         <activity
             android:name=".ui.home.view.HomeActivity"
             android:exported="false"
-            android:theme="@style/Theme.MealMate" />
+            android:theme="@style/Theme.MealMate"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".ui.auth.AuthenticationActivity"
             android:exported="false"
