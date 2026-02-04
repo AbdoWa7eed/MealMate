@@ -1,6 +1,6 @@
 package com.iti.mealmate.ui.onboarding;
 
-import com.iti.mealmate.base.BasePresenter;
+import com.iti.mealmate.core.base.BasePresenter;
 import com.iti.mealmate.ui.onboarding.model.OnboardingPage;
 
 import java.util.List;

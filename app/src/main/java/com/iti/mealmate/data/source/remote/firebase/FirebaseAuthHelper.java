@@ -12,7 +12,7 @@ import com.iti.mealmate.util.RxTask;
 import io.reactivex.rxjava3.core.Single;
 
 public class FirebaseAuthHelper {
-    private FirebaseAuth firebaseAuth;
+    private final FirebaseAuth firebaseAuth;
 
     public FirebaseAuthHelper(FirebaseAuth auth) {
         this.firebaseAuth = auth;
@@ -22,12 +22,12 @@ public class FirebaseAuthHelper {
         return RxTask.firebaseToSingleTask(
                 firebaseAuth.signInWithEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword())
         ).flatMap(authResult -> {
-            if (authResult.getUser() != null) {
-                return Single.just(authResult.getUser());
-            } else {
-                return Single.error(new Exception("User authentication failed"));
-            }
-        });
+                    if (authResult.getUser() != null) {
+                        return Single.just(authResult.getUser());
+                    } else {
+                        return Single.error(new Exception("User authentication failed"));
+                    }
+                });
     }
 
     public Single<FirebaseUser> registerWithEmail(RegisterRequest registerRequest) {
@@ -35,12 +35,12 @@ public class FirebaseAuthHelper {
         return RxTask.firebaseToSingleTask(
                 firebaseAuth.createUserWithEmailAndPassword(registerRequest.getEmail(), registerRequest.getPassword())
         ).flatMap(authResult -> {
-            if (authResult.getUser() != null) {
-                return Single.just(authResult.getUser());
-            } else {
-                return Single.error(new Exception("User authentication failed"));
-            }
-        });
+                    if (authResult.getUser() != null) {
+                        return Single.just(authResult.getUser());
+                    } else {
+                        return Single.error(new Exception("User authentication failed"));
+                    }
+                });
     }
 
     public Single<FirebaseUser> signInWithGoogle(String idToken) {
@@ -55,12 +55,12 @@ public class FirebaseAuthHelper {
         return RxTask.firebaseToSingleTask(
                 firebaseAuth.signInWithCredential(credential)
         ).flatMap(authResult -> {
-            if (authResult.getUser() != null) {
-                return Single.just(authResult.getUser());
-            } else {
-                return Single.error(new Exception("User authentication failed"));
-            }
-        });
+                    if (authResult.getUser() != null) {
+                        return Single.just(authResult.getUser());
+                    } else {
+                        return Single.error(new Exception("User authentication failed"));
+                    }
+                });
     }
 
     public boolean isLoggedIn() {
@@ -70,6 +70,5 @@ public class FirebaseAuthHelper {
     public void logout() {
         firebaseAuth.signOut();
     }
-
 
 }

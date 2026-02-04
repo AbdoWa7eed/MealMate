@@ -85,40 +85,42 @@ public class HomeFragment extends Fragment implements HomeView {
 
     @Override
     public void showLoading() {
-        if (isAdded()) {
-            hideContent();
-            FragmentStateManager.showShimmerFragment(
-                    getChildFragmentManager(),
-                    R.id.state_fragment_container
-            );
-        }
+        hideContent();
+        FragmentStateManager.showShimmerFragment(
+                getChildFragmentManager(),
+                R.id.state_fragment_container
+        );
     }
 
     @Override
     public void hideLoading() {
-        if (isAdded()) {
-            FragmentStateManager.hideShimmerFragment(getChildFragmentManager());
-            showContent();
-        }
+        FragmentStateManager.hideShimmerFragment(getChildFragmentManager());
+        showContent();
     }
 
     @Override
     public void showError(String message) {
-        if (isAdded()) {
-            hideContent();
-            String errorTitle = getString(R.string.error_title_default);
-            String errorMessage = message != null && !message.isEmpty()
-                    ? message
-                    : getString(R.string.error_subtitle_default);
+        hideContent();
+        String errorMessage = message != null && !message.isEmpty()
+                ? message
+                : getString(R.string.error_subtitle_default);
 
-            FragmentStateManager.showErrorFragment(
-                    getChildFragmentManager(),
-                    R.id.state_fragment_container,
-                    errorTitle,
-                    errorMessage,
-                    presenter::loadHomeData
-            );
-        }
+        FragmentStateManager.showErrorFragment(
+                getChildFragmentManager(),
+                R.id.state_fragment_container,
+                errorMessage,
+                presenter::loadHomeData
+        );
+    }
+
+    @Override
+    public void noInternetError() {
+        hideContent();
+        FragmentStateManager.showConnectionErrorFragment(
+                getChildFragmentManager(),
+                R.id.state_fragment_container,
+                presenter::loadHomeData
+        );
     }
 
     private void showContent() {

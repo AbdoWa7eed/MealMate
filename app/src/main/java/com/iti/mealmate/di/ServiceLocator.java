@@ -1,12 +1,15 @@
 package com.iti.mealmate.di;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.MemoryCacheSettings;
+import com.iti.mealmate.core.network.AppConnectivityManager;
+import com.iti.mealmate.core.network.AppConnectivityManagerImpl;
 import com.iti.mealmate.data.auth.datasource.AuthDataSource;
 import com.iti.mealmate.data.auth.datasource.AuthDataSourceImpl;
 import com.iti.mealmate.data.auth.repo.AuthRepository;
@@ -29,6 +32,7 @@ public final class ServiceLocator {
     private static PreferencesHelper preferencesHelper;
     private static AuthRepository authRepository;
     private static MealRepository mealRepository;
+    private static AppConnectivityManager connectivityManager;
 
     private ServiceLocator() {}
 
@@ -36,6 +40,7 @@ public final class ServiceLocator {
         if (initialized) return;
         Context appContext = context.getApplicationContext();
         preferencesHelper = new PreferencesHelper(appContext);
+        connectivityManager = new AppConnectivityManagerImpl(appContext);
         if (FirebaseApp.getApps(appContext).isEmpty()) {
             FirebaseApp.initializeApp(appContext);
         }
@@ -52,7 +57,7 @@ public final class ServiceLocator {
                 new FirestoreUserHelper(firestore);
         AuthDataSource authDataSource =
                 new AuthDataSourceImpl(firebaseAuthHelper, firestoreUserHelper);
-        authRepository = new AuthRepositoryImpl(authDataSource);
+        authRepository = new AuthRepositoryImpl(authDataSource, connectivityManager);
 
         MealApiService mealApiService =
                 ApiClient.getInstance().create(MealApiService.class);
@@ -60,7 +65,7 @@ public final class ServiceLocator {
                 new FirestoreMealHelper(firestore);
         MealRemoteDataSource mealRemoteDataSource =
                 new MealRemoteDataSourceImpl(mealApiService, firestoreMealHelper);
-        mealRepository = new MealRepositoryImpl(mealRemoteDataSource);
+        mealRepository = new MealRepositoryImpl(mealRemoteDataSource, connectivityManager);
 
         initialized = true;
     }
@@ -78,6 +83,11 @@ public final class ServiceLocator {
     public static MealRepository getMealRepository() {
         checkInit();
         return mealRepository;
+    }
+
+    public static AppConnectivityManager getConnectivityManager() {
+        checkInit();
+        return connectivityManager;
     }
 
     private static void checkInit() {

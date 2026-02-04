@@ -30,10 +30,23 @@ public class FragmentStateManager {
     }
 
     public static void showErrorFragment(@NonNull FragmentManager fragmentManager, int containerId,
-                                         @NonNull String title, @NonNull String message,
+                                         @NonNull String title,
                                          @Nullable Runnable retryAction) {
         if (!fragmentManager.isStateSaved()) {
-            ErrorFragment errorFragment = ErrorFragment.newInstance(title, message, retryAction != null);
+            ErrorFragment errorFragment = ErrorFragment.newInstance(title, retryAction != null);
+            errorFragment.setRetryAction(retryAction);
+
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(containerId, errorFragment, TAG_ERROR);
+            transaction.commitAllowingStateLoss();
+        }
+    }
+
+    public static void showConnectionErrorFragment(@NonNull FragmentManager fragmentManager, int containerId,
+                                                   @Nullable Runnable retryAction) {
+        if (!fragmentManager.isStateSaved()) {
+            ErrorFragment errorFragment =
+                    ErrorFragment.newConnectionErrorInstance(retryAction != null);
             errorFragment.setRetryAction(retryAction);
 
             FragmentTransaction transaction = fragmentManager.beginTransaction();

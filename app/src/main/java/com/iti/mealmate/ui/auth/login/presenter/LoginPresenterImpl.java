@@ -1,8 +1,9 @@
 package com.iti.mealmate.ui.auth.login.presenter;
 
 import android.content.Context;
-import android.util.Log;
 
+import com.iti.mealmate.R;
+import com.iti.mealmate.core.network.NoConnectivityException;
 import com.iti.mealmate.data.auth.model.LoginRequest;
 import com.iti.mealmate.data.auth.model.UserModel;
 import com.iti.mealmate.data.auth.repo.AuthRepository;
@@ -18,7 +19,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class LoginPresenterImpl implements LoginPresenter {
 
-    private static final String TAG = "LoginPresenterImpl";
     private final LoginView view;
 
     private final AuthRepository repository;
@@ -82,8 +82,7 @@ public class LoginPresenterImpl implements LoginPresenter {
         var googleTokenRequest = GoogleSignInHelper.signIn(context)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::completeGoogleSignIn,
-                        error -> view.showError(error.getMessage()));
+                .subscribe(this::completeGoogleSignIn, this::onError);
         compositeDisposable.add(googleTokenRequest);
     }
 
@@ -104,8 +103,7 @@ public class LoginPresenterImpl implements LoginPresenter {
             var facebookSignInRequest = FacebookSignInHelper.signIn((FacebookLoginProvider) view)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::completeFacebookSignIn,
-                            error -> view.showError(error.getMessage()));
+                    .subscribe(this::completeFacebookSignIn, this::onError);
             compositeDisposable.add(facebookSignInRequest);
         } else {
             view.showError("Facebook login not supported for this view");
@@ -125,8 +123,15 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     private void onError(Throwable error) {
         view.hideLoading();
-        Log.e(TAG, "Error logging in", error);
-        view.showError(error.getMessage());
+        if (error instanceof NoConnectivityException) {
+            view.noInternetError();
+        } else {
+            String message =
+                    error != null && error.getMessage() != null && !error.getMessage().isEmpty()
+                            ? error.getMessage()
+                            : context.getString(R.string.error_subtitle_default);
+            view.showError(message);
+        }
     }
 
 

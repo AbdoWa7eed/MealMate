@@ -1,5 +1,6 @@
 package com.iti.mealmate.ui.home.presenter;
 
+import com.iti.mealmate.core.network.NoConnectivityException;
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.data.meal.repo.MealRepository;
 import com.iti.mealmate.ui.home.HomePresenter;
@@ -39,11 +40,13 @@ public class HomePresenterImpl implements HomePresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(view::hideLoading)
-                .subscribe(this::loadData,
-                        error -> {
-                            view.showError(error.getMessage());
-                        }
-                );
+                .subscribe(this::loadData, error -> {
+                    if (error instanceof NoConnectivityException) {
+                        view.noInternetError();
+                    } else {
+                        view.showError(error.getMessage());
+                    }
+                });
 
         disposables.add(homeRequest);
     }

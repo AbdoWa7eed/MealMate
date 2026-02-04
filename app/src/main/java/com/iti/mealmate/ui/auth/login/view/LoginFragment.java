@@ -103,6 +103,14 @@ public class LoginFragment extends Fragment implements LoginView, FacebookLoginP
     }
 
     @Override
+    public void noInternetError() {
+        ActivityExtensions.showErrorSnackBar(
+                requireActivity(),
+                getString(R.string.error_network_subtitle)
+        );
+    }
+
+    @Override
     public Fragment getFragment() {
         return this;
     }

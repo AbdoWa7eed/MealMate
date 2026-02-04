@@ -102,6 +102,14 @@ public class RegistrationFragment extends Fragment implements RegistrationView {
     }
 
     @Override
+    public void noInternetError() {
+        ActivityExtensions.showErrorSnackBar(
+                requireActivity(),
+                getString(R.string.error_network_subtitle)
+        );
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         presenter.onDestroy();
