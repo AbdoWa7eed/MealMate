@@ -1,4 +1,4 @@
-package com.iti.mealmate.ui.utils;
+package com.iti.mealmate.ui.common;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.iti.mealmate.ui.common.ErrorFragment;
 import com.iti.mealmate.ui.home.view.HomeShimmerFragment;
 
 public class FragmentStateManager {

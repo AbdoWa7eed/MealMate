@@ -4,12 +4,9 @@ import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.iti.mealmate.R;
-import com.iti.mealmate.ui.utils.ActivityExtensions;
+import com.iti.mealmate.ui.common.ActivityExtensions;
 
 public class AuthenticationActivity extends AppCompatActivity {
 

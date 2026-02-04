@@ -13,7 +13,7 @@ import com.iti.mealmate.ui.auth.AuthenticationActivity;
 import com.iti.mealmate.ui.onboarding.OnboardingContract;
 import com.iti.mealmate.ui.onboarding.OnboardingPresenter;
 import com.iti.mealmate.ui.onboarding.model.OnboardingPage;
-import com.iti.mealmate.ui.utils.ActivityExtensions;
+import com.iti.mealmate.ui.common.ActivityExtensions;
 
 import java.util.List;
 

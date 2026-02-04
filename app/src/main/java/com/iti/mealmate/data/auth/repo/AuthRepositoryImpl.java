@@ -6,7 +6,7 @@ import com.iti.mealmate.data.auth.datasource.AuthDataSource;
 import com.iti.mealmate.data.auth.model.LoginRequest;
 import com.iti.mealmate.data.auth.model.RegisterRequest;
 import com.iti.mealmate.data.auth.model.UserModel;
-import com.iti.mealmate.util.RxTask;
+import com.iti.mealmate.core.util.RxTask;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;

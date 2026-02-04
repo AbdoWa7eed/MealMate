@@ -4,7 +4,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.iti.mealmate.data.meal.exceptions.MealNotFoundException;
 import com.iti.mealmate.data.meal.model.response.MealOfTheDay;
-import com.iti.mealmate.util.RxTask;
+import com.iti.mealmate.core.util.RxTask;
 
 import java.time.LocalDate;
 

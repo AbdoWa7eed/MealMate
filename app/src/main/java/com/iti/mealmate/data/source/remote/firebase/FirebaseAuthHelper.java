@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.iti.mealmate.data.auth.model.LoginRequest;
 import com.iti.mealmate.data.auth.model.RegisterRequest;
-import com.iti.mealmate.util.RxTask;
+import com.iti.mealmate.core.util.RxTask;
 
 import io.reactivex.rxjava3.core.Single;
 

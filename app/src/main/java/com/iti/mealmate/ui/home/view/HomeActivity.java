@@ -9,7 +9,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.iti.mealmate.databinding.ActivityHomeBinding;
 import com.iti.mealmate.R;
-import com.iti.mealmate.ui.utils.ActivityExtensions;
+import com.iti.mealmate.ui.common.ActivityExtensions;
 
 public class HomeActivity extends AppCompatActivity {
 

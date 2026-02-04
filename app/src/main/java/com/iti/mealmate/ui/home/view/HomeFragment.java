@@ -21,7 +21,7 @@ import com.iti.mealmate.ui.home.HomeView;
 import com.iti.mealmate.ui.home.presenter.HomePresenterImpl;
 import com.iti.mealmate.ui.home.view.adapter.CategoryAdapter;
 import com.iti.mealmate.ui.home.view.adapter.TrendingRecipeAdapter;
-import com.iti.mealmate.ui.utils.FragmentStateManager;
+import com.iti.mealmate.ui.common.FragmentStateManager;
 
 import java.util.List;
 
