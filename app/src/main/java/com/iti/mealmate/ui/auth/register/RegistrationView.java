@@ -1,6 +1,6 @@
 package com.iti.mealmate.ui.auth.register;
 
-import com.iti.mealmate.base.BaseView;
+import com.iti.mealmate.core.base.BaseView;
 import com.iti.mealmate.data.auth.model.UserModel;
 
 public interface RegistrationView extends BaseView {

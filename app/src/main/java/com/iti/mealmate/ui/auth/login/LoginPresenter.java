@@ -1,7 +1,6 @@
 package com.iti.mealmate.ui.auth.login;
 
-import com.iti.mealmate.base.BasePresenter;
-import com.iti.mealmate.data.auth.model.LoginRequest;
+import com.iti.mealmate.core.base.BasePresenter;
 
 public interface LoginPresenter extends BasePresenter {
 

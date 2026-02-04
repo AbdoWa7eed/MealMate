@@ -1,6 +1,6 @@
 package com.iti.mealmate.ui.splash;
 
-import com.iti.mealmate.base.BasePresenter;
+import com.iti.mealmate.core.base.BasePresenter;
 
 public interface SplashContract {
     interface View {

@@ -2,6 +2,8 @@ package com.iti.mealmate.ui.auth.register.presenter;
 
 import android.util.Patterns;
 
+import com.iti.mealmate.R;
+import com.iti.mealmate.core.network.NoConnectivityException;
 import com.iti.mealmate.data.auth.model.RegisterRequest;
 import com.iti.mealmate.data.auth.repo.AuthRepository;
 import com.iti.mealmate.ui.auth.register.RegistrationPresenter;
@@ -42,7 +44,19 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
                     view.navigateToHome(user);
                 }, throwable -> {
                     view.hideLoading();
-                    view.showError(throwable.getMessage());
+                    if (throwable instanceof NoConnectivityException) {
+                        view.noInternetError();
+                    } else {
+                        String message =
+                                throwable != null && throwable.getMessage() != null
+                                        && !throwable.getMessage().isEmpty()
+                                        ? throwable.getMessage()
+                                        : view instanceof android.content.Context
+                                                ? ((android.content.Context) view)
+                                                .getString(R.string.error_subtitle_default)
+                                                : "Something went wrong";
+                        view.showError(message);
+                    }
                 });
         compositeDisposable.add(disposable);
     }
