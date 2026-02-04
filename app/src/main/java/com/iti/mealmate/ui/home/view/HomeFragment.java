@@ -54,8 +54,6 @@ public class HomeFragment extends Fragment implements HomeView {
             presenter = new HomePresenterImpl(this, ServiceLocator.getMealRepository());
         }
         presenter.loadHomeData();
-
-
     }
 
     private void setupHomeViews() {

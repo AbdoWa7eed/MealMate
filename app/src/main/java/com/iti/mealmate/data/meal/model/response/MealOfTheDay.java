@@ -2,24 +2,30 @@ package com.iti.mealmate.data.meal.model.response;
 
 import androidx.annotation.NonNull;
 
+import com.iti.mealmate.data.meal.model.entity.Meal;
+
+import java.util.List;
+
 public class MealOfTheDay {
-    private String mealId;
+    private Meal dailyMeal;
     private String date;
+    private List<Meal> suggestedMeals;
 
     public MealOfTheDay() {
     }
 
-    public MealOfTheDay(String mealId, @NonNull String date) {
-        this.mealId = mealId;
+    public MealOfTheDay(Meal dailyMeal, @NonNull String date, List<Meal> trendingMeals) {
+        this.dailyMeal = dailyMeal;
         this.date = date;
+        this.suggestedMeals = trendingMeals;
     }
 
-    public String getMealId() {
-        return mealId;
+    public Meal getDailyMeal() {
+        return dailyMeal;
     }
 
-    public void setMealId(String mealId) {
-        this.mealId = mealId;
+    public void setDailyMeal(Meal dailyMeal) {
+        this.dailyMeal = dailyMeal;
     }
 
     @NonNull
@@ -29,6 +35,14 @@ public class MealOfTheDay {
 
     public void setDate(@NonNull String date) {
         this.date = date;
+    }
+
+    public List<Meal> getSuggestedMeals() {
+        return suggestedMeals;
+    }
+
+    public void setSuggestedMeals(List<Meal> suggestedMeals) {
+        this.suggestedMeals = suggestedMeals;
     }
 
 }

@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
-import androidx.navigation.NavOptions;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -46,20 +45,7 @@ public class HomeActivity extends AppCompatActivity {
 
             NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-            binding.bottomNav.setOnItemSelectedListener(item -> {
-                NavOptions navOptions = new NavOptions.Builder()
-                        .setLaunchSingleTop(true)
-                        .setRestoreState(true)
-                        .setPopUpTo(
-                                navController.getGraph().getStartDestinationId(),
-                                false,
-                                true
-                        )
-                        .build();
-
-                navController.navigate(item.getItemId(), null, navOptions);
-                return true;
-            });
+            NavigationUI.setupWithNavController(binding.bottomNav, navController);
         });
     }
 

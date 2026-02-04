@@ -3,8 +3,11 @@ package com.iti.mealmate.data.meal.model.entity;
 import java.text.Normalizer;
 
 public class MealIngredient {
-    private final String name;
-    private final String measure;
+    private String name;
+    private String measure;
+
+    public MealIngredient() {
+    }
 
     public MealIngredient(String name, String measure) {
         this.name = name != null ? name.trim() : "";
@@ -20,10 +23,18 @@ public class MealIngredient {
     }
 
     public String getImageUrl() {
-        if (name.isEmpty()) return"";
+        if (name == null || name.isEmpty()) return"";
         String normalized = Normalizer.normalize(name, Normalizer.Form.NFD)
                 .toLowerCase()
                 .replace(" ", "_");
         return "https://www.themealdb.com/images/ingredients/" + normalized + ".png";
+    }
+
+    public void setName(String name) {
+        this.name = name != null ? name.trim() : "";
+    }
+
+    public void setMeasure(String measure) {
+        this.measure = measure != null ? measure.trim() : "";
     }
 }
