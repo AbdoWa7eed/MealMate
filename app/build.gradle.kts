@@ -62,6 +62,8 @@ dependencies {
     implementation(libs.facebook.login)
     implementation(libs.retrofit)
     implementation(libs.retrofit2.converter.gson)
-    implementation(libs.adapter.rxjava2)
+    implementation(libs.adapter.rxjava3)
+    implementation(libs.glide)
+    implementation(libs.shimmer)
 
 }

@@ -2,51 +2,87 @@ package com.iti.mealmate.di;
 
 import android.content.Context;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.MemoryCacheSettings;
 import com.iti.mealmate.data.auth.datasource.AuthDataSource;
 import com.iti.mealmate.data.auth.datasource.AuthDataSourceImpl;
 import com.iti.mealmate.data.auth.repo.AuthRepository;
 import com.iti.mealmate.data.auth.repo.AuthRepositoryImpl;
+import com.iti.mealmate.data.meal.api.MealApiService;
+import com.iti.mealmate.data.meal.datasource.remote.FirestoreMealHelper;
+import com.iti.mealmate.data.meal.datasource.remote.MealRemoteDataSource;
+import com.iti.mealmate.data.meal.datasource.remote.MealRemoteDataSourceImpl;
+import com.iti.mealmate.data.meal.repo.MealRepository;
+import com.iti.mealmate.data.meal.repo.MealRepositoryImpl;
 import com.iti.mealmate.data.source.local.prefs.PreferencesHelper;
+import com.iti.mealmate.data.source.remote.api.ApiClient;
 import com.iti.mealmate.data.source.remote.firebase.FirebaseAuthHelper;
 import com.iti.mealmate.data.source.remote.firebase.FirestoreUserHelper;
 
-public class ServiceLocator {
+public final class ServiceLocator {
+
+    private static boolean initialized = false;
+
     private static PreferencesHelper preferencesHelper;
-
     private static AuthRepository authRepository;
-    private static AuthDataSource authDataSource;
+    private static MealRepository mealRepository;
 
-    private static FirebaseAuthHelper firebaseAuthHelper;
+    private ServiceLocator() {}
 
-    private static FirestoreUserHelper firestoreUserHelper;
-
-    public static void init(Context context) {
-        if (preferencesHelper == null) {
-            preferencesHelper = new PreferencesHelper(context.getApplicationContext());
+    public static synchronized void init(Context context) {
+        if (initialized) return;
+        Context appContext = context.getApplicationContext();
+        preferencesHelper = new PreferencesHelper(appContext);
+        if (FirebaseApp.getApps(appContext).isEmpty()) {
+            FirebaseApp.initializeApp(appContext);
         }
+        FirebaseFirestoreSettings settings =
+                new FirebaseFirestoreSettings.Builder()
+                        .setLocalCacheSettings(MemoryCacheSettings.newBuilder().build())
+                        .build();
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.setFirestoreSettings(settings);
 
-        if (authRepository == null) {
-            firebaseAuthHelper = new FirebaseAuthHelper(FirebaseAuth.getInstance());
-            firestoreUserHelper = new FirestoreUserHelper(FirebaseFirestore.getInstance());
-            authDataSource = new AuthDataSourceImpl(firebaseAuthHelper, firestoreUserHelper);
-            authRepository = new AuthRepositoryImpl(authDataSource);
-        }
+        FirebaseAuthHelper firebaseAuthHelper =
+                new FirebaseAuthHelper(FirebaseAuth.getInstance());
+        FirestoreUserHelper firestoreUserHelper =
+                new FirestoreUserHelper(firestore);
+        AuthDataSource authDataSource =
+                new AuthDataSourceImpl(firebaseAuthHelper, firestoreUserHelper);
+        authRepository = new AuthRepositoryImpl(authDataSource);
+
+        MealApiService mealApiService =
+                ApiClient.getInstance().create(MealApiService.class);
+        FirestoreMealHelper firestoreMealHelper =
+                new FirestoreMealHelper(firestore);
+        MealRemoteDataSource mealRemoteDataSource =
+                new MealRemoteDataSourceImpl(mealApiService, firestoreMealHelper);
+        mealRepository = new MealRepositoryImpl(mealRemoteDataSource);
+
+        initialized = true;
     }
 
     public static PreferencesHelper getPreferencesHelper() {
-        if (preferencesHelper == null) {
-            throw new IllegalStateException("ServiceLocator not initialized!");
-        }
+        checkInit();
         return preferencesHelper;
     }
 
-
     public static AuthRepository getAuthRepository() {
-        if (authRepository == null) {
-            throw new IllegalStateException("ServiceLocator not initialized!");
-        }
+        checkInit();
         return authRepository;
+    }
+
+    public static MealRepository getMealRepository() {
+        checkInit();
+        return mealRepository;
+    }
+
+    private static void checkInit() {
+        if (!initialized) {
+            throw new IllegalStateException("ServiceLocator.init() must be called first");
+        }
     }
 }

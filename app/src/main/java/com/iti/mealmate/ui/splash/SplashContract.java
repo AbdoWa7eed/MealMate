@@ -5,7 +5,7 @@ import com.iti.mealmate.base.BasePresenter;
 public interface SplashContract {
     interface View {
         void navigateToOnboarding();
-        void navigateToMain();
+        void navigateToHome();
         void navigateToLogin();
         void startSplashAnimations();
     }

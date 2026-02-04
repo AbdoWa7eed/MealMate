@@ -16,6 +16,7 @@ import com.iti.mealmate.R;
 import com.iti.mealmate.databinding.ActivitySplashBinding;
 import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.auth.AuthenticationActivity;
+import com.iti.mealmate.ui.home.view.HomeActivity;
 import com.iti.mealmate.ui.onboarding.view.OnboardingActivity;
 import com.iti.mealmate.ui.splash.SplashContract;
 import com.iti.mealmate.ui.splash.SplashPresenter;
@@ -36,7 +37,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
         super.onCreate(savedInstanceState);
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        presenter = new SplashPresenter(this, ServiceLocator.getPreferencesHelper());
+        presenter = new SplashPresenter(this, ServiceLocator.getPreferencesHelper(), ServiceLocator.getAuthRepository());
         presenter.onViewCreated();
         scheduleNavigation();
     }
@@ -73,10 +74,8 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
     }
 
     @Override
-    public void navigateToMain() {
-        // TODO: Navigate to Home/Login after onboarding is done
-        // For now, staying consistent with your determineDestination logic
-        ActivityExtensions.navigateToActivity(this, AuthenticationActivity.class);
+    public void navigateToHome() {
+        ActivityExtensions.navigateToActivity(this, HomeActivity.class);
         finish();
     }
 

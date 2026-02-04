@@ -1,4 +1,4 @@
-package com.iti.mealmate.ui.home;
+package com.iti.mealmate.ui.home.view;
 
 import android.os.Bundle;
 
@@ -34,6 +34,7 @@ public class HomeActivity extends AppCompatActivity {
     private void setupNavigation() {
         binding.homeNavHost.post(() -> {
             navController = androidx.navigation.Navigation.findNavController(binding.homeNavHost);
+
             appBarConfiguration = new AppBarConfiguration.Builder(
                     R.id.homeFragment,
                     R.id.discoverFragment,
@@ -43,6 +44,7 @@ public class HomeActivity extends AppCompatActivity {
             ).build();
 
             NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+
             NavigationUI.setupWithNavController(binding.bottomNav, navController);
         });
     }

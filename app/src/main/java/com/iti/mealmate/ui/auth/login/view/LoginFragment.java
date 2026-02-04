@@ -18,6 +18,7 @@ import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.auth.login.LoginPresenter;
 import com.iti.mealmate.ui.auth.login.LoginView;
 import com.iti.mealmate.ui.auth.login.presenter.LoginPresenterImpl;
+import com.iti.mealmate.ui.home.view.HomeActivity;
 import com.iti.mealmate.ui.utils.ActivityExtensions;
 import com.iti.mealmate.util.FacebookLoginProvider;
 
@@ -65,6 +66,7 @@ public class LoginFragment extends Fragment implements LoginView, FacebookLoginP
     @Override
     public void navigateToHome(UserModel user) {
         ActivityExtensions.showSuccessSnackBar(requireActivity(), "Welcome " + user.getName());
+        ActivityExtensions.navigateToActivity(requireActivity(), HomeActivity.class);
     }
 
     @Override

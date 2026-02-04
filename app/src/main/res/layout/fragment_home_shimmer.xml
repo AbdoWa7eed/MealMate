@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="none">
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:shimmer_auto_start="false"
+        app:shimmer_base_alpha="0.7"
+        app:shimmer_direction="left_to_right"
+        app:shimmer_duration="1000"
+        app:shimmer_repeat_count="-1"
+        app:shimmer_repeat_delay="0"
+        app:shimmer_repeat_mode="restart"
+        app:shimmer_shape="linear"
+        app:shimmer_tilt="20">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBackground"
+            android:padding="16dp">
+
+            <View
+                android:id="@+id/shimmer_meal_title"
+                android:layout_width="150dp"
+                android:layout_height="20dp"
+                android:background="@drawable/shimmer_placeholder"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/shimmer_meal_card"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="20dp"
+                app:cardBackgroundColor="@color/colorSurface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/shimmer_meal_title">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shimmer_placeholder" />
+            </androidx.cardview.widget.CardView>
+
+            <View
+                android:id="@+id/shimmer_categories_title"
+                android:layout_width="100dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/shimmer_placeholder"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/shimmer_meal_card" />
+
+            <LinearLayout
+                android:id="@+id/shimmer_categories_list"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="18dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/shimmer_categories_title">
+
+                <View
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/shimmer_placeholder" />
+
+                <View
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/shimmer_placeholder" />
+
+                <View
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/shimmer_placeholder" />
+
+                <View
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/shimmer_placeholder" />
+
+                <View
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/shimmer_placeholder" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/shimmer_trending_title"
+                android:layout_width="120dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/shimmer_placeholder"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/shimmer_categories_list" />
+
+            <LinearLayout
+                android:id="@+id/shimmer_trending_list"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/shimmer_trending_title">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginBottom="12dp"
+                    app:cardBackgroundColor="@color/colorSurface"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:padding="12dp">
+
+                        <View
+                            android:layout_width="96dp"
+                            android:layout_height="96dp"
+                            android:background="@drawable/shimmer_placeholder" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="16dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/shimmer_placeholder" />
+
+                            <View
+                                android:layout_width="80dp"
+                                android:layout_height="12dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/shimmer_placeholder" />
+
+                            <View
+                                android:layout_width="100dp"
+                                android:layout_height="12dp"
+                                android:background="@drawable/shimmer_placeholder" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginBottom="12dp"
+                    app:cardBackgroundColor="@color/colorSurface"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:padding="12dp">
+
+                        <View
+                            android:layout_width="96dp"
+                            android:layout_height="96dp"
+                            android:background="@drawable/shimmer_placeholder" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="16dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/shimmer_placeholder" />
+
+                            <View
+                                android:layout_width="80dp"
+                                android:layout_height="12dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/shimmer_placeholder" />
+
+                            <View
+                                android:layout_width="100dp"
+                                android:layout_height="12dp"
+                                android:background="@drawable/shimmer_placeholder" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    app:cardBackgroundColor="@color/colorSurface"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:padding="12dp">
+
+                        <View
+                            android:layout_width="96dp"
+                            android:layout_height="96dp"
+                            android:background="@drawable/shimmer_placeholder" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="16dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/shimmer_placeholder" />
+
+                            <View
+                                android:layout_width="80dp"
+                                android:layout_height="12dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/shimmer_placeholder" />
+
+                            <View
+                                android:layout_width="100dp"
+                                android:layout_height="12dp"
+                                android:background="@drawable/shimmer_placeholder" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+</androidx.core.widget.NestedScrollView>
