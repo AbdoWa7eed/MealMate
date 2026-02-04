@@ -28,13 +28,13 @@ public class FilterRemoteDataSourceImpl implements FilterRemoteDataSource {
 
     @Override
     public Single<List<IngredientResponse>> getIngredients() {
-        return apiService.getIngredients("list")
+        return apiService.getIngredients()
                 .map(IngredientsBaseResponse::getMeals);
     }
 
     @Override
     public Single<List<CountryResponse>> getCountries() {
-        return apiService.getCountries("list")
+        return apiService.getCountries()
                 .map(CountriesBaseResponse::getMeals);
     }
 }

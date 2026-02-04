@@ -6,7 +6,9 @@ import java.util.Map;
 
 public final class CountryFlagProvider {
 
-    private static final String FLAG_BASE_URL = "https://flagsapi.com/%s/flat/64.png";
+
+    private static final String FLAG_BASE_URL =
+            "https://www.themealdb.com/images/icons/flags/big/128/%s.png";
 
     private static final Map<String, String> AREA_TO_CODE = new HashMap<>();
 

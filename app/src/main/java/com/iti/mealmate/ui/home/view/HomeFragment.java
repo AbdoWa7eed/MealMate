@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,12 +29,9 @@ public class HomeFragment extends Fragment implements HomeView {
     private FragmentHomeBinding binding;
     private HomePresenter presenter;
 
-    private static final String TAG = "HomeFragment";
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate: ");
     }
 
     @Override
@@ -49,7 +45,6 @@ public class HomeFragment extends Fragment implements HomeView {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupHomeViews();
-
         if(presenter == null) {
             presenter = new HomePresenterImpl(this, ServiceLocator.getMealRepository());
         }
@@ -134,8 +129,15 @@ public class HomeFragment extends Fragment implements HomeView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        presenter.onDestroy();
         binding = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) {
+            presenter.onDestroy();
+        }
     }
 }
 

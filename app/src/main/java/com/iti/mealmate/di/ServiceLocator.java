@@ -18,6 +18,11 @@ import com.iti.mealmate.data.meal.api.MealApiService;
 import com.iti.mealmate.data.meal.datasource.remote.FirestoreMealHelper;
 import com.iti.mealmate.data.meal.datasource.remote.MealRemoteDataSource;
 import com.iti.mealmate.data.meal.datasource.remote.MealRemoteDataSourceImpl;
+import com.iti.mealmate.data.filter.api.FilterApiService;
+import com.iti.mealmate.data.filter.datasource.remote.FilterRemoteDataSource;
+import com.iti.mealmate.data.filter.datasource.remote.FilterRemoteDataSourceImpl;
+import com.iti.mealmate.data.filter.repo.FilterRepository;
+import com.iti.mealmate.data.filter.repo.FilterRepositoryImpl;
 import com.iti.mealmate.data.meal.repo.MealRepository;
 import com.iti.mealmate.data.meal.repo.MealRepositoryImpl;
 import com.iti.mealmate.data.source.local.prefs.PreferencesHelper;
@@ -32,6 +37,7 @@ public final class ServiceLocator {
     private static PreferencesHelper preferencesHelper;
     private static AuthRepository authRepository;
     private static MealRepository mealRepository;
+    private static FilterRepository filterRepository;
     private static AppConnectivityManager connectivityManager;
 
     private ServiceLocator() {}
@@ -67,6 +73,12 @@ public final class ServiceLocator {
                 new MealRemoteDataSourceImpl(mealApiService, firestoreMealHelper);
         mealRepository = new MealRepositoryImpl(mealRemoteDataSource, connectivityManager);
 
+        FilterApiService filterApiService =
+                ApiClient.getInstance().create(FilterApiService.class);
+        FilterRemoteDataSource filterRemoteDataSource =
+                new FilterRemoteDataSourceImpl(filterApiService);
+        filterRepository = new FilterRepositoryImpl(filterRemoteDataSource, connectivityManager);
+
         initialized = true;
     }
 
@@ -83,6 +95,11 @@ public final class ServiceLocator {
     public static MealRepository getMealRepository() {
         checkInit();
         return mealRepository;
+    }
+
+    public static FilterRepository getFilterRepository() {
+        checkInit();
+        return filterRepository;
     }
 
     public static AppConnectivityManager getConnectivityManager() {

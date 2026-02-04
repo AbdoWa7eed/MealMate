@@ -79,8 +79,4 @@ public class FragmentStateManager {
     }
 
 
-    public static void hideStateFragment(@NonNull FragmentManager fragmentManager) {
-        hideShimmerFragment(fragmentManager);
-        hideErrorFragment(fragmentManager);
-    }
 }
