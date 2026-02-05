@@ -20,6 +20,7 @@ import com.iti.mealmate.ui.home.presenter.HomePresenterImpl;
 import com.iti.mealmate.ui.home.view.adapter.CategoryAdapter;
 import com.iti.mealmate.ui.home.view.adapter.TrendingRecipeAdapter;
 import com.iti.mealmate.ui.common.MealListArgs;
+import com.iti.mealmate.ui.mealdetail.view.MealDetailsActivity;
 import com.iti.mealmate.ui.meallist.view.MealListActivity;
 
 import java.util.List;
@@ -74,13 +75,20 @@ public class HomeFragment extends Fragment implements HomeView {
             binding.textMealOfDayName.setText(meal.getName());
             binding.textMealOfDayCountry.setText(meal.getArea());
             uiStateHandler.showContent();
+            binding.cardMealOfDay.setOnClickListener(v ->  this.navigateToMealDetails(meal));
         }
     }
 
     @Override
     public void showTrendingMeals(List<Meal> meals) {
-        binding.recyclerTrending.setAdapter(new TrendingRecipeAdapter(meals));
+        binding.recyclerTrending.setAdapter(new TrendingRecipeAdapter(meals, this::navigateToMealDetails));
         uiStateHandler.showContent();
+    }
+
+    private void navigateToMealDetails(Meal meal) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(com.iti.mealmate.ui.mealdetail.view.MealDetailsActivity.EXTRA_MEAL, meal);
+        ActivityExtensions.navigateToActivity(requireActivity(), MealDetailsActivity.class, bundle);
     }
 
     @Override

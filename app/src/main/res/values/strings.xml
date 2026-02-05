@@ -112,4 +112,19 @@
     <string name="discover_chip_ingredients">Ingredients</string>
     <string name="discover_empty_state">No results found. Try a different filter or search term.</string>
     <string name="search_result">Search Result</string>
+
+    <!-- Meal Details -->
+    <string name="meal_details_ingredients">Ingredients</string>
+    <string name="meal_details_preparation">Preparation</string>
+    <string name="meal_details_add_to_plan">ADD TO WEEKLY PLAN</string>
+    <string name="meal_details_items_count">%d items</string>
+    <string name="meal_name_placeholder">Creamy Spaghetti Carbonara</string>
+
+    <!-- Content Descriptions -->
+    <string name="cd_meal_image">Meal Image</string>
+    <string name="cd_back_button">Navigate Back</string>
+    <string name="cd_favorite_button">Add to Favorites</string>
+    <string name="cd_play_video">Play Recipe Video</string>
+    <string name="cd_country_icon">Country Icon</string>
+    <string name="cd_ingredient_image">Ingredient Image</string>
 </resources>

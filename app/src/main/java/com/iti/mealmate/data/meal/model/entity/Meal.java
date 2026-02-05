@@ -1,8 +1,9 @@
 package com.iti.mealmate.data.meal.model.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Meal {
+public class Meal implements Serializable {
     private String id;
     private String name;
     private String category;

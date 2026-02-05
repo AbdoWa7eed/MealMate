@@ -12,13 +12,16 @@ import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.databinding.ItemTrendingRecipeBinding;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class TrendingRecipeAdapter extends RecyclerView.Adapter<TrendingRecipeAdapter.TrendingRecipeViewHolder> {
 
     private final List<Meal> meals;
+    private final Consumer<Meal> onMealClicked;
 
-    public TrendingRecipeAdapter(List<Meal> meals) {
+    public TrendingRecipeAdapter(List<Meal> meals, Consumer<Meal> onMealClicked) {
         this.meals = meals;
+        this.onMealClicked = onMealClicked;
     }
 
     @NonNull
@@ -52,6 +55,8 @@ public class TrendingRecipeAdapter extends RecyclerView.Adapter<TrendingRecipeAd
                     recipe.isFavorite() ? R.drawable.ic_fav_filled_primary : R.drawable.ic_fav_filled
             );
         });
+
+        holder.itemView.setOnClickListener(v -> onMealClicked.accept(recipe));
     }
 
     @Override

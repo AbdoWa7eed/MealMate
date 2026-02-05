@@ -35,6 +35,15 @@ public class ActivityExtensions {
         setStatusBarColor(activity, R.color.colorBackground, false);
     }
 
+    public static void setStatusBarTransparent(Activity activity) {
+        activity.getWindow().setStatusBarColor(activity.getColor(android.R.color.transparent));
+        WindowInsetsControllerCompat insetsController =
+                new WindowInsetsControllerCompat(activity.getWindow(), activity.getWindow().getDecorView());
+        insetsController.setAppearanceLightStatusBars(true); // Dark icons for light imagery, or false for dark imagery.
+        // Assuming details screen hero image is dark-ish or user wants transparency over it. 
+        // MealDetailsActivity sets dark icons.
+    }
+
     public static void navigateToActivity(Activity activity, Class<?> target, Bundle extras) {
         Intent intent = new Intent(activity, target);
         if (extras != null) {
