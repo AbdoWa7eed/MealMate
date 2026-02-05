@@ -15,7 +15,16 @@ import java.util.List;
 
 public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealViewHolder> {
 
+    public interface OnMealClickListener {
+        void onMealClick(MealLight meal);
+    }
+
     private final List<MealLight> meals = new ArrayList<>();
+    private OnMealClickListener listener;
+
+    public void setOnMealClickListener(OnMealClickListener listener) {
+        this.listener = listener;
+    }
 
     public void submitList(List<MealLight> newMeals) {
         meals.clear();
@@ -42,6 +51,12 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
         Glide.with(holder.itemView.getContext())
                 .load(meal.getThumbnailUrl())
                 .into(holder.binding.imageMealThumbnail);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onMealClick(meal);
+            }
+        });
     }
 
     @Override
@@ -58,5 +73,3 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
         }
     }
 }
-
-

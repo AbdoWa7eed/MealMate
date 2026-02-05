@@ -15,8 +15,7 @@ import com.iti.mealmate.ui.meallist.MealListPresenter;
 import com.iti.mealmate.ui.meallist.MealListView;
 import com.iti.mealmate.ui.meallist.presenter.MealListPresenterImpl;
 import com.iti.mealmate.ui.meallist.view.adapter.MealListAdapter;
-
-import java.util.Collections;
+import com.iti.mealmate.ui.mealdetail.view.MealDetailsActivity;
 import java.util.List;
 
 public class MealListActivity extends AppCompatActivity implements MealListView {
@@ -58,10 +57,16 @@ public class MealListActivity extends AppCompatActivity implements MealListView 
 
     private void initRecyclerView() {
         mealListAdapter = new MealListAdapter();
+        mealListAdapter.setOnMealClickListener(meal -> navigateToMealDetails(meal.getId()));
         binding.recyclerMealList.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerMealList.setAdapter(mealListAdapter);
     }
 
+    private void navigateToMealDetails(String mealId) {
+        Bundle data = new Bundle();
+        data.putString(MealDetailsActivity.EXTRA_MEAL_ID, mealId);
+        ActivityExtensions.navigateToActivity(this, MealDetailsActivity.class, data);
+    }
     private void setupToolbar() {
         ActivityExtensions.setStatusBarWithDarkIcons(this);
 

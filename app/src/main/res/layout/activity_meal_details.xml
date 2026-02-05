@@ -9,6 +9,7 @@
     tools:context=".ui.mealdetail.view.MealDetailsActivity">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -37,43 +38,6 @@
                 app:layout_constraintTop_toTopOf="@id/iv_meal_image"
                 app:layout_constraintVertical_bias="0.0"
                 tools:layout_editor_absoluteX="0dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
-                android:paddingTop="48dp"
-                android:paddingBottom="16dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <ImageButton
-                    android:id="@+id/btn_back"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/bg_glass_circle"
-                    android:contentDescription="@string/cd_back_button"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_arrow_back"
-                    android:theme="@style/Theme.Material3.DayNight.NoActionBar"
-                    app:tint="@android:color/white" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
-                <ImageButton
-                    android:id="@+id/btn_favorite"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/bg_glass_circle"
-                    android:contentDescription="@string/cd_favorite_button"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_fav_filled"
-                    app:tint="@android:color/white" />
-            </LinearLayout>
 
             <FrameLayout
                 android:id="@+id/video_button_container"
@@ -236,6 +200,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
+        android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_gradient_white_fade"
@@ -252,5 +217,66 @@
             app:iconTint="@android:color/white"
             android:text="@string/meal_details_add_to_plan" />
     </LinearLayout>
+
+    <include
+        android:id="@+id/shimmer_overlay"
+        layout="@layout/layout_meal_details_shimmer_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/error_overlay"
+        layout="@layout/layout_error_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_container"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/toolbar_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="48dp"
+        android:paddingBottom="16dp"
+        android:elevation="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_glass_circle"
+            android:contentDescription="@string/cd_back_button"
+            android:padding="8dp"
+            android:src="@drawable/ic_arrow_back"
+            android:theme="@style/Theme.Material3.DayNight.NoActionBar"
+            app:tint="@android:color/white" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/btn_favorite"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_glass_circle"
+            android:contentDescription="@string/cd_favorite_button"
+            android:padding="8dp"
+            android:src="@drawable/ic_fav_filled"
+            app:tint="@android:color/white" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/video_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="20dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

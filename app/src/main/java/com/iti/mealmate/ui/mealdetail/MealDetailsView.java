@@ -6,6 +6,7 @@ import com.iti.mealmate.data.meal.model.entity.MealIngredient;
 import java.util.List;
 
 public interface MealDetailsView extends BaseView {
+    void showContent();
     void showMealName(String name);
     void showMealImage(String url);
     void showCountry(String country);

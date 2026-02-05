@@ -17,6 +17,7 @@ import com.iti.mealmate.R;
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.data.meal.model.entity.MealIngredient;
 import com.iti.mealmate.databinding.ActivityMealDetailsBinding;
+import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.common.ActivityExtensions;
 import com.iti.mealmate.ui.mealdetail.MealDetailsPresenter;
 import com.iti.mealmate.ui.mealdetail.MealDetailsView;
@@ -27,11 +28,13 @@ import java.util.List;
 public class MealDetailsActivity extends AppCompatActivity implements MealDetailsView {
 
     public static final String EXTRA_MEAL = "extra_meal";
+    public static final String EXTRA_MEAL_ID = "extra_meal_id";
 
     private ActivityMealDetailsBinding binding;
     private IngredientsAdapter ingredientsAdapter;
     private PreparationAdapter preparationAdapter;
     private MealDetailsPresenter presenter;
+    private MealDetailsUiStateHandler uiStateHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +45,13 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         ActivityExtensions.setStatusBarTransparent(this);
 
         initViews();
-        presenter = new MealDetailsPresenterImpl(this);
+        initPresenter();
         loadData();
     }
 
     private void initViews() {
+        uiStateHandler = new MealDetailsUiStateHandler(binding);
+
         ingredientsAdapter = new IngredientsAdapter();
         GridLayoutManager ingredientsLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.HORIZONTAL, false);
         binding.rvIngredients.setLayoutManager(ingredientsLayoutManager);
@@ -60,13 +65,21 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         binding.btnAddPlan.setOnClickListener(v -> presenter.addToPlan());
     }
 
+    private void initPresenter() {
+        presenter = new MealDetailsPresenterImpl(this, ServiceLocator.getMealRepository());
+    }
+
     private void loadData() {
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra(EXTRA_MEAL)) {
-            Meal meal = (Meal) intent.getSerializableExtra(EXTRA_MEAL);
-            presenter.setMeal(meal);
-            binding.btnVideo.setOnClickListener(v -> presenter.onVideoClicked());
-        }
+        Meal meal = intent != null ? (Meal) intent.getSerializableExtra(EXTRA_MEAL) : null;
+        String mealId = intent != null ? intent.getStringExtra(EXTRA_MEAL_ID) : null;
+        presenter.handleIntent(meal, mealId);
+        binding.btnVideo.setOnClickListener(v -> presenter.onVideoClicked());
+    }
+
+    @Override
+    public void showContent() {
+        uiStateHandler.showContent();
     }
 
     @Override
@@ -89,7 +102,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                     }
                 }, false);
 
-        ActivityExtensions.navigateToFragment(this, R.id.main, fragment, PreparationVideoFragment.TAG);
+        ActivityExtensions.navigateToFragment(this, R.id.video_container, fragment, PreparationVideoFragment.TAG);
     }
 
     @Override
@@ -135,19 +148,22 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
     @Override
     public void showLoading() {
+        uiStateHandler.showLoading();
     }
 
     @Override
     public void hideLoading() {
+        uiStateHandler.hideLoading();
     }
 
     @Override
     public void showError(String message) {
-        ActivityExtensions.showErrorSnackBar(this, message);
+        uiStateHandler.showError(message, presenter::retry);
     }
 
     @Override
     public void noInternetError() {
+        uiStateHandler.showNoInternetError(presenter::retry);
     }
 
     @Override

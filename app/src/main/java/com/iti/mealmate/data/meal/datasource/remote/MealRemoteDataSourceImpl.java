@@ -65,6 +65,12 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
                 .map(MealsBaseResponse::getMeals);
     }
 
+    @Override
+    public Single<Meal> getMealById(String id) {
+        return mealApiService.getMealById(id)
+                .map(response -> MealMapper.toEntity(response.getMeals().get(0)));
+    }
+
 
     private Single<MealOfTheDay> getOrFetchDailyMeals() {
         if (cachedFetchOperation == null) {

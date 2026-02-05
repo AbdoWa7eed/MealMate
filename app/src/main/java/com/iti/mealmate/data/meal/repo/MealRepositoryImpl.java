@@ -79,4 +79,13 @@ public class MealRepositoryImpl implements MealRepository {
         .map(MealMapper::toLightList)
         .onErrorResumeNext(throwable -> Single.error(AppErrorHandler.handle(throwable)));
     }
+
+    @Override
+    public Single<Meal> getMealById(String id) {
+        return RxTask.withConnectivity(
+                remoteDataSource.getMealById(id),
+                connectivityManager
+        )
+        .onErrorResumeNext(throwable -> Single.error(AppErrorHandler.handle(throwable)));
+    }
 }
