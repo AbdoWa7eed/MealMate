@@ -2,6 +2,7 @@ package com.iti.mealmate.data.meal.datasource.remote;
 
 
 import com.iti.mealmate.data.meal.model.entity.Meal;
+import com.iti.mealmate.data.meal.model.response.MealResponse;
 
 import java.util.List;
 import io.reactivex.rxjava3.core.Single;
@@ -9,9 +10,14 @@ import io.reactivex.rxjava3.core.Single;
 public interface MealRemoteDataSource {
     Single<Meal> getMealOfTheDay();
 
-    Single<List<Meal>> getMealsByIngredient(String ingredient);
+    Single<List<MealResponse>> getMealsByIngredient(String ingredient);
 
-    Single<List<Meal>> searchMealsByName(String name);
+    Single<List<MealResponse>> searchMealsByName(String name);
 
-    public Single<List<Meal>> getSuggestedMeals();
+    Single<List<Meal>> getSuggestedMeals();
+
+    Single<List<MealResponse>> getMealsByCategory(String category);
+
+
+    Single<List<MealResponse>> getMealsByCountry(String country);
 }

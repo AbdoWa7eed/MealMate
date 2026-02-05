@@ -19,4 +19,11 @@ public interface MealApiService {
     @GET("search.php")
     Single<MealsBaseResponse> searchMealsByName(@Query("s") String name);
 
+    @GET("filter.php")
+    Single<MealsBaseResponse> getMealsByCategory(@Query("c") String category);
+
+    @GET("filter.php")
+    Single<MealsBaseResponse> getMealsByCountry(@Query("a") String country);
+
+
 }

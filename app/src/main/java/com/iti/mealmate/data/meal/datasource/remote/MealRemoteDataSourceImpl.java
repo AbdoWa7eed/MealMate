@@ -4,6 +4,7 @@ import com.iti.mealmate.data.meal.api.MealApiService;
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.data.meal.model.mapper.MealMapper;
 import com.iti.mealmate.data.meal.model.response.MealOfTheDay;
+import com.iti.mealmate.data.meal.model.response.MealResponse;
 import com.iti.mealmate.data.meal.model.response.MealsBaseResponse;
 
 import java.util.ArrayList;
@@ -26,16 +27,14 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
 
     @Override
     public Single<Meal> getMealOfTheDay() {
-        return  firestoreMealHelper.getMealOfTheDay()
+        return firestoreMealHelper.getMealOfTheDay()
                 .map(MealOfTheDay::getDailyMeal)
-                .onErrorResumeNext(e -> getOrFetchDailyMeals()
-                        .map(MealOfTheDay::getDailyMeal)
-                );
+                .onErrorResumeNext(e -> getOrFetchDailyMeals().map(MealOfTheDay::getDailyMeal));
     }
 
     @Override
     public Single<List<Meal>> getSuggestedMeals() {
-        return  firestoreMealHelper.getMealOfTheDay()
+        return firestoreMealHelper.getMealOfTheDay()
                 .map(MealOfTheDay::getSuggestedMeals)
                 .onErrorResumeNext(e -> getOrFetchDailyMeals()
                         .map(MealOfTheDay::getSuggestedMeals)
@@ -43,17 +42,28 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
     }
 
     @Override
-    public Single<List<Meal>> getMealsByIngredient(String ingredient) {
-        return mealApiService.getMealsByIngredient(ingredient)
-                .map(this::mapResponseToMealList);
+    public Single<List<MealResponse>> getMealsByCategory(String category) {
+        return mealApiService
+                .getMealsByCategory(category).map(MealsBaseResponse::getMeals);
     }
 
     @Override
-    public Single<List<Meal>> searchMealsByName(String name) {
-        return mealApiService.searchMealsByName(name)
-                .map(this::mapResponseToMealList);
+    public Single<List<MealResponse>> getMealsByCountry(String country) {
+        return mealApiService
+                .getMealsByCountry(country).map(MealsBaseResponse::getMeals);
     }
 
+    @Override
+    public Single<List<MealResponse>> getMealsByIngredient(String ingredient) {
+        return mealApiService.getMealsByIngredient(ingredient)
+                .map(MealsBaseResponse::getMeals);
+    }
+
+    @Override
+    public Single<List<MealResponse>> searchMealsByName(String name) {
+        return mealApiService.searchMealsByName(name)
+                .map(MealsBaseResponse::getMeals);
+    }
 
 
     private Single<MealOfTheDay> getOrFetchDailyMeals() {
@@ -104,12 +114,4 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
                 });
     }
 
-    private List<Meal> mapResponseToMealList(MealsBaseResponse response) {
-        if (response.getMeals() == null) {
-            return new ArrayList<>();
-        }
-        return response.getMeals().stream()
-                .map(MealMapper::toEntity)
-                .collect(Collectors.toList());
-    }
 }
