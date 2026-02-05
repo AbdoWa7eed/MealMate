@@ -1,11 +1,10 @@
 package com.iti.mealmate.ui.discover.view;
 
-import static com.google.android.material.internal.ViewUtils.dpToPx;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,6 +14,7 @@ import com.iti.mealmate.data.filter.model.entity.FilterItem;
 import com.iti.mealmate.data.filter.model.entity.FilterType;
 import com.iti.mealmate.databinding.FragmentDiscoverBinding;
 import com.iti.mealmate.di.ServiceLocator;
+import com.iti.mealmate.ui.common.ActivityExtensions;
 import com.iti.mealmate.ui.common.RxTextView;
 import com.iti.mealmate.ui.common.UiUtils;
 import com.iti.mealmate.ui.discover.DiscoverPresenter;
@@ -22,6 +22,8 @@ import com.iti.mealmate.ui.discover.DiscoverView;
 import com.iti.mealmate.ui.discover.presenter.DiscoverPresenterImpl;
 import com.iti.mealmate.ui.discover.view.adapter.DiscoverAdapter;
 import com.iti.mealmate.ui.discover.view.adapter.GridSpacingItemDecoration;
+import com.iti.mealmate.ui.common.MealListArgs;
+import com.iti.mealmate.ui.meallist.view.MealListActivity;
 
 import java.util.List;
 
@@ -60,13 +62,29 @@ public class DiscoverFragment extends Fragment implements DiscoverView {
 
     private void setupRecyclerView() {
         discoverAdapter = new DiscoverAdapter();
-        binding.recyclerDiscoverResults
-                .setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        binding.recyclerDiscoverResults.setLayoutManager(
+                new GridLayoutManager(requireContext(), 2)
+        );
+
+        discoverAdapter
+                .setOnItemClicked(item -> {
+                    var args = new MealListArgs(item.getFilterType(), item.getName());
+                    this.navigateToMealList(args);
+                });
         binding.recyclerDiscoverResults.setAdapter(discoverAdapter);
-        var pixels = UiUtils.dpToPx(requireContext(), 8);
-        binding.recyclerDiscoverResults
-                .addItemDecoration(new GridSpacingItemDecoration(2, pixels, true));
+
+        int pixels = UiUtils.dpToPx(requireContext(), 8);
+        binding.recyclerDiscoverResults.addItemDecoration(
+                new GridSpacingItemDecoration(2, pixels, true)
+        );
     }
+
+    private void navigateToMealList(MealListArgs args) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(MealListActivity.EXTRA_ARGS, args);
+        ActivityExtensions.navigateToActivity(requireActivity(), MealListActivity.class, bundle);
+    }
+
 
     private void setupFilterChips() {
         binding.chipCategory.setChecked(true);
@@ -82,9 +100,17 @@ public class DiscoverFragment extends Fragment implements DiscoverView {
     }
 
     private void setupSearch() {
-        presenter.setupSearchObservable(
-                RxTextView.textChanges(binding.editTextSearch)
-        );
+        presenter.setupSearchObservable(RxTextView.textChanges(binding.editTextSearch));
+
+        binding.editTextSearch.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+                String query = v.getText().toString().trim();
+                var args = new MealListArgs(FilterType.SEARCH, query);
+                navigateToMealList(args);
+                return true;
+            }
+            return false;
+        });
     }
 
 

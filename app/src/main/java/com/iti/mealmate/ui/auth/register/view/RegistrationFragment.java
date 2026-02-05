@@ -18,6 +18,7 @@ import com.iti.mealmate.ui.auth.register.RegistrationPresenter;
 import com.iti.mealmate.ui.auth.register.RegistrationView;
 import com.iti.mealmate.ui.auth.register.presenter.RegistrationPresenterImpl;
 import com.iti.mealmate.ui.common.ActivityExtensions;
+import com.iti.mealmate.ui.home.view.HomeActivity;
 
 import java.util.Objects;
 
@@ -58,7 +59,7 @@ public class RegistrationFragment extends Fragment implements RegistrationView {
     @Override
     public void navigateToHome(UserModel user) {
         ActivityExtensions.showSuccessSnackBar(requireActivity(), "Welcome " + user.getName());
-        // TODO: Navigate to Home Activity or Fragment
+        ActivityExtensions.navigateAndFinish(requireActivity(), HomeActivity.class);
     }
 
     @Override

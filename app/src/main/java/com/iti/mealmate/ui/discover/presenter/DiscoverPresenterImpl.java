@@ -164,11 +164,15 @@ public class DiscoverPresenterImpl implements DiscoverPresenter {
     private List<FilterItem> getCachedListForType(FilterType type) {
         if (type == FilterType.COUNTRY) {
             return countries;
-        } else if (type == FilterType.INGREDIENT) {
+        }
+        if (type == FilterType.INGREDIENT) {
             return ingredients;
-        } else {
+        }
+        if (type == FilterType.CATEGORY) {
             return categories;
         }
+
+        return null;
     }
 
     @Override

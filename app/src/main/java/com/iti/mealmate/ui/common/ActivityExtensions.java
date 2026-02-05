@@ -43,6 +43,13 @@ public class ActivityExtensions {
         activity.startActivity(intent);
     }
 
+
+
+    public static void navigateAndFinish(Activity activity, Class<?> target) {
+        navigateToActivity(activity, target, null);
+        activity.finish();
+    }
+
     public static void navigateToActivity(Activity activity, Class<?> target) {
         navigateToActivity(activity, target, null);
     }
@@ -58,8 +65,23 @@ public class ActivityExtensions {
             activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
         toolbar.setNavigationIconTint(
-                ContextCompat.getColor(activity, android.R.color.white)
+                ContextCompat.getColor(activity, android.R.color.black)
         );
+        toolbar.setNavigationOnClickListener(v ->
+                activity.getOnBackPressedDispatcher().onBackPressed()
+        );
+    }
+
+    public static void enableBackButtonWithTitle(AppCompatActivity activity, MaterialToolbar toolbar, String title) {
+        activity.setSupportActionBar(toolbar);
+        if (activity.getSupportActionBar() != null) {
+            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        toolbar.setNavigationIconTint(
+                ContextCompat.getColor(activity, android.R.color.black)
+        );
+        toolbar.setTitle(title);
         toolbar.setNavigationOnClickListener(v ->
                 activity.getOnBackPressedDispatcher().onBackPressed()
         );

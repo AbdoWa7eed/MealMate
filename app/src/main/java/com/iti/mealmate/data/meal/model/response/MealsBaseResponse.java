@@ -2,6 +2,7 @@ package com.iti.mealmate.data.meal.model.response;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MealsBaseResponse {
@@ -13,6 +14,8 @@ public class MealsBaseResponse {
     }
 
     public List<MealResponse> getMeals() {
+        if(meals == null)
+            return new ArrayList<>();
         return meals;
     }
 

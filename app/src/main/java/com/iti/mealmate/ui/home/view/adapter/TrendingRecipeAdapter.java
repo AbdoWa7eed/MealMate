@@ -53,6 +53,7 @@ public class TrendingRecipeAdapter extends RecyclerView.Adapter<TrendingRecipeAd
             );
         });
     }
+
     @Override
     public int getItemCount() {
         return meals != null ? meals.size() : 0;
@@ -66,7 +67,6 @@ public class TrendingRecipeAdapter extends RecyclerView.Adapter<TrendingRecipeAd
             this.binding = binding;
         }
     }
-
-
 }
+
 
