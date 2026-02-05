@@ -20,4 +20,6 @@ public interface MealRepository {
     Single<List<MealLight>> getMealsByCategory(String category);
 
     Single<List<MealLight>> getMealsByCountry(String country);
+
+    Single<Meal> getMealById(String id);
 }

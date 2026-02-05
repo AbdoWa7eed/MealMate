@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MealMate">
         <activity
+            android:name=".ui.mealdetail.view.MealDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.meallist.view.MealListActivity"
             android:exported="false" />
         <activity

@@ -65,5 +65,6 @@ dependencies {
     implementation(libs.adapter.rxjava3)
     implementation(libs.glide)
     implementation(libs.shimmer)
+    implementation(libs.android.youtube.player)
 
 }

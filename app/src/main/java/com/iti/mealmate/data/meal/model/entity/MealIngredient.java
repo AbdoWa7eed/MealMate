@@ -1,8 +1,9 @@
 package com.iti.mealmate.data.meal.model.entity;
 
+import java.io.Serializable;
 import java.text.Normalizer;
 
-public class MealIngredient {
+public class MealIngredient implements Serializable {
     private String name;
     private String measure;
 
