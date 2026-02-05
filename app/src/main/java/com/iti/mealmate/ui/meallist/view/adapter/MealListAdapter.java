@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.iti.mealmate.data.meal.model.entity.Meal;
+import com.iti.mealmate.data.meal.model.entity.MealLight;
 import com.iti.mealmate.databinding.ItemMealListBinding;
 
 import java.util.ArrayList;
@@ -15,9 +15,9 @@ import java.util.List;
 
 public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealViewHolder> {
 
-    private final List<Meal> meals = new ArrayList<>();
+    private final List<MealLight> meals = new ArrayList<>();
 
-    public void submitList(List<Meal> newMeals) {
+    public void submitList(List<MealLight> newMeals) {
         meals.clear();
         if (newMeals != null) {
             meals.addAll(newMeals);
@@ -35,7 +35,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
 
     @Override
     public void onBindViewHolder(@NonNull MealViewHolder holder, int position) {
-        Meal meal = meals.get(position);
+        MealLight meal = meals.get(position);
 
         holder.binding.textMealName.setText(meal.getName());
 

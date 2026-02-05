@@ -11,11 +11,17 @@ import com.iti.mealmate.databinding.HomeCategoryItemBinding;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
     private final List<CategoryItem> categories;
 
+    private Consumer<String> onCategoryClicked;
+
+    public void setOnCategoryClicked(Consumer<String> onCategoryClicked){
+        this.onCategoryClicked = onCategoryClicked;
+    }
     public CategoryAdapter() {
         this.categories = new ArrayList<>();
         categories.add(new CategoryAdapter.CategoryItem("Breakfast", R.drawable.ic_breakfast));
@@ -37,6 +43,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         CategoryItem category = categories.get(position);
         holder.binding.textCategoryName.setText(category.getName());
         holder.binding.imageCategoryIcon.setImageResource(category.getIconResId());
+
+        if(onCategoryClicked != null){
+            holder.binding.getRoot().setOnClickListener(v -> {
+                onCategoryClicked.accept(category.name);
+            });
+        }
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.iti.mealmate.data.filter.model.entity.FilterItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.DiscoverViewHolder> {
 
@@ -24,6 +25,12 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
     public void setItems(List<FilterItem> items) {
         this.items = items != null ? items : new ArrayList<>();
         notifyDataSetChanged();
+    }
+
+
+    private Consumer<FilterItem> onItemClicked;
+    public void setOnItemClicked(Consumer<FilterItem> onItemClicked){
+        this.onItemClicked = onItemClicked;
     }
 
     @NonNull
@@ -45,6 +52,12 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
                         .load(item.getImageUrl())
                         .into(holder.binding.imageDiscoverThumbnail);
             }
+
+            holder.binding.getRoot().setOnClickListener(v -> {
+                if (onItemClicked != null) {
+                    onItemClicked.accept(item);
+                }
+            });
         }
     }
 

@@ -66,7 +66,7 @@ public class LoginFragment extends Fragment implements LoginView, FacebookLoginP
     @Override
     public void navigateToHome(UserModel user) {
         ActivityExtensions.showSuccessSnackBar(requireActivity(), "Welcome " + user.getName());
-        ActivityExtensions.navigateToActivity(requireActivity(), HomeActivity.class);
+        ActivityExtensions.navigateAndFinish(requireActivity(), HomeActivity.class);
     }
 
     @Override

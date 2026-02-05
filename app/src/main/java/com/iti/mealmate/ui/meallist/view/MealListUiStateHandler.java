@@ -29,8 +29,20 @@ public class MealListUiStateHandler {
     public void showContent() {
         stopAndHideLoading();
         ErrorOverlayHelper.hideError(binding.errorOverlay.getRoot());
-        binding.recyclerContainer.setVisibility(View.VISIBLE);
+        binding.recyclerMealList.setVisibility(View.VISIBLE);
         binding.emptyStateContainer.setVisibility(View.GONE);
+    }
+
+    public void showEmptyState() {
+        stopAndHideLoading();
+        ErrorOverlayHelper.hideError(binding.errorOverlay.getRoot());
+        binding.recyclerMealList.setVisibility(View.GONE);
+        binding.emptyStateContainer.setVisibility(View.VISIBLE);
+    }
+
+    public void hideEmptyState() {
+        binding.emptyStateContainer.setVisibility(View.GONE);
+        binding.recyclerMealList.setVisibility(View.VISIBLE);
     }
 
     public void showError(String message, Runnable retryAction) {
@@ -46,7 +58,7 @@ public class MealListUiStateHandler {
     }
 
     private void hideContent() {
-        binding.recyclerContainer.setVisibility(View.GONE);
+        binding.recyclerMealList.setVisibility(View.GONE);
         binding.emptyStateContainer.setVisibility(View.GONE);
     }
 

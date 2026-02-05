@@ -7,7 +7,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
+    android:fitsSystemWindows="true"
     tools:context=".ui.meallist.view.MealListActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/meal_list_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:title="@string/app_name"
+        app:titleTextAppearance="@style/TextAppearance.MealMate.ToolbarTitle" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_input_search"
@@ -19,7 +30,7 @@
         app:endIconMode="clear_text"
         app:endIconTint="@color/colorTextSecondary"
         app:errorEnabled="false"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/meal_list_toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:startIconDrawable="@android:drawable/ic_menu_search"

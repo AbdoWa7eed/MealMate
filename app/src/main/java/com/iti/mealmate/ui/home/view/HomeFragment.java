@@ -13,11 +13,14 @@ import com.bumptech.glide.Glide;
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.databinding.FragmentHomeBinding;
 import com.iti.mealmate.di.ServiceLocator;
+import com.iti.mealmate.ui.common.ActivityExtensions;
 import com.iti.mealmate.ui.home.HomePresenter;
 import com.iti.mealmate.ui.home.HomeView;
 import com.iti.mealmate.ui.home.presenter.HomePresenterImpl;
 import com.iti.mealmate.ui.home.view.adapter.CategoryAdapter;
 import com.iti.mealmate.ui.home.view.adapter.TrendingRecipeAdapter;
+import com.iti.mealmate.ui.common.MealListArgs;
+import com.iti.mealmate.ui.meallist.view.MealListActivity;
 
 import java.util.List;
 
@@ -48,9 +51,18 @@ public class HomeFragment extends Fragment implements HomeView {
     private void setupHomeViews() {
         binding.recyclerCategories.setLayoutManager(
                 new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-        binding.recyclerCategories.setAdapter(new CategoryAdapter());
+        var adapter = new CategoryAdapter();
+        adapter.setOnCategoryClicked(this::navigateToMealList);
+        binding.recyclerCategories.setAdapter(adapter);
         binding.recyclerTrending.setLayoutManager(
                 new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+    }
+
+    private void navigateToMealList(String category) {
+        MealListArgs args = MealListArgs.category(category);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(MealListActivity.EXTRA_ARGS, args);
+        ActivityExtensions.navigateToActivity(requireActivity(), MealListActivity.class, bundle);
     }
 
     @Override

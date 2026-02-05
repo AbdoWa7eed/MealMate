@@ -4,7 +4,6 @@ import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.data.meal.model.entity.MealIngredient;
 import com.iti.mealmate.data.meal.model.entity.MealLight;
 import com.iti.mealmate.data.meal.model.response.MealResponse;
-import com.iti.mealmate.data.meal.model.response.MealsBaseResponse;
 
 import java.util.ArrayList;
 import java.util.List;
