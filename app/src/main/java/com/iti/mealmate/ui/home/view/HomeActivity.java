@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.iti.mealmate.R;
 import com.iti.mealmate.databinding.ActivityHomeBinding;
+import com.iti.mealmate.ui.common.ActivityExtensions;
 import com.iti.mealmate.ui.discover.view.DiscoverFragment;
 import com.iti.mealmate.ui.favorites.FavoritesFragment;
 import com.iti.mealmate.ui.plan.PlanFragment;
@@ -30,7 +31,6 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         if (savedInstanceState != null) {
             restoreFragments();
         } else {
@@ -42,6 +42,7 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         setupBottomNavigation();
+        ActivityExtensions.setStatusBarWithDarkIcons(this);
     }
 
     private void restoreFragments() {

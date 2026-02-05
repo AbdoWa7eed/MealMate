@@ -2,9 +2,13 @@ package com.iti.mealmate.ui.mealdetail.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -17,6 +21,7 @@ import com.iti.mealmate.ui.common.ActivityExtensions;
 import com.iti.mealmate.ui.mealdetail.MealDetailsPresenter;
 import com.iti.mealmate.ui.mealdetail.MealDetailsView;
 import com.iti.mealmate.ui.mealdetail.presenter.MealDetailsPresenterImpl;
+
 import java.util.List;
 
 public class MealDetailsActivity extends AppCompatActivity implements MealDetailsView {
@@ -60,12 +65,43 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         if (intent != null && intent.hasExtra(EXTRA_MEAL)) {
             Meal meal = (Meal) intent.getSerializableExtra(EXTRA_MEAL);
             presenter.setMeal(meal);
+            binding.btnVideo.setOnClickListener(v -> presenter.onVideoClicked());
         }
     }
 
     @Override
     public void showMealName(String name) {
         binding.tvMealName.setText(name);
+    }
+
+    @Override
+    public void showVideo(String url) {
+        PreparationVideoFragment fragment = PreparationVideoFragment.newInstance(url);
+
+        getSupportFragmentManager().registerFragmentLifecycleCallbacks(
+                new FragmentManager.FragmentLifecycleCallbacks() {
+                    @Override
+                    public void onFragmentResumed(@NonNull FragmentManager fm, @NonNull Fragment f) {
+                        if (f instanceof PreparationVideoFragment) {
+                            hideVideoLoading();
+                            fm.unregisterFragmentLifecycleCallbacks(this);
+                        }
+                    }
+                }, false);
+
+        ActivityExtensions.navigateToFragment(this, R.id.main, fragment, PreparationVideoFragment.TAG);
+    }
+
+    @Override
+    public void showVideoLoading() {
+        binding.btnVideo.setVisibility(View.INVISIBLE);
+        binding.progressVideo.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideVideoLoading() {
+        binding.progressVideo.setVisibility(View.GONE);
+        binding.btnVideo.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -97,15 +133,12 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         binding.tvItemsCount.setText(String.format(getString(R.string.meal_details_items_count), count));
     }
 
-
     @Override
     public void showLoading() {
-        // No-op for now
     }
 
     @Override
     public void hideLoading() {
-        // No-op for now
     }
 
     @Override
@@ -115,7 +148,6 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
     @Override
     public void noInternetError() {
-        // No-op for now
     }
 
     @Override

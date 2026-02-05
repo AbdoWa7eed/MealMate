@@ -12,6 +12,8 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
 
     private final MealDetailsView view;
 
+    private Meal meal;
+
     public MealDetailsPresenterImpl(MealDetailsView view) {
         this.view = view;
     }
@@ -19,6 +21,7 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
     @Override
     public void setMeal(Meal meal) {
         if (meal != null) {
+            this.meal = meal;
             displayMealSimpleDetails(meal);
             displayIngredients(meal);
             displayInstructions(meal);
@@ -62,6 +65,18 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
     public void addToPlan() {
         // TODO: Implement logic to add to plan
 
+    }
+
+    @Override
+    public void onVideoClicked() {
+        view.showVideoLoading();
+        view.showVideo(meal.getYoutubeUrl());
+    }
+
+
+    @Override
+    public void onDestroy() {
+        // clean up
     }
 
 }

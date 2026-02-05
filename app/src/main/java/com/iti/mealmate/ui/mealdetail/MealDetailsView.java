@@ -12,4 +12,7 @@ public interface MealDetailsView extends BaseView {
     void showIngredients(List<MealIngredient> ingredients);
     void showPreparationSteps(List<String> steps);
     void showItemsCount(int count);
+    void showVideo(String url);
+    void showVideoLoading();
+    void hideVideoLoading();
 }
