@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.iti.mealmate.R;
 import com.iti.mealmate.databinding.ActivityHomeBinding;
-import com.iti.mealmate.ui.discover.DiscoverFragment;
+import com.iti.mealmate.ui.discover.view.DiscoverFragment;
 import com.iti.mealmate.ui.favorites.FavoritesFragment;
 import com.iti.mealmate.ui.plan.PlanFragment;
 import com.iti.mealmate.ui.profile.ProfileFragment;
@@ -28,43 +28,20 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initViewBinding();
-        initFragments(savedInstanceState);
-        setupBottomNavigation();
-    }
-
-    private void initViewBinding() {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-    }
 
-    private void initFragments(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             restoreFragments();
-            return;
+        } else {
+            homeFragment = new HomeFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.home_nav_host, homeFragment)
+                    .commit();
+            activeFragment = homeFragment;
         }
 
-        createFragments();
-        addFragmentsToContainer();
-        activeFragment = homeFragment;
-    }
-
-    private void createFragments() {
-        homeFragment = new HomeFragment();
-        discoverFragment = new DiscoverFragment();
-        planFragment = new PlanFragment();
-        favoritesFragment = new FavoritesFragment();
-        profileFragment = new ProfileFragment();
-    }
-
-    private void addFragmentsToContainer() {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.home_nav_host, profileFragment).hide(profileFragment);
-        transaction.add(R.id.home_nav_host, favoritesFragment).hide(favoritesFragment);
-        transaction.add(R.id.home_nav_host, planFragment).hide(planFragment);
-        transaction.add(R.id.home_nav_host, discoverFragment).hide(discoverFragment);
-        transaction.add(R.id.home_nav_host, homeFragment);
-        transaction.commit();
+        setupBottomNavigation();
     }
 
     private void restoreFragments() {
@@ -73,9 +50,9 @@ public class HomeActivity extends AppCompatActivity {
         planFragment = getSupportFragmentManager().findFragmentByTag(PlanFragment.class.getSimpleName());
         favoritesFragment = getSupportFragmentManager().findFragmentByTag(FavoritesFragment.class.getSimpleName());
         profileFragment = getSupportFragmentManager().findFragmentByTag(ProfileFragment.class.getSimpleName());
-        activeFragment = homeFragment;
+        Fragment current = getSupportFragmentManager().getPrimaryNavigationFragment();
+        activeFragment = current != null ? current : homeFragment;
     }
-
 
     private void setupBottomNavigation() {
         binding.bottomNav.setOnItemSelectedListener(item -> {
@@ -85,23 +62,44 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private Fragment getFragmentForMenu(int menuId) {
-        if (menuId == R.id.homeFragment) return homeFragment;
-        if (menuId == R.id.discoverFragment) return discoverFragment;
-        if (menuId == R.id.planFragment) return planFragment;
-        if (menuId == R.id.favoritesFragment) return favoritesFragment;
-        if (menuId == R.id.profileFragment) return profileFragment;
-        return null;
+        if (menuId == R.id.homeFragment) {
+            if (homeFragment == null) homeFragment = new HomeFragment();
+            return homeFragment;
+        } else if (menuId == R.id.discoverFragment) {
+            if (discoverFragment == null) discoverFragment = new DiscoverFragment();
+            return discoverFragment;
+        } else if (menuId == R.id.planFragment) {
+            if (planFragment == null) planFragment = new PlanFragment();
+            return planFragment;
+        } else if (menuId == R.id.favoritesFragment) {
+            if (favoritesFragment == null) favoritesFragment = new FavoritesFragment();
+            return favoritesFragment;
+        } else if (menuId == R.id.profileFragment) {
+            if (profileFragment == null) profileFragment = new ProfileFragment();
+            return profileFragment;
+        } else {
+            return null;
+        }
     }
 
     private void switchFragment(Fragment target) {
         if (target == null || target == activeFragment) return;
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .hide(activeFragment)
-                .show(target)
-                .commit();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        if (!target.isAdded()) {
+            String tag = target.getClass().getSimpleName();
+            transaction.add(R.id.home_nav_host, target, tag);
+        }
+
+        if (activeFragment != null) {
+            transaction.hide(activeFragment);
+        }
+
+        transaction.show(target).commit();
 
         activeFragment = target;
     }
+
+
 }

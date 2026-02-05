@@ -1,7 +1,5 @@
 package com.iti.mealmate.ui.discover.presenter;
 
-import android.util.Log;
-
 import com.iti.mealmate.core.network.NoConnectivityException;
 import com.iti.mealmate.data.filter.model.entity.FilterItem;
 import com.iti.mealmate.data.filter.model.entity.FilterType;
@@ -36,7 +34,6 @@ public class DiscoverPresenterImpl implements DiscoverPresenter {
     private Disposable currentFilterDisposable;
 
 
-    private static final String TAG = "DiscoverPresenterImpl";
     public DiscoverPresenterImpl(DiscoverView view, FilterRepository filterRepository) {
         this.view = view;
         this.filterRepository = filterRepository;
@@ -72,7 +69,6 @@ public class DiscoverPresenterImpl implements DiscoverPresenter {
     }
 
     private Boolean handleFiltersResult(List<FilterItem> cat, List<FilterItem> country, List<FilterItem> ing) {
-        Log.d(TAG, "handleFiltersResult: CACHINNNG");
         categories = cat;
         countries = country;
         ingredients = ing;
@@ -80,10 +76,12 @@ public class DiscoverPresenterImpl implements DiscoverPresenter {
     }
 
     private void handleFiltersError(Throwable error) {
-        if (error instanceof NoConnectivityException) {
-            view.noInternetError();
-        } else {
-            view.showError(error.getMessage());
+        if (!disposables.isDisposed()) {
+            if (error instanceof NoConnectivityException) {
+                view.noInternetError();
+            } else {
+                view.showError(error.getMessage());
+            }
         }
     }
 
@@ -120,7 +118,10 @@ public class DiscoverPresenterImpl implements DiscoverPresenter {
 
     private void applyFilterAndShow() {
         List<FilterItem> baseList = getCachedListForType(currentType);
-        if (baseList == null || baseList.isEmpty()) {
+        if (baseList == null) {
+            return;
+        }
+        if (baseList.isEmpty()) {
             showEmptyList();
             return;
         }
@@ -131,12 +132,12 @@ public class DiscoverPresenterImpl implements DiscoverPresenter {
 
         currentFilterDisposable =
                 Observable.fromCallable(() -> filterList(baseList, "", currentType))
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        this::updateUIWithFilteredList,
-                        throwable -> view.showError(throwable.getMessage())
-                );
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                this::updateUIWithFilteredList,
+                                throwable -> view.showError(throwable.getMessage())
+                        );
 
         disposables.add(currentFilterDisposable);
     }

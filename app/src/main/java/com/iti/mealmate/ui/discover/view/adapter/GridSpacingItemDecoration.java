@@ -1,4 +1,4 @@
-package com.iti.mealmate.ui.discover.adapter;
+package com.iti.mealmate.ui.discover.view.adapter;
 
 import android.graphics.Rect;
 import android.view.View;

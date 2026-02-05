@@ -110,5 +110,5 @@
     <string name="discover_chip_category">Category</string>
     <string name="discover_chip_country">Country</string>
     <string name="discover_chip_ingredients">Ingredients</string>
-    <string name="discover_empty_state">Discover your next favorite meal</string>
+    <string name="discover_empty_state">No results found. Try a different filter or search term.</string>
 </resources>

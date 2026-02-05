@@ -3,6 +3,7 @@ package com.iti.mealmate.core.error;
 import android.util.Log;
 
 import com.google.firebase.FirebaseException;
+import com.iti.mealmate.core.network.NoConnectivityException;
 
 public final class AppErrorHandler {
 
@@ -18,11 +19,11 @@ public final class AppErrorHandler {
             return FirebaseErrorHandler.handle(throwable);
         }
 
-        return new Exception(
-                throwable.getMessage() != null && !throwable.getMessage().isEmpty()
-                        ? throwable.getMessage()
-                        : "Something went wrong. Please try again later."
-        );
+        if (throwable instanceof NoConnectivityException) {
+            return (NoConnectivityException) throwable;
+        }
+
+        return new Exception("An Unknown Error Occurred. Please try again later.");
     }
 }
 

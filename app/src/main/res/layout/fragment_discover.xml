@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.discover.DiscoverFragment">
+    tools:context=".ui.discover.view.DiscoverFragment">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/content_container"
@@ -146,6 +146,13 @@
             layout="@layout/layout_discover_shimmer_overlay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/error_overlay"
+            layout="@layout/layout_error_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:visibility="gone" />
 
     </FrameLayout>

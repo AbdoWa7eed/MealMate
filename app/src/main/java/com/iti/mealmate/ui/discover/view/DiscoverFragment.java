@@ -1,7 +1,8 @@
-package com.iti.mealmate.ui.discover;
+package com.iti.mealmate.ui.discover.view;
+
+import static com.google.android.material.internal.ViewUtils.dpToPx;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,17 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.facebook.shimmer.ShimmerFrameLayout;
-import com.iti.mealmate.R;
 import com.iti.mealmate.data.filter.model.entity.FilterItem;
 import com.iti.mealmate.data.filter.model.entity.FilterType;
 import com.iti.mealmate.databinding.FragmentDiscoverBinding;
 import com.iti.mealmate.di.ServiceLocator;
-import com.iti.mealmate.ui.common.ActivityExtensions;
 import com.iti.mealmate.ui.common.RxTextView;
-import com.iti.mealmate.ui.discover.adapter.DiscoverAdapter;
-import com.iti.mealmate.ui.discover.adapter.GridSpacingItemDecoration;
+import com.iti.mealmate.ui.common.UiUtils;
+import com.iti.mealmate.ui.discover.DiscoverPresenter;
+import com.iti.mealmate.ui.discover.DiscoverView;
 import com.iti.mealmate.ui.discover.presenter.DiscoverPresenterImpl;
+import com.iti.mealmate.ui.discover.view.adapter.DiscoverAdapter;
+import com.iti.mealmate.ui.discover.view.adapter.GridSpacingItemDecoration;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class DiscoverFragment extends Fragment implements DiscoverView {
     private FragmentDiscoverBinding binding;
     private DiscoverPresenter presenter;
     private DiscoverAdapter discoverAdapter;
+    private DiscoverUiStateHandler uiStateHandler;
 
     @Override
     public View onCreateView(
@@ -38,6 +40,7 @@ public class DiscoverFragment extends Fragment implements DiscoverView {
             Bundle savedInstanceState
     ) {
         binding = FragmentDiscoverBinding.inflate(inflater, container, false);
+        uiStateHandler = new DiscoverUiStateHandler(binding);
         return binding.getRoot();
     }
 
@@ -50,13 +53,22 @@ public class DiscoverFragment extends Fragment implements DiscoverView {
     }
 
     private void setupViews() {
+        setupRecyclerView();
+        setupFilterChips();
+        setupSearch();
+    }
+
+    private void setupRecyclerView() {
         discoverAdapter = new DiscoverAdapter();
-        GridLayoutManager layoutManager = new GridLayoutManager(requireContext(), 2);
-        binding.recyclerDiscoverResults.setLayoutManager(layoutManager);
+        binding.recyclerDiscoverResults
+                .setLayoutManager(new GridLayoutManager(requireContext(), 2));
         binding.recyclerDiscoverResults.setAdapter(discoverAdapter);
-        int spacingInPixels = (int) (8 * getResources().getDisplayMetrics().density);
-        binding.recyclerDiscoverResults.addItemDecoration(
-                new GridSpacingItemDecoration(2, spacingInPixels, true));
+        var pixels = UiUtils.dpToPx(requireContext(), 8);
+        binding.recyclerDiscoverResults
+                .addItemDecoration(new GridSpacingItemDecoration(2, pixels, true));
+    }
+
+    private void setupFilterChips() {
         binding.chipCategory.setChecked(true);
         binding.chipCategory.setOnClickListener(
                 v -> presenter.onFilterTypeSelected(FilterType.CATEGORY)
@@ -67,8 +79,15 @@ public class DiscoverFragment extends Fragment implements DiscoverView {
         binding.chipIngredients.setOnClickListener(
                 v -> presenter.onFilterTypeSelected(FilterType.INGREDIENT)
         );
-        presenter.setupSearchObservable(RxTextView.textChanges(binding.editTextSearch));
     }
+
+    private void setupSearch() {
+        presenter.setupSearchObservable(
+                RxTextView.textChanges(binding.editTextSearch)
+        );
+    }
+
+
     private void setupPresenter() {
         if (presenter == null) {
             presenter = new DiscoverPresenterImpl(
@@ -81,67 +100,38 @@ public class DiscoverFragment extends Fragment implements DiscoverView {
 
     @Override
     public void showLoading() {
-        hideEmptyState();
-        binding.recyclerDiscoverResults.setVisibility(View.GONE);
-        ShimmerFrameLayout shimmer = binding.shimmerOverlay.shimmerContainer;
-        shimmer.setVisibility(View.VISIBLE);
-        shimmer.startShimmer();
+        uiStateHandler.showLoading();
     }
 
     @Override
     public void hideLoading() {
-        stopAndHideLoading();
-        binding.recyclerDiscoverResults.setVisibility(View.VISIBLE);
+        uiStateHandler.hideLoading();
     }
 
     @Override
     public void showFilters(List<FilterItem> items) {
-        stopAndHideLoading();
-        hideEmptyState();
         discoverAdapter.setItems(items);
-        binding.recyclerDiscoverResults.setVisibility(View.VISIBLE);
+        uiStateHandler.showFiltersState();
     }
 
     @Override
     public void showEmptyState() {
-        stopAndHideLoading();
-        binding.recyclerDiscoverResults.setVisibility(View.GONE);
-        binding.emptyStateContainer.setVisibility(View.VISIBLE);
+        uiStateHandler.showEmptyState();
     }
 
     @Override
     public void hideEmptyState() {
-        binding.emptyStateContainer.setVisibility(View.GONE);
+        uiStateHandler.hideEmptyState();
     }
 
     @Override
     public void showError(String message) {
-        stopAndHideLoading();
-        binding.recyclerDiscoverResults.setVisibility(View.GONE);
-        String errorMessage = (message != null && !message.isEmpty())
-                ? message
-                : getString(R.string.error_subtitle_default);
-        ActivityExtensions.showErrorSnackBar(
-                requireActivity(),
-                errorMessage
-        );
+        uiStateHandler.showError(message, presenter::loadInitialFilters);
     }
 
     @Override
     public void noInternetError() {
-        stopAndHideLoading();
-        binding.recyclerDiscoverResults.setVisibility(View.GONE);
-
-        ActivityExtensions.showErrorSnackBar(
-                requireActivity(),
-                getString(R.string.error_network_subtitle)
-        );
-    }
-
-    private void stopAndHideLoading() {
-        ShimmerFrameLayout shimmer = binding.shimmerOverlay.shimmerContainer;
-        shimmer.stopShimmer();
-        shimmer.setVisibility(View.GONE);
+        uiStateHandler.showNoInternetError(presenter::loadInitialFilters);
     }
 
     @Override

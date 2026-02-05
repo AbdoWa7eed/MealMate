@@ -1,4 +1,4 @@
-package com.iti.mealmate.ui.discover.adapter;
+package com.iti.mealmate.ui.discover.view.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;

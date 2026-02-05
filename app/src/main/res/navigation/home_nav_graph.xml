@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/discoverFragment"
-        android:name="com.iti.mealmate.ui.discover.DiscoverFragment"
+        android:name="com.iti.mealmate.ui.discover.view.DiscoverFragment"
         android:label="@string/discover" />
 
     <fragment

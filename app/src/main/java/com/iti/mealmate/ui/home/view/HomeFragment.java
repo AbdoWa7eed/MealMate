@@ -1,17 +1,15 @@
 package com.iti.mealmate.ui.home.view;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.bumptech.glide.Glide;
-import com.iti.mealmate.R;
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.databinding.FragmentHomeBinding;
 import com.iti.mealmate.di.ServiceLocator;
@@ -20,7 +18,6 @@ import com.iti.mealmate.ui.home.HomeView;
 import com.iti.mealmate.ui.home.presenter.HomePresenterImpl;
 import com.iti.mealmate.ui.home.view.adapter.CategoryAdapter;
 import com.iti.mealmate.ui.home.view.adapter.TrendingRecipeAdapter;
-import com.iti.mealmate.ui.common.FragmentStateManager;
 
 import java.util.List;
 
@@ -28,11 +25,7 @@ public class HomeFragment extends Fragment implements HomeView {
 
     private FragmentHomeBinding binding;
     private HomePresenter presenter;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private HomeUiStateHandler uiStateHandler;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -44,11 +37,12 @@ public class HomeFragment extends Fragment implements HomeView {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        uiStateHandler = new HomeUiStateHandler(binding);
         setupHomeViews();
-        if(presenter == null) {
+        if (presenter == null) {
             presenter = new HomePresenterImpl(this, ServiceLocator.getMealRepository());
+            presenter.loadHomeData();
         }
-        presenter.loadHomeData();
     }
 
     private void setupHomeViews() {
@@ -65,66 +59,38 @@ public class HomeFragment extends Fragment implements HomeView {
             Glide.with(requireContext())
                     .load(meal.getThumbnailUrl())
                     .into(binding.imageMealOfDay);
-
             binding.textMealOfDayName.setText(meal.getName());
             binding.textMealOfDayCountry.setText(meal.getArea());
-            showContent();
+            uiStateHandler.showContent();
         }
     }
 
     @Override
     public void showTrendingMeals(List<Meal> meals) {
         binding.recyclerTrending.setAdapter(new TrendingRecipeAdapter(meals));
-        showContent();
+        uiStateHandler.showContent();
     }
 
     @Override
     public void showLoading() {
-        hideContent();
-        FragmentStateManager.showShimmerFragment(
-                getChildFragmentManager(),
-                R.id.state_fragment_container
-        );
+        uiStateHandler.showLoading();
     }
 
     @Override
     public void hideLoading() {
-        FragmentStateManager.hideShimmerFragment(getChildFragmentManager());
-        showContent();
+        uiStateHandler.hideLoading();
     }
 
     @Override
     public void showError(String message) {
-        hideContent();
-        String errorMessage = message != null && !message.isEmpty()
-                ? message
-                : getString(R.string.error_subtitle_default);
-
-        FragmentStateManager.showErrorFragment(
-                getChildFragmentManager(),
-                R.id.state_fragment_container,
-                errorMessage,
-                presenter::loadHomeData
-        );
+        uiStateHandler.showError(message, presenter::loadHomeData);
     }
 
     @Override
     public void noInternetError() {
-        hideContent();
-        FragmentStateManager.showConnectionErrorFragment(
-                getChildFragmentManager(),
-                R.id.state_fragment_container,
-                presenter::loadHomeData
-        );
+        uiStateHandler.showNoInternetError(presenter::loadHomeData);
     }
 
-    private void showContent() {
-        binding.contentContainer.setVisibility(View.VISIBLE);
-    }
-
-    private void hideContent() {
-        binding.contentContainer.setVisibility(View.GONE);
-    }
 
     @Override
     public void onDestroyView() {
@@ -140,4 +106,3 @@ public class HomeFragment extends Fragment implements HomeView {
         }
     }
 }
-
