@@ -12,6 +12,7 @@ import com.iti.mealmate.core.network.AppConnectivityManager;
 import com.iti.mealmate.core.network.AppConnectivityManagerImpl;
 import com.iti.mealmate.data.auth.datasource.AuthDataSource;
 import com.iti.mealmate.data.auth.datasource.AuthDataSourceImpl;
+import com.iti.mealmate.data.auth.datasource.local.dao.UserDao;
 import com.iti.mealmate.data.auth.repo.AuthRepository;
 import com.iti.mealmate.data.auth.repo.AuthRepositoryImpl;
 import com.iti.mealmate.data.meal.api.MealApiService;
@@ -25,6 +26,7 @@ import com.iti.mealmate.data.filter.repo.FilterRepository;
 import com.iti.mealmate.data.filter.repo.FilterRepositoryImpl;
 import com.iti.mealmate.data.meal.repo.MealRepository;
 import com.iti.mealmate.data.meal.repo.MealRepositoryImpl;
+import com.iti.mealmate.data.source.local.db.AppDatabase;
 import com.iti.mealmate.data.source.local.prefs.PreferencesHelper;
 import com.iti.mealmate.data.source.remote.api.ApiClient;
 import com.iti.mealmate.data.source.remote.firebase.FirebaseAuthHelper;
@@ -40,6 +42,8 @@ public final class ServiceLocator {
     private static FilterRepository filterRepository;
     private static AppConnectivityManager connectivityManager;
 
+    private static AppDatabase appDatabase;
+
     private ServiceLocator() {}
 
     public static synchronized void init(Context context) {
@@ -47,6 +51,7 @@ public final class ServiceLocator {
         Context appContext = context.getApplicationContext();
         preferencesHelper = new PreferencesHelper(appContext);
         connectivityManager = new AppConnectivityManagerImpl(appContext);
+        appDatabase = AppDatabase.getInstance(appContext);
         if (FirebaseApp.getApps(appContext).isEmpty()) {
             FirebaseApp.initializeApp(appContext);
         }
@@ -106,6 +111,7 @@ public final class ServiceLocator {
         checkInit();
         return connectivityManager;
     }
+
 
     private static void checkInit() {
         if (!initialized) {

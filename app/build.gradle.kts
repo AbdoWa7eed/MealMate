@@ -66,5 +66,8 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.shimmer)
     implementation(libs.android.youtube.player)
+    implementation(libs.room.runtime)
+    implementation(libs.room.rxjava3)
+
 
 }
