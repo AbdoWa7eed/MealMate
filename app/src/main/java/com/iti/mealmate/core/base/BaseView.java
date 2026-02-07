@@ -3,6 +3,11 @@ package com.iti.mealmate.core.base;
 public interface BaseView {
     void showLoading();
     void hideLoading();
-    void showError(String message);
-    void noInternetError();
+    default void showPageError(String message) {}
+
+    default void showErrorMessage(String message) {}
+
+    default void showSuccessMessage(String message) {}
+
+    default void noInternetError() {}
 }

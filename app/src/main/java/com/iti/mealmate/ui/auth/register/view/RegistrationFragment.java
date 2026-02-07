@@ -98,7 +98,7 @@ public class RegistrationFragment extends Fragment implements RegistrationView {
     }
 
     @Override
-    public void showError(String message) {
+    public void showPageError(String message) {
         ActivityExtensions.showErrorSnackBar(requireActivity(), message);
     }
 

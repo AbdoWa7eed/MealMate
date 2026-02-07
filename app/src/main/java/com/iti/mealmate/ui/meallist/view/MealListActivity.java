@@ -102,7 +102,7 @@ public class MealListActivity extends AppCompatActivity implements MealListView 
     }
 
     @Override
-    public void showError(String message) {
+    public void showPageError(String message) {
         uiStateHandler.showError(message, presenter::retry);
     }
 

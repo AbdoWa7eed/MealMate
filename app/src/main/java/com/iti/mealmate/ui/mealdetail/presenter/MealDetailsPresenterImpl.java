@@ -1,10 +1,10 @@
 package com.iti.mealmate.ui.mealdetail.presenter;
 
-import com.iti.mealmate.core.error.AppErrorHandler;
 import com.iti.mealmate.core.network.NoConnectivityException;
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.data.meal.model.entity.MealIngredient;
 import com.iti.mealmate.data.meal.repo.MealRepository;
+import com.iti.mealmate.data.meal.repo.favorite.FavoriteRepository;
 import com.iti.mealmate.ui.mealdetail.MealDetailsPresenter;
 import com.iti.mealmate.ui.mealdetail.MealDetailsView;
 
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -19,14 +20,16 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
 
     private final MealDetailsView view;
     private final MealRepository mealRepository;
+    private final FavoriteRepository favoriteRepository;
     private final CompositeDisposable disposables = new CompositeDisposable();
 
     private Meal meal;
     private String pendingMealId;
 
-    public MealDetailsPresenterImpl(MealDetailsView view, MealRepository mealRepository) {
+    public MealDetailsPresenterImpl(MealDetailsView view, MealRepository mealRepository, FavoriteRepository favoriteRepository) {
         this.view = view;
         this.mealRepository = mealRepository;
+        this.favoriteRepository = favoriteRepository;
     }
 
     @Override
@@ -76,7 +79,7 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
         if (throwable instanceof NoConnectivityException) {
             view.noInternetError();
         } else {
-            view.showError(throwable.getMessage());
+            view.showPageError(throwable.getMessage());
         }
     }
 
@@ -90,6 +93,7 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
         view.showMealName(meal.getName());
         view.showCountry(meal.getArea());
         view.showMealImage(meal.getThumbnailUrl());
+        view.showFavoriteStatus(meal.isFavorite());
     }
 
     private void displayIngredients(Meal meal) {
@@ -128,6 +132,33 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
     public void onVideoClicked() {
         view.showVideoLoading();
         view.showVideo(meal.getYoutubeUrl());
+    }
+
+    @Override
+    public void toggleFavorite() {
+        if (meal == null) return;
+
+        boolean previousState = meal.isFavorite();
+
+        Completable action = previousState
+                ? favoriteRepository.removeFromFavorites(meal)
+                : favoriteRepository.addToFavorites(meal);
+
+        disposables.add(action.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> onFavoriteToggleSuccess(!previousState),
+                        throwable -> {
+                            view.showFavoriteStatus(previousState);
+                            view.showErrorMessage(throwable.getMessage());
+                        }
+                ));
+    }
+
+    private void onFavoriteToggleSuccess(boolean isFavorite) {
+        meal.setFavorite(isFavorite);
+        view.showFavoriteStatus(isFavorite);
+        view.showSuccessMessage(isFavorite ? "Added to favorites" : "Removed from favorites");
     }
 
     @Override

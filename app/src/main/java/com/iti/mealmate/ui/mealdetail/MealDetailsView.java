@@ -16,4 +16,5 @@ public interface MealDetailsView extends BaseView {
     void showVideo(String url);
     void showVideoLoading();
     void hideVideoLoading();
+    void showFavoriteStatus(boolean isFavorite);
 }

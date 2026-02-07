@@ -106,7 +106,7 @@ public class LoginPresenterImpl implements LoginPresenter {
                     .subscribe(this::completeFacebookSignIn, this::onError);
             compositeDisposable.add(facebookSignInRequest);
         } else {
-            view.showError("Facebook login not supported for this view");
+            view.showPageError("Facebook login not supported for this view");
         }
     }
 
@@ -130,7 +130,7 @@ public class LoginPresenterImpl implements LoginPresenter {
                     error != null && error.getMessage() != null && !error.getMessage().isEmpty()
                             ? error.getMessage()
                             : context.getString(R.string.error_subtitle_default);
-            view.showError(message);
+            view.showPageError(message);
         }
     }
 

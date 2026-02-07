@@ -18,10 +18,12 @@ public class TrendingRecipeAdapter extends RecyclerView.Adapter<TrendingRecipeAd
 
     private final List<Meal> meals;
     private final Consumer<Meal> onMealClicked;
+    private final Consumer<Meal> onFavoriteClicked;
 
-    public TrendingRecipeAdapter(List<Meal> meals, Consumer<Meal> onMealClicked) {
+    public TrendingRecipeAdapter(List<Meal> meals, Consumer<Meal> onMealClicked, Consumer<Meal> onFavoriteClicked) {
         this.meals = meals;
         this.onMealClicked = onMealClicked;
+        this.onFavoriteClicked = onFavoriteClicked;
     }
 
     @NonNull
@@ -48,13 +50,7 @@ public class TrendingRecipeAdapter extends RecyclerView.Adapter<TrendingRecipeAd
                 recipe.isFavorite() ? R.drawable.ic_fav_filled_primary : R.drawable.ic_fav_filled
         );
 
-        holder.binding.buttonTrendingFavorite.setOnClickListener(v -> {
-            recipe.setFavorite(!recipe.isFavorite());
-
-            holder.binding.buttonFavImage.setImageResource(
-                    recipe.isFavorite() ? R.drawable.ic_fav_filled_primary : R.drawable.ic_fav_filled
-            );
-        });
+        holder.binding.buttonTrendingFavorite.setOnClickListener(v -> onFavoriteClicked.accept(recipe));
 
         holder.itemView.setOnClickListener(v -> onMealClicked.accept(recipe));
     }

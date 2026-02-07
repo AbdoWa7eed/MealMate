@@ -10,7 +10,7 @@ import com.iti.mealmate.R;
 import com.iti.mealmate.databinding.ActivityHomeBinding;
 import com.iti.mealmate.ui.common.ActivityExtensions;
 import com.iti.mealmate.ui.discover.view.DiscoverFragment;
-import com.iti.mealmate.ui.favorites.FavoritesFragment;
+import com.iti.mealmate.ui.favorites.view.FavoritesFragment;
 import com.iti.mealmate.ui.plan.PlanFragment;
 import com.iti.mealmate.ui.profile.ProfileFragment;
 

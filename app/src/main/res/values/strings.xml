@@ -39,7 +39,6 @@
     <string name="confirm_password_hint">Confirm your password</string>
     <string name="already_have_account">Already have an account?</string>
     <string name="sign_up_title">Join MealMate</string>
-    <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="previous">Previous</string>
@@ -97,7 +96,6 @@
     <string name="fb_login_protocol_scheme">fb1227026426198292</string>
     <string name="facebook_client_token">4669bac4375e8a6f3c60dc7e5fd67dba</string>
 
-    <!-- Error state strings -->
     <string name="error_title_default">Something went wrong</string>
     <string name="error_subtitle_default">We couldn\'t load the content. Please try again.</string>
     <string name="retry_button">Retry</string>
@@ -105,22 +103,20 @@
     <string name="error_network_subtitle">Please check your connection and try again.</string>
     <string name="error_image_description">Error illustration</string>
 
-    <!-- Discover screen -->
     <string name="discover_search_hint">Search for recipes...</string>
     <string name="discover_chip_category">Category</string>
     <string name="discover_chip_country">Country</string>
     <string name="discover_chip_ingredients">Ingredients</string>
     <string name="discover_empty_state">No results found. Try a different filter or search term.</string>
+    <string name="no_favorites_message">You haven\'t added any favorites yet. Start exploring!</string>
     <string name="search_result">Search Result</string>
 
-    <!-- Meal Details -->
     <string name="meal_details_ingredients">Ingredients</string>
     <string name="meal_details_preparation">Preparation</string>
     <string name="meal_details_add_to_plan">ADD TO WEEKLY PLAN</string>
     <string name="meal_details_items_count">%d items</string>
     <string name="meal_name_placeholder">Creamy Spaghetti Carbonara</string>
 
-    <!-- Content Descriptions -->
     <string name="cd_meal_image">Meal Image</string>
     <string name="cd_back_button">Navigate Back</string>
     <string name="cd_favorite_button">Add to Favorites</string>

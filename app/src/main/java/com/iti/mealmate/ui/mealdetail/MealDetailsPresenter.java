@@ -8,4 +8,5 @@ public interface MealDetailsPresenter extends BasePresenter {
     void retry();
     void addToPlan();
     void onVideoClicked();
+    void toggleFavorite();
 }

@@ -98,7 +98,7 @@ public class LoginFragment extends Fragment implements LoginView, FacebookLoginP
     }
 
     @Override
-    public void showError(String message) {
+    public void showErrorMessage(String message) {
         ActivityExtensions.showErrorSnackBar(requireActivity(), message);
     }
 

@@ -63,10 +63,15 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
         binding.btnBack.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
         binding.btnAddPlan.setOnClickListener(v -> presenter.addToPlan());
+        binding.btnFavorite.setOnClickListener(v -> presenter.toggleFavorite());
     }
 
     private void initPresenter() {
-        presenter = new MealDetailsPresenterImpl(this, ServiceLocator.getMealRepository());
+        presenter = new MealDetailsPresenterImpl(
+                this, 
+                ServiceLocator.getMealRepository(),
+                ServiceLocator.getFavoriteRepository()
+        );
     }
 
     private void loadData() {
@@ -89,7 +94,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
     @Override
     public void showVideo(String url) {
-        PreparationVideoFragment fragment = PreparationVideoFragment.newInstance(url);
+         PreparationVideoFragment fragment = PreparationVideoFragment.newInstance(url);
 
         getSupportFragmentManager().registerFragmentLifecycleCallbacks(
                 new FragmentManager.FragmentLifecycleCallbacks() {
@@ -147,6 +152,18 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
     }
 
     @Override
+    public void showFavoriteStatus(boolean isFavorite) {
+        binding.btnFavorite.setImageResource(
+                isFavorite ? R.drawable.ic_fav_filled_primary : R.drawable.ic_fav_filled
+        );
+    }
+
+    @Override
+    public void showSuccessMessage(String message) {
+        ActivityExtensions.showSuccessSnackBar(this, message);
+    }
+
+    @Override
     public void showLoading() {
         uiStateHandler.showLoading();
     }
@@ -157,8 +174,13 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
     }
 
     @Override
-    public void showError(String message) {
+    public void showPageError(String message) {
         uiStateHandler.showError(message, presenter::retry);
+    }
+
+    @Override
+    public void showErrorMessage(String message) {
+        ActivityExtensions.showErrorSnackBar(this, message);
     }
 
     @Override

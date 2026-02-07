@@ -14,7 +14,7 @@ public interface FavoriteRepository {
 
     Single<Boolean> isFavorite(String mealId);
 
-    Completable addToFavorites(String mealId);
+    Completable addToFavorites(Meal meal);
 
-    Completable removeFromFavorites(String mealId);
+    Completable removeFromFavorites(Meal meal);
 }

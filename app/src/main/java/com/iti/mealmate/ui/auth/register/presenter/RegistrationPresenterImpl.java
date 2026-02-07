@@ -55,7 +55,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
                                                 ? ((android.content.Context) view)
                                                 .getString(R.string.error_subtitle_default)
                                                 : "Something went wrong";
-                        view.showError(message);
+                        view.showPageError(message);
                     }
                 });
         compositeDisposable.add(disposable);

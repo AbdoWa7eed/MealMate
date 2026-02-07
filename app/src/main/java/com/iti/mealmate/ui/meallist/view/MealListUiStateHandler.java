@@ -3,6 +3,7 @@ package com.iti.mealmate.ui.meallist.view;
 import android.view.View;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.iti.mealmate.R;
 import com.iti.mealmate.databinding.ActivityMealListBinding;
 import com.iti.mealmate.ui.common.ErrorOverlayHelper;
 
@@ -30,18 +31,19 @@ public class MealListUiStateHandler {
         stopAndHideLoading();
         ErrorOverlayHelper.hideError(binding.errorOverlay.getRoot());
         binding.recyclerMealList.setVisibility(View.VISIBLE);
-        binding.emptyStateContainer.setVisibility(View.GONE);
+        binding.emptyStateLayout.emptyStateContainer.setVisibility(View.GONE);
     }
 
     public void showEmptyState() {
         stopAndHideLoading();
         ErrorOverlayHelper.hideError(binding.errorOverlay.getRoot());
         binding.recyclerMealList.setVisibility(View.GONE);
-        binding.emptyStateContainer.setVisibility(View.VISIBLE);
+        binding.emptyStateLayout.emptyStateContainer.setVisibility(View.VISIBLE);
+        binding.emptyStateLayout.textEmptyState.setText(R.string.discover_empty_state);
     }
 
     public void hideEmptyState() {
-        binding.emptyStateContainer.setVisibility(View.GONE);
+        binding.emptyStateLayout.emptyStateContainer.setVisibility(View.GONE);
         binding.recyclerMealList.setVisibility(View.VISIBLE);
     }
 
@@ -59,7 +61,7 @@ public class MealListUiStateHandler {
 
     private void hideContent() {
         binding.recyclerMealList.setVisibility(View.GONE);
-        binding.emptyStateContainer.setVisibility(View.GONE);
+        binding.emptyStateLayout.emptyStateContainer.setVisibility(View.GONE);
     }
 
     private void stopAndHideLoading() {

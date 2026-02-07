@@ -17,9 +17,13 @@ import com.iti.mealmate.data.auth.repo.AuthRepositoryImpl;
 import com.iti.mealmate.data.meal.api.MealApiService;
 import com.iti.mealmate.data.meal.datasource.local.datasource.favorite.FavoriteLocalDataSource;
 import com.iti.mealmate.data.meal.datasource.local.datasource.favorite.FavoriteLocalDataSourceImpl;
+import com.iti.mealmate.data.meal.datasource.local.datasource.meal.MealLocalDataSource;
+import com.iti.mealmate.data.meal.datasource.local.datasource.meal.MealLocalDataSourceImpl;
 import com.iti.mealmate.data.meal.datasource.remote.FirestoreMealHelper;
 import com.iti.mealmate.data.meal.datasource.remote.MealRemoteDataSource;
 import com.iti.mealmate.data.meal.datasource.remote.MealRemoteDataSourceImpl;
+import com.iti.mealmate.data.meal.repo.favorite.FavoriteRepository;
+import com.iti.mealmate.data.meal.repo.favorite.FavoriteRepositoryImpl;
 import com.iti.mealmate.data.filter.api.FilterApiService;
 import com.iti.mealmate.data.filter.datasource.remote.FilterRemoteDataSource;
 import com.iti.mealmate.data.filter.datasource.remote.FilterRemoteDataSourceImpl;
@@ -41,7 +45,9 @@ public final class ServiceLocator {
     private static AuthRepository authRepository;
     private static MealRepository mealRepository;
     private static FilterRepository filterRepository;
+    private static FavoriteRepository favoriteRepository;
     private static AppConnectivityManager connectivityManager;
+    private static MealLocalDataSource mealLocalDataSource;
 
     private static AppDatabase appDatabase;
 
@@ -79,7 +85,9 @@ public final class ServiceLocator {
                 new MealRemoteDataSourceImpl(mealApiService, firestoreMealHelper);
         FavoriteLocalDataSource favoriteLocalDataSource =
                 new FavoriteLocalDataSourceImpl(appDatabase.mealDao());
+        mealLocalDataSource = new MealLocalDataSourceImpl(appDatabase.mealDao());
         mealRepository = new MealRepositoryImpl(mealRemoteDataSource, connectivityManager, favoriteLocalDataSource);
+        favoriteRepository = new FavoriteRepositoryImpl(favoriteLocalDataSource, mealLocalDataSource);
 
         FilterApiService filterApiService =
                 ApiClient.getInstance().create(FilterApiService.class);
@@ -113,6 +121,16 @@ public final class ServiceLocator {
     public static AppConnectivityManager getConnectivityManager() {
         checkInit();
         return connectivityManager;
+    }
+
+    public static FavoriteRepository getFavoriteRepository() {
+        checkInit();
+        return favoriteRepository;
+    }
+
+    public static MealLocalDataSource getMealLocalDataSource() {
+        checkInit();
+        return mealLocalDataSource;
     }
 
 

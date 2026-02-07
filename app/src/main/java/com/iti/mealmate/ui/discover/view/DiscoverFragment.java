@@ -151,7 +151,7 @@ public class DiscoverFragment extends Fragment implements DiscoverView {
     }
 
     @Override
-    public void showError(String message) {
+    public void showPageError(String message) {
         uiStateHandler.showError(message, presenter::loadInitialFilters);
     }
 
