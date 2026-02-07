@@ -116,7 +116,7 @@ public class MealListPresenterImpl implements MealListPresenter {
             if (error instanceof NoConnectivityException) {
                 view.noInternetError();
             } else {
-                view.showError(error.getMessage());
+                view.showPageError(error.getMessage());
             }
         }
     }

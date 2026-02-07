@@ -3,6 +3,7 @@ package com.iti.mealmate.ui.home.presenter;
 import com.iti.mealmate.core.network.NoConnectivityException;
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.data.meal.repo.MealRepository;
+import com.iti.mealmate.data.meal.repo.favorite.FavoriteRepository;
 import com.iti.mealmate.ui.home.HomePresenter;
 import com.iti.mealmate.ui.home.HomeView;
 
@@ -18,13 +19,15 @@ public class HomePresenterImpl implements HomePresenter {
 
     private final HomeView view;
     private final MealRepository mealRepository;
+    private final FavoriteRepository favoriteRepository;
     private final CompositeDisposable disposables = new CompositeDisposable();
     private HomeData data;
     private Disposable currentHomeRequest;
 
-    public HomePresenterImpl(HomeView view, MealRepository mealRepository) {
+    public HomePresenterImpl(HomeView view, MealRepository mealRepository, FavoriteRepository favoriteRepository) {
         this.view = view;
         this.mealRepository = mealRepository;
+        this.favoriteRepository = favoriteRepository;
     }
 
     @Override
@@ -52,7 +55,7 @@ public class HomePresenterImpl implements HomePresenter {
             if (error instanceof NoConnectivityException) {
                 view.noInternetError();
             } else {
-                view.showError(error.getMessage());
+                view.showPageError(error.getMessage());
             }
         }
     }
@@ -61,6 +64,35 @@ public class HomePresenterImpl implements HomePresenter {
         this.data = data;
         view.showMealOfTheDay(data.mealOfTheDay);
         view.showTrendingMeals(data.suggestedMeals);
+    }
+
+    @Override
+    public void toggleFavorite(Meal meal) {
+        Disposable request;
+        if (meal.isFavorite()) {
+            request = favoriteRepository.removeFromFavorites(meal.getId())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            () -> {
+                                meal.setFavorite(false);
+                                view.showSuccessMessage("Removed from favorites");
+                                view.showTrendingMeals(data.suggestedMeals);
+                            },
+                            throwable -> view.showErrorMessage(throwable.getMessage()));
+        } else {
+            request = favoriteRepository.addToFavorites(meal.getId())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(() -> {
+                                meal.setFavorite(true);
+                                view.showSuccessMessage("Added to favorites");
+                                view.showTrendingMeals(data.suggestedMeals);
+                            },
+                            throwable -> view.showErrorMessage(throwable.getMessage())
+                    );
+        }
+        disposables.add(request);
     }
 
 

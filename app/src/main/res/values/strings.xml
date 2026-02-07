@@ -111,6 +111,7 @@
     <string name="discover_chip_country">Country</string>
     <string name="discover_chip_ingredients">Ingredients</string>
     <string name="discover_empty_state">No results found. Try a different filter or search term.</string>
+    <string name="no_favorites_message">You haven\'t added any favorites yet. Start exploring!</string>
     <string name="search_result">Search Result</string>
 
     <!-- Meal Details -->

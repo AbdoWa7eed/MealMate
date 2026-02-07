@@ -80,7 +80,7 @@ public class DiscoverPresenterImpl implements DiscoverPresenter {
             if (error instanceof NoConnectivityException) {
                 view.noInternetError();
             } else {
-                view.showError(error.getMessage());
+                view.showPageError(error.getMessage());
             }
         }
     }
@@ -100,7 +100,7 @@ public class DiscoverPresenterImpl implements DiscoverPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::updateUIWithFilteredList,
-                        throwable -> view.showError(throwable.getMessage())
+                        throwable -> view.showPageError(throwable.getMessage())
                 );
 
         disposables.add(searchDisposable);
@@ -136,7 +136,7 @@ public class DiscoverPresenterImpl implements DiscoverPresenter {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 this::updateUIWithFilteredList,
-                                throwable -> view.showError(throwable.getMessage())
+                                throwable -> view.showPageError(throwable.getMessage())
                         );
 
         disposables.add(currentFilterDisposable);

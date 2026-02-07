@@ -45,4 +45,6 @@ public class FavoriteRepositoryImpl implements FavoriteRepository {
         return favoriteLocalDataSource.removeFromFavorites(mealId)
                 .onErrorResumeNext(throwable -> Completable.error(AppErrorHandler.handle(throwable)));
     }
+
+
 }

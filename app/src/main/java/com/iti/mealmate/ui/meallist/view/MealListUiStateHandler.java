@@ -30,18 +30,18 @@ public class MealListUiStateHandler {
         stopAndHideLoading();
         ErrorOverlayHelper.hideError(binding.errorOverlay.getRoot());
         binding.recyclerMealList.setVisibility(View.VISIBLE);
-        binding.emptyStateContainer.setVisibility(View.GONE);
+        binding.emptyStateLayout.emptyStateContainer.setVisibility(View.GONE);
     }
 
     public void showEmptyState() {
         stopAndHideLoading();
         ErrorOverlayHelper.hideError(binding.errorOverlay.getRoot());
         binding.recyclerMealList.setVisibility(View.GONE);
-        binding.emptyStateContainer.setVisibility(View.VISIBLE);
+        binding.emptyStateLayout.emptyStateContainer.setVisibility(View.VISIBLE);
     }
 
     public void hideEmptyState() {
-        binding.emptyStateContainer.setVisibility(View.GONE);
+        binding.emptyStateLayout.emptyStateContainer.setVisibility(View.GONE);
         binding.recyclerMealList.setVisibility(View.VISIBLE);
     }
 
@@ -59,7 +59,7 @@ public class MealListUiStateHandler {
 
     private void hideContent() {
         binding.recyclerMealList.setVisibility(View.GONE);
-        binding.emptyStateContainer.setVisibility(View.GONE);
+        binding.emptyStateLayout.emptyStateContainer.setVisibility(View.GONE);
     }
 
     private void stopAndHideLoading() {

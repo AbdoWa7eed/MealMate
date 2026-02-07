@@ -44,7 +44,9 @@ public class HomeFragment extends Fragment implements HomeView {
         uiStateHandler = new HomeUiStateHandler(binding);
         setupHomeViews();
         if (presenter == null) {
-            presenter = new HomePresenterImpl(this, ServiceLocator.getMealRepository());
+            presenter = new HomePresenterImpl(this, 
+                    ServiceLocator.getMealRepository(),
+                    ServiceLocator.getFavoriteRepository());
             presenter.loadHomeData();
         }
     }
@@ -81,8 +83,15 @@ public class HomeFragment extends Fragment implements HomeView {
 
     @Override
     public void showTrendingMeals(List<Meal> meals) {
-        binding.recyclerTrending.setAdapter(new TrendingRecipeAdapter(meals, this::navigateToMealDetails));
+        binding.recyclerTrending.setAdapter(new TrendingRecipeAdapter(meals, 
+                this::navigateToMealDetails, 
+                presenter::toggleFavorite));
         uiStateHandler.showContent();
+    }
+
+    @Override
+    public void showSuccessMessage(String message) {
+        ActivityExtensions.showSuccessSnackBar(requireActivity(), message);
     }
 
     private void navigateToMealDetails(Meal meal) {
@@ -102,13 +111,18 @@ public class HomeFragment extends Fragment implements HomeView {
     }
 
     @Override
-    public void showError(String message) {
+    public void noInternetError() {
+        uiStateHandler.showNoInternetError(presenter::loadHomeData);
+    }
+
+    @Override
+    public void showPageError(String message) {
         uiStateHandler.showError(message, presenter::loadHomeData);
     }
 
     @Override
-    public void noInternetError() {
-        uiStateHandler.showNoInternetError(presenter::loadHomeData);
+    public void showErrorMessage(String message) {
+        ActivityExtensions.showErrorSnackBar(requireActivity(), message);
     }
 
 
