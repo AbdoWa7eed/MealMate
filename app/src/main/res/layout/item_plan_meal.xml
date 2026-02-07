@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_plan_meal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    app:cardBackgroundColor="#F9FAFB"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_meal_thumbnail"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/image_meal_thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/onboarding_image_2" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/text_meal_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/button_remove_meal"
+            app:layout_constraintStart_toEndOf="@+id/card_meal_thumbnail"
+            app:layout_constraintTop_toTopOf="@+id/card_meal_thumbnail"
+            tools:text="Quinoa Salad Bowl" />
+
+        <TextView
+            android:id="@+id/text_meal_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/card_meal_thumbnail"
+            app:layout_constraintTop_toBottomOf="@+id/text_meal_name"
+            tools:text="Salad" />
+
+        <TextView
+            android:id="@+id/text_meal_separator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="•"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_meal_category"
+            app:layout_constraintStart_toEndOf="@+id/text_meal_category"
+            app:layout_constraintTop_toTopOf="@+id/text_meal_category" />
+
+        <TextView
+            android:id="@+id/text_meal_country"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textColor="@color/colorBlue"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_meal_category"
+            app:layout_constraintStart_toEndOf="@+id/text_meal_separator"
+            app:layout_constraintTop_toTopOf="@+id/text_meal_category"
+            tools:text="French" />
+
+        <ImageView
+            android:id="@+id/button_remove_meal"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="6dp"
+            android:src="@drawable/ic_delete"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/colorPrimary" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

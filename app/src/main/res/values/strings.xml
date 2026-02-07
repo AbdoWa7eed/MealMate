@@ -123,4 +123,15 @@
     <string name="cd_play_video">Play Recipe Video</string>
     <string name="cd_country_icon">Country Icon</string>
     <string name="cd_ingredient_image">Ingredient Image</string>
+
+    <string name="this_week">This Week</string>
+    <string name="next_week">Next Week</string>
+    <string name="today_caps">TODAY</string>
+    <string name="confirmation_title">Confirmation</string>
+    <string name="confirmation_message">Are you sure you want to proceed?</string>
+    <string name="sure">Sure</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="placeholder_date_range">Oct 23 - Oct 29</string>
+    <string name="placeholder_day">Monday</string>
 </resources>

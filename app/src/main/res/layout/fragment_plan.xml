@@ -5,21 +5,70 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    android:padding="24dp"
+    android:paddingHorizontal="16dp"
     tools:context=".ui.plan.PlanFragment">
 
+    <LinearLayout
+        android:id="@+id/layout_week_selector"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_week_selector"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/btn_this_week"
+            android:layout_width="0dp"
+            android:layout_height="34dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_week_selected"
+            android:gravity="center"
+            android:text="@string/this_week"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btn_next_week"
+            android:layout_width="0dp"
+            android:layout_height="34dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/next_week"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+
+    </LinearLayout>
+
     <TextView
-        android:id="@+id/text_plan"
+        android:id="@+id/text_date_range"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/plan"
-        android:textSize="24sp"
+        android:layout_marginTop="16dp"
+        android:text="@string/placeholder_date_range"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp"
         android:textStyle="bold"
-        android:textColor="?attr/colorOnSurface"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_week_selector" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_plan"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:clipToPadding="false"
+        android:paddingBottom="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_date_range"
+        tools:listitem="@layout/item_plan_day" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
