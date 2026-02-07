@@ -26,6 +26,9 @@ public interface MealDao {
     @Query("SELECT * FROM meals WHERE cacheType = :type ORDER BY cachedDate DESC")
     Flowable<List<MealEntity>> getMealsByType(CacheType type);
 
+    @Query("SELECT * FROM meals WHERE cacheType = :type AND cachedDate = :todayStart ORDER BY id DESC")
+    Flowable<List<MealEntity>> getTodayMeals(CacheType type, long todayStart);
+
     @Query("SELECT * FROM meals WHERE isFavorite = 1")
     Flowable<List<MealEntity>> getFavorites();
 

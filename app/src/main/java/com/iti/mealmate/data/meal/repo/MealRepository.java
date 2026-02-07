@@ -5,15 +5,16 @@ import com.iti.mealmate.data.meal.model.entity.MealLight;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 
 public interface MealRepository {
 
-    Single<Meal> getMealOfTheDay();
+    Flowable<Meal> getMealOfTheDay();
 
     Single<List<MealLight>> getMealsByIngredient(String ingredient);
 
-    Single<List<Meal>>  getSuggestedMeals();
+    Flowable<List<Meal>>  getSuggestedMeals();
 
     Single<List<MealLight>> searchMealsByName(String name);
 

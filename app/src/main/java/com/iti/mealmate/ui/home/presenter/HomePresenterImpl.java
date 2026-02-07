@@ -11,7 +11,7 @@ import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -33,21 +33,22 @@ public class HomePresenterImpl implements HomePresenter {
 
     @Override
     public void loadHomeData() {
-
+        if(data != null)
+            return;
         view.showLoading();
-        currentHomeRequest = Single.zip(
+        currentHomeRequest = Flowable.zip(
                         mealRepository.getMealOfTheDay(),
                         mealRepository.getSuggestedMeals(),
                         HomeData::new)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(view::hideLoading)
                 .subscribe(this::loadData, this::handleHomeError);
 
         disposables.add(currentHomeRequest);
     }
 
     private void handleHomeError(Throwable error) {
+        view.hideLoading();
         if (!disposables.isDisposed()) {
             if (error instanceof NoConnectivityException) {
                 view.noInternetError();
@@ -61,6 +62,7 @@ public class HomePresenterImpl implements HomePresenter {
         this.data = data;
         view.showMealOfTheDay(data.mealOfTheDay);
         view.showTrendingMeals(data.suggestedMeals);
+        view.hideLoading();
     }
 
     @Override

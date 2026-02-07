@@ -21,11 +21,15 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
         this.firestoreMealHelper = firestoreMealHelper;
     }
 
+    private static final String TAG = "MEALDATASOURCE";
+
     @Override
     public Single<Meal> getMealOfTheDay() {
+
         return firestoreMealHelper.getMealOfTheDay()
                 .map(MealOfTheDay::getDailyMeal)
                 .onErrorResumeNext(e -> getOrFetchDailyMeals().map(MealOfTheDay::getDailyMeal));
+
     }
 
     @Override
@@ -35,6 +39,7 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
                 .onErrorResumeNext(e -> getOrFetchDailyMeals()
                         .map(MealOfTheDay::getSuggestedMeals)
                 );
+
     }
 
     @Override

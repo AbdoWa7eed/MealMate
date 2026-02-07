@@ -1,7 +1,6 @@
 package com.iti.mealmate.ui.home.view;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,17 +126,7 @@ public class HomeFragment extends Fragment implements HomeView {
         ActivityExtensions.showErrorSnackBar(requireActivity(), message);
     }
 
-    private static final String TAG = "HomeFragment";
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-
-        Log.d(TAG, "onHiddenChanged: ");
-        if (!hidden) {
-            presenter.loadHomeData();
-        }
-    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
