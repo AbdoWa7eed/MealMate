@@ -21,5 +21,5 @@ public interface MealRemoteDataSource {
 
     Single<List<MealResponse>> getMealsByCountry(String country);
 
-    Single<Meal> getMealById(String id);
+    Single<MealResponse> getMealById(String id);
 }
