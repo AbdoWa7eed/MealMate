@@ -86,7 +86,7 @@ public final class ServiceLocator {
         FavoriteLocalDataSource favoriteLocalDataSource =
                 new FavoriteLocalDataSourceImpl(appDatabase.mealDao());
         mealLocalDataSource = new MealLocalDataSourceImpl(appDatabase.mealDao());
-        mealRepository = new MealRepositoryImpl(mealRemoteDataSource, connectivityManager, favoriteLocalDataSource);
+        mealRepository = new MealRepositoryImpl(mealRemoteDataSource, connectivityManager, favoriteLocalDataSource, mealLocalDataSource);
         favoriteRepository = new FavoriteRepositoryImpl(favoriteLocalDataSource, mealLocalDataSource);
 
         FilterApiService filterApiService =
