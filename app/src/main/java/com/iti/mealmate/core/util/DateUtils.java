@@ -1,5 +1,6 @@
 package com.iti.mealmate.core.util;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
@@ -13,5 +14,12 @@ public final class DateUtils {
                 .atStartOfDay(ZoneId.systemDefault())
                 .toInstant()
                 .toEpochMilli();
+
+    }
+
+    public static LocalDate timestampToLocalDate(long timestamp) {
+        return Instant.ofEpochMilli(timestamp)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
     }
 }

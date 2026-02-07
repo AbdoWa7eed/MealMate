@@ -7,11 +7,10 @@ import androidx.room.Index;
 
 @Entity(
         tableName = "planned_meals",
-        primaryKeys = {"mealId", "weekStartDate", "dayName"},
+        primaryKeys = {"mealId", "plannedDate"},
         indices = {
                 @Index("mealId"),
-                @Index("weekStartDate"),
-                @Index(value = {"weekStartDate", "dayName"})
+                @Index("plannedDate"),
         },
         foreignKeys = {
                 @ForeignKey(
@@ -25,21 +24,29 @@ import androidx.room.Index;
 public class PlannedMealsEntity {
 
     @NonNull
-    public String mealId;
+    private  String mealId;
 
-    @NonNull
-    public String dayName;
+    private long plannedDate;
 
-    @NonNull
-    public String weekStartDate;
-
-    public Long plannedDate;
-
-    public PlannedMealsEntity(@NonNull String mealId, @NonNull String dayName,
-                              @NonNull String weekStartDate, Long plannedDate) {
+    public PlannedMealsEntity(@NonNull String mealId, long plannedDate) {
         this.mealId = mealId;
-        this.dayName = dayName;
-        this.weekStartDate = weekStartDate;
+        this.plannedDate = plannedDate;
+    }
+
+    @NonNull
+    public String getMealId() {
+        return mealId;
+    }
+
+    public void setMealId(@NonNull String mealId) {
+        this.mealId = mealId;
+    }
+
+    public long getPlannedDate() {
+        return plannedDate;
+    }
+
+    public void setPlannedDate(long plannedDate) {
         this.plannedDate = plannedDate;
     }
 }
