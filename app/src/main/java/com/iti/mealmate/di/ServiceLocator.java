@@ -15,6 +15,8 @@ import com.iti.mealmate.data.auth.datasource.AuthDataSourceImpl;
 import com.iti.mealmate.data.auth.repo.AuthRepository;
 import com.iti.mealmate.data.auth.repo.AuthRepositoryImpl;
 import com.iti.mealmate.data.meal.api.MealApiService;
+import com.iti.mealmate.data.meal.datasource.local.datasource.favorite.FavoriteLocalDataSource;
+import com.iti.mealmate.data.meal.datasource.local.datasource.favorite.FavoriteLocalDataSourceImpl;
 import com.iti.mealmate.data.meal.datasource.remote.FirestoreMealHelper;
 import com.iti.mealmate.data.meal.datasource.remote.MealRemoteDataSource;
 import com.iti.mealmate.data.meal.datasource.remote.MealRemoteDataSourceImpl;
@@ -75,7 +77,9 @@ public final class ServiceLocator {
                 new FirestoreMealHelper(firestore);
         MealRemoteDataSource mealRemoteDataSource =
                 new MealRemoteDataSourceImpl(mealApiService, firestoreMealHelper);
-        mealRepository = new MealRepositoryImpl(mealRemoteDataSource, connectivityManager);
+        FavoriteLocalDataSource favoriteLocalDataSource =
+                new FavoriteLocalDataSourceImpl(appDatabase.mealDao());
+        mealRepository = new MealRepositoryImpl(mealRemoteDataSource, connectivityManager, favoriteLocalDataSource);
 
         FilterApiService filterApiService =
                 ApiClient.getInstance().create(FilterApiService.class);

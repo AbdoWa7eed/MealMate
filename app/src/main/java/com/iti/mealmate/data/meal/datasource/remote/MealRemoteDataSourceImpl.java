@@ -6,11 +6,7 @@ import com.iti.mealmate.data.meal.model.mapper.MealMapper;
 import com.iti.mealmate.data.meal.model.response.MealOfTheDay;
 import com.iti.mealmate.data.meal.model.response.MealResponse;
 import com.iti.mealmate.data.meal.model.response.MealsBaseResponse;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 
@@ -66,9 +62,8 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
     }
 
     @Override
-    public Single<Meal> getMealById(String id) {
-        return mealApiService.getMealById(id)
-                .map(response -> MealMapper.toEntity(response.getMeals().get(0)));
+    public Single<MealResponse> getMealById(String id) {
+        return mealApiService.getMealById(id).map(response -> response.getMeals().get(0));
     }
 
 
@@ -106,11 +101,7 @@ public class MealRemoteDataSourceImpl implements MealRemoteDataSource {
 
     private Single<List<Meal>> fetchSuggestedMeals() {
         return Flowable.range(0, 10)
-                .flatMap(i ->
-                        mealApiService.getRandomMeal()
-                                .map(response -> MealMapper.toEntity(response.getMeals().get(0)))
-                                .toFlowable()
-                )
+                .flatMap(i -> fetchRandomMeal().toFlowable())
                 .toList()
                 .flatMap(meals -> {
                     if (meals.isEmpty()) {

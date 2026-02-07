@@ -1,5 +1,8 @@
 package com.iti.mealmate.data.meal.model.mapper;
 
+import com.iti.mealmate.core.util.DateUtils;
+import com.iti.mealmate.data.meal.datasource.local.entity.CacheType;
+import com.iti.mealmate.data.meal.datasource.local.entity.MealEntity;
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.data.meal.model.entity.MealIngredient;
 import com.iti.mealmate.data.meal.model.entity.MealLight;
@@ -66,4 +69,53 @@ public class MealMapper {
                 ))
                 .collect(Collectors.toList());
     }
+
+    public static List<Meal> cachedEntitiesToDomain(List<MealEntity> entities) {
+        if (entities == null || entities.isEmpty()) return List.of();
+        return entities.stream()
+                .map(MealMapper::cachedEntityToDomain)
+                .collect(Collectors.toList());
+    }
+
+    public static Meal cachedEntityToDomain(MealEntity entity) {
+        if (entity == null) return null;
+        return new Meal(
+                entity.getId(),
+                entity.getName(),
+                entity.getCategory(),
+                entity.getArea(),
+                entity.getInstructions(),
+                entity.getThumbnailUrl(),
+                entity.getYoutubeUrl(),
+                entity.getSourceUrl(),
+                entity.getIngredients(),
+                entity.isFavorite());
+    }
+
+    public static List<MealEntity> domainToCachedEntities(List<Meal> meals, CacheType type) {
+        if (meals == null || meals.isEmpty()) return List.of();
+        return meals.stream()
+                .map(meal -> MealMapper.domainToCachedEntity(meal, type))
+                .collect(Collectors.toList());
+    }
+
+    public static MealEntity domainToCachedEntity(Meal meal, CacheType type) {
+        if (meal == null)
+            return null;
+        return new MealEntity(
+                meal.getId(),
+                meal.getName(),
+                meal.getCategory(),
+                meal.getArea(),
+                meal.getInstructions(),
+                meal.getThumbnailUrl(),
+                meal.getYoutubeUrl(),
+                meal.getSourceUrl(),
+                meal.getIngredients(),
+                meal.isFavorite(),
+                type,
+                DateUtils.todayAtStartOfDay()
+        );
+    }
+
 }
