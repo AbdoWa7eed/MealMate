@@ -3,6 +3,7 @@ package com.iti.mealmate.ui.meallist.view;
 import android.view.View;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.iti.mealmate.R;
 import com.iti.mealmate.databinding.ActivityMealListBinding;
 import com.iti.mealmate.ui.common.ErrorOverlayHelper;
 
@@ -38,6 +39,7 @@ public class MealListUiStateHandler {
         ErrorOverlayHelper.hideError(binding.errorOverlay.getRoot());
         binding.recyclerMealList.setVisibility(View.GONE);
         binding.emptyStateLayout.emptyStateContainer.setVisibility(View.VISIBLE);
+        binding.emptyStateLayout.textEmptyState.setText(R.string.discover_empty_state);
     }
 
     public void hideEmptyState() {

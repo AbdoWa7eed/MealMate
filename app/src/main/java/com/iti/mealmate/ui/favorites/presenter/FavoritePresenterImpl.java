@@ -7,6 +7,7 @@ import com.iti.mealmate.ui.favorites.FavoritePresenter;
 import com.iti.mealmate.ui.favorites.FavoriteView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -49,37 +50,30 @@ public class FavoritePresenterImpl implements FavoritePresenter {
 
     @Override
     public void toggleFavorite(Meal meal) {
-        if (meal.isFavorite()) {
-            disposables.add(favoriteRepository.removeFromFavorites(meal.getId())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            () -> {
-                                meal.setFavorite(false);
-                                view.showSuccessMessage("Removed from favorites");
-                                loadFavorites();
-                            },
-                            throwable -> view.showErrorMessage(throwable.getMessage())
-                    ));
-        } else {
-            disposables.add(favoriteRepository.addToFavorites(meal.getId())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            () -> {
-                                meal.setFavorite(true);
-                                view.showSuccessMessage("Added to favorites");
-                                loadFavorites();
-                            },
-                            throwable -> view.showErrorMessage(throwable.getMessage())
-                    ));
-        }
+        boolean previousStatus = meal.isFavorite();
+        Completable action = previousStatus
+                ? favoriteRepository.removeFromFavorites(meal)
+                : favoriteRepository.addToFavorites(meal);
+
+        disposables.add(action
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> onFavoriteToggled(meal, !previousStatus),
+                        throwable -> {
+                            meal.setFavorite(previousStatus);
+                            loadFavorites();
+                            view.showErrorMessage(throwable.getMessage());
+                        }
+                ));
     }
 
-    @Override
-    public void onMealClicked(Meal meal) {
-        view.navigateToDetails(meal);
+    private void onFavoriteToggled(Meal meal, boolean isFavorite) {
+        meal.setFavorite(isFavorite);
+        view.showSuccessMessage(isFavorite ? "Added to favorites" : "Removed from favorites");
+        loadFavorites();
     }
+
 
     @Override
     public void onDestroy() {

@@ -1,6 +1,7 @@
 package com.iti.mealmate.ui.home.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ public class HomeFragment extends Fragment implements HomeView {
         uiStateHandler = new HomeUiStateHandler(binding);
         setupHomeViews();
         if (presenter == null) {
-            presenter = new HomePresenterImpl(this, 
+            presenter = new HomePresenterImpl(this,
                     ServiceLocator.getMealRepository(),
                     ServiceLocator.getFavoriteRepository());
             presenter.loadHomeData();
@@ -77,15 +78,16 @@ public class HomeFragment extends Fragment implements HomeView {
             binding.textMealOfDayName.setText(meal.getName());
             binding.textMealOfDayCountry.setText(meal.getArea());
             uiStateHandler.showContent();
-            binding.cardMealOfDay.setOnClickListener(v ->  this.navigateToMealDetails(meal));
+            binding.cardMealOfDay.setOnClickListener(v -> this.navigateToMealDetails(meal));
         }
     }
 
     @Override
     public void showTrendingMeals(List<Meal> meals) {
-        binding.recyclerTrending.setAdapter(new TrendingRecipeAdapter(meals, 
-                this::navigateToMealDetails, 
-                presenter::toggleFavorite));
+        TrendingRecipeAdapter adapter = new TrendingRecipeAdapter(meals,
+                this::navigateToMealDetails,
+                presenter::toggleFavorite);
+        binding.recyclerTrending.setAdapter(adapter);
         uiStateHandler.showContent();
     }
 
@@ -125,7 +127,17 @@ public class HomeFragment extends Fragment implements HomeView {
         ActivityExtensions.showErrorSnackBar(requireActivity(), message);
     }
 
+    private static final String TAG = "HomeFragment";
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+
+        Log.d(TAG, "onHiddenChanged: ");
+        if (!hidden) {
+            presenter.loadHomeData();
+        }
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();

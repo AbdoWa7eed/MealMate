@@ -13,7 +13,7 @@
     <ImageView
         android:id="@+id/image_empty_logo"
         android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_height="73dp"
         android:alpha="0.7"
         android:contentDescription="@string/app_name"
         android:src="@drawable/logo_circled"

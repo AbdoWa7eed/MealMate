@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    android:padding="24dp"
+    android:padding="16dp"
     tools:context=".ui.favorites.view.FavoritesFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -14,7 +14,6 @@
         android:layout_height="0dp"
         android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        android:padding="8dp"
         app:spanCount="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

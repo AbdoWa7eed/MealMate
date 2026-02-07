@@ -269,8 +269,7 @@
             android:background="@drawable/bg_glass_circle"
             android:contentDescription="@string/cd_favorite_button"
             android:padding="8dp"
-            android:src="@drawable/ic_fav_filled"
-            app:tint="@android:color/white" />
+            android:src="@drawable/ic_fav_filled" />
     </LinearLayout>
 
     <FrameLayout

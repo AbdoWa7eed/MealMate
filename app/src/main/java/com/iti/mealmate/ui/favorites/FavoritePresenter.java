@@ -6,5 +6,4 @@ import com.iti.mealmate.data.meal.model.entity.Meal;
 public interface FavoritePresenter extends BasePresenter {
     void loadFavorites();
     void toggleFavorite(Meal meal);
-    void onMealClicked(Meal meal);
 }

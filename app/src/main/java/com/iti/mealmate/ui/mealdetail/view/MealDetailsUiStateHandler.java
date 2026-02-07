@@ -67,6 +67,5 @@ public class MealDetailsUiStateHandler {
     private void setToolbarItemsColor(int colorRes) {
         int color = binding.getRoot().getContext().getColor(colorRes);
         binding.btnBack.setColorFilter(color);
-        binding.btnFavorite.setColorFilter(color);
     }
 }

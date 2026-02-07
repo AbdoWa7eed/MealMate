@@ -10,6 +10,7 @@ import com.iti.mealmate.ui.home.HomeView;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -32,10 +33,6 @@ public class HomePresenterImpl implements HomePresenter {
 
     @Override
     public void loadHomeData() {
-        if (data != null) {
-            loadData(data);
-            return;
-        }
 
         view.showLoading();
         currentHomeRequest = Single.zip(
@@ -68,31 +65,28 @@ public class HomePresenterImpl implements HomePresenter {
 
     @Override
     public void toggleFavorite(Meal meal) {
-        Disposable request;
-        if (meal.isFavorite()) {
-            request = favoriteRepository.removeFromFavorites(meal.getId())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            () -> {
-                                meal.setFavorite(false);
-                                view.showSuccessMessage("Removed from favorites");
-                                view.showTrendingMeals(data.suggestedMeals);
-                            },
-                            throwable -> view.showErrorMessage(throwable.getMessage()));
-        } else {
-            request = favoriteRepository.addToFavorites(meal.getId())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(() -> {
-                                meal.setFavorite(true);
-                                view.showSuccessMessage("Added to favorites");
-                                view.showTrendingMeals(data.suggestedMeals);
-                            },
-                            throwable -> view.showErrorMessage(throwable.getMessage())
-                    );
-        }
-        disposables.add(request);
+        boolean previousStatus = meal.isFavorite();
+        Completable action = previousStatus
+                ? favoriteRepository.removeFromFavorites(meal)
+                : favoriteRepository.addToFavorites(meal);
+
+        disposables.add(action
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> onFavoriteToggled(meal, !previousStatus),
+                        throwable -> {
+                            meal.setFavorite(previousStatus);
+                            view.showTrendingMeals(data.suggestedMeals);
+                            view.showErrorMessage(throwable.getMessage());
+                        }
+                ));
+    }
+
+    private void onFavoriteToggled(Meal meal, boolean isFavorite) {
+        meal.setFavorite(isFavorite);
+        view.showSuccessMessage(isFavorite ? "Added to favorites" : "Removed from favorites");
+        view.showTrendingMeals(data.suggestedMeals);
     }
 
 

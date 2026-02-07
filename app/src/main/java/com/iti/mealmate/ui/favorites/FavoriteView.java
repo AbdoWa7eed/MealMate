@@ -7,5 +7,4 @@ import java.util.List;
 public interface FavoriteView extends BaseView {
     void showFavorites(List<Meal> favorites);
     void showEmptyState();
-    void navigateToDetails(Meal meal);
 }
