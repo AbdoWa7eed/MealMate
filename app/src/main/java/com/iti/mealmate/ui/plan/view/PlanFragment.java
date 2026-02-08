@@ -1,15 +1,19 @@
 package com.iti.mealmate.ui.plan.view;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
+import com.iti.mealmate.R;
+import com.iti.mealmate.core.util.DateUtils;
 import com.iti.mealmate.data.meal.model.entity.DayPlan;
 import com.iti.mealmate.databinding.FragmentPlanBinding;
 import com.iti.mealmate.di.ServiceLocator;
@@ -17,6 +21,7 @@ import com.iti.mealmate.ui.common.ActivityExtensions;
 import com.iti.mealmate.ui.plan.PlanPresenter;
 import com.iti.mealmate.ui.plan.PlanView;
 import com.iti.mealmate.ui.plan.presenter.PlanPresenterImpl;
+import com.iti.mealmate.ui.plan.view.adapter.PlansAdapter;
 
 import java.util.List;
 
@@ -24,42 +29,77 @@ public class PlanFragment extends Fragment implements PlanView {
 
     private FragmentPlanBinding binding;
     private PlanPresenter presenter;
+    private PlansAdapter plansAdapter;
 
+    private PlanUiStateHandler planUiStateHandler;
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState) {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = FragmentPlanBinding.inflate(getLayoutInflater());
+        binding = FragmentPlanBinding.inflate(inflater, container, false);
         presenter = new PlanPresenterImpl(this, ServiceLocator.getPlanRepository());
+
         return binding.getRoot();
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(
+            @NonNull View view,
+            @Nullable Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
+        planUiStateHandler = new PlanUiStateHandler(binding);
+        setupRecyclerView();
+        setupWeekSelector();
         presenter.onViewCreated();
+
+    }
+
+    private void setupRecyclerView() {
+        plansAdapter = new PlansAdapter(presenter::removeMeal);
+        binding.recyclerPlan.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.recyclerPlan.setAdapter(plansAdapter);
+        binding.recyclerPlan.setHasFixedSize(false);
+    }
+
+    private void setupWeekSelector() {
+        TextView thisWeek = binding.btnThisWeek;
+        TextView nextWeek = binding.btnNextWeek;
+        planUiStateHandler.initializeWeekSelector();
+        thisWeek.setOnClickListener(v -> {
+            planUiStateHandler.toggleWeek(thisWeek, nextWeek);
+            presenter.loadCurrentWeek();
+        });
+        nextWeek.setOnClickListener(v -> {
+            planUiStateHandler.toggleWeek(nextWeek, thisWeek);
+            presenter.loadNextWeek();
+        });
     }
 
     @Override
     public void showPlannedMeals(List<DayPlan> plannedMealList) {
+        planUiStateHandler.showContent();
+        plansAdapter.submitList(plannedMealList);
+        binding.textDateRange.setText(DateUtils.getTwoWeekDateRange());
+    }
 
+    @Override
+    public void showEmptyState() {
+        planUiStateHandler.showEmptyState(getString(R.string.no_plans_message));
     }
 
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void showLoading() {
+        planUiStateHandler.showLoading();
     }
 
     @Override
-    public void showLoading() {}
+    public void hideLoading() {
 
-    @Override
-    public void hideLoading() {}
+    }
 
     @Override
     public void showPageError(String message) {
@@ -80,5 +120,10 @@ public class PlanFragment extends Fragment implements PlanView {
     public void noInternetError() {
         PlanView.super.noInternetError();
     }
-}
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+}

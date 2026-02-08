@@ -7,4 +7,7 @@ import java.util.List;
 public interface PlanView extends BaseView {
 
     void showPlannedMeals(List<DayPlan> plannedMealList);
+
+    void showEmptyState();
+
 }
