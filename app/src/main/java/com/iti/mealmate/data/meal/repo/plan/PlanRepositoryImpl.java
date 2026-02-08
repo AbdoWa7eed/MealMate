@@ -2,6 +2,7 @@ package com.iti.mealmate.data.meal.repo.plan;
 
 import com.iti.mealmate.core.error.AppErrorHandler;
 import com.iti.mealmate.data.meal.datasource.local.datasource.meal.MealLocalDataSource;
+import com.iti.mealmate.data.meal.datasource.local.datasource.plan.PlanLocalDataSource;
 import com.iti.mealmate.data.meal.datasource.local.datasource.plan.PlanLocalDataSourceImpl;
 import com.iti.mealmate.data.meal.datasource.local.entity.CacheType;
 import com.iti.mealmate.data.meal.model.entity.Meal;
@@ -17,7 +18,7 @@ import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 
 public class PlanRepositoryImpl implements PlanRepository{
-    private final PlanLocalDataSourceImpl planLocalDataSource;
+    private final PlanLocalDataSource planLocalDataSource;
     private final MealLocalDataSource mealLocalDataSource;
 
     public PlanRepositoryImpl(PlanLocalDataSourceImpl planLocalDataSource, MealLocalDataSource mealLocalDataSource) {

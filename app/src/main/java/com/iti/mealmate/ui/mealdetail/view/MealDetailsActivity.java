@@ -19,6 +19,7 @@ import com.iti.mealmate.data.meal.model.entity.MealIngredient;
 import com.iti.mealmate.databinding.ActivityMealDetailsBinding;
 import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.common.ActivityExtensions;
+import com.iti.mealmate.ui.common.UiUtils;
 import com.iti.mealmate.ui.mealdetail.MealDetailsPresenter;
 import com.iti.mealmate.ui.mealdetail.MealDetailsView;
 import com.iti.mealmate.ui.mealdetail.presenter.MealDetailsPresenterImpl;
@@ -62,7 +63,9 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         binding.rvPreparation.setAdapter(preparationAdapter);
 
         binding.btnBack.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
-        binding.btnAddPlan.setOnClickListener(v -> presenter.addToPlan());
+        binding.btnAddPlan
+                .setOnClickListener(v -> UiUtils
+                        .showDatePicker(this, presenter::addToPlan));
         binding.btnFavorite.setOnClickListener(v -> presenter.toggleFavorite());
     }
 
@@ -70,7 +73,8 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         presenter = new MealDetailsPresenterImpl(
                 this, 
                 ServiceLocator.getMealRepository(),
-                ServiceLocator.getFavoriteRepository()
+                ServiceLocator.getFavoriteRepository(),
+                ServiceLocator.getPlanRepository()
         );
     }
 
@@ -187,6 +191,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
     public void noInternetError() {
         uiStateHandler.showNoInternetError(presenter::retry);
     }
+
 
     @Override
     protected void onDestroy() {
