@@ -18,11 +18,20 @@ public final class DateUtils {
 
     }
 
+    public static long dateToTimeStamp(LocalDate date) {
+        return date.atStartOfDay(ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli();
+
+    }
+
     public static LocalDate timestampToLocalDate(long timestamp) {
         return Instant.ofEpochMilli(timestamp)
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
     }
+
+
 
     public static LocalDate endOfNextWeek() {
         LocalDate today = LocalDate.now();

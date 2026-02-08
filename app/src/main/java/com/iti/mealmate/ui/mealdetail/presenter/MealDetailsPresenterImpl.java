@@ -3,6 +3,7 @@ package com.iti.mealmate.ui.mealdetail.presenter;
 import com.iti.mealmate.core.network.NoConnectivityException;
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.data.meal.model.entity.MealIngredient;
+import com.iti.mealmate.data.meal.model.entity.PlannedMeal;
 import com.iti.mealmate.data.meal.repo.MealRepository;
 import com.iti.mealmate.data.meal.repo.favorite.FavoriteRepository;
 import com.iti.mealmate.data.meal.repo.plan.PlanRepository;
@@ -135,13 +136,9 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
     @Override
     public void addToPlan(LocalDate date) {
         var addToPlanRequest = planRepository
-                .addPlannedMeal(meal, date).subscribe(
-                        () -> {
-                            view.showSuccessMessage("Added To Plan");
-                        },
-                        throwable -> {
-                            view.showErrorMessage(throwable.getMessage());
-                        }
+                .addPlannedMeal(new PlannedMeal(meal, date)).subscribe(
+                        () -> view.showSuccessMessage("Added To Plan"),
+                        throwable -> view.showErrorMessage(throwable.getMessage())
                 );
 
         disposables.add(addToPlanRequest);
