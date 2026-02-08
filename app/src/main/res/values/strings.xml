@@ -117,6 +117,9 @@
     <string name="meal_details_items_count">%d items</string>
     <string name="meal_name_placeholder">Creamy Spaghetti Carbonara</string>
 
+    <string name="no_plans_message">You haven\'t added any favorites yet. Start exploring!</string>
+
+
     <string name="cd_meal_image">Meal Image</string>
     <string name="cd_back_button">Navigate Back</string>
     <string name="cd_favorite_button">Add to Favorites</string>

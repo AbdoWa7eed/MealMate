@@ -2,9 +2,10 @@ package com.iti.mealmate.data.meal.repo.plan;
 
 import com.iti.mealmate.core.error.AppErrorHandler;
 import com.iti.mealmate.data.meal.datasource.local.datasource.meal.MealLocalDataSource;
+import com.iti.mealmate.data.meal.datasource.local.datasource.plan.PlanLocalDataSource;
 import com.iti.mealmate.data.meal.datasource.local.datasource.plan.PlanLocalDataSourceImpl;
 import com.iti.mealmate.data.meal.datasource.local.entity.CacheType;
-import com.iti.mealmate.data.meal.model.entity.Meal;
+import com.iti.mealmate.data.meal.model.entity.DayPlan;
 import com.iti.mealmate.data.meal.model.entity.PlannedMeal;
 import com.iti.mealmate.data.meal.model.mapper.MealMapper;
 import com.iti.mealmate.data.meal.model.mapper.PlanMapper;
@@ -16,8 +17,8 @@ import java.util.List;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 
-public class PlanRepositoryImpl implements PlanRepository{
-    private final PlanLocalDataSourceImpl planLocalDataSource;
+public class PlanRepositoryImpl implements PlanRepository {
+    private final PlanLocalDataSource planLocalDataSource;
     private final MealLocalDataSource mealLocalDataSource;
 
     public PlanRepositoryImpl(PlanLocalDataSourceImpl planLocalDataSource, MealLocalDataSource mealLocalDataSource) {
@@ -26,15 +27,19 @@ public class PlanRepositoryImpl implements PlanRepository{
     }
 
     @Override
-    public Completable addPlannedMeal(Meal meal, LocalDate date) {
-        return mealLocalDataSource.isMealExists(meal.getId())
+    public Completable addPlannedMeal(PlannedMeal plannedMeal) {
+        var plannedEntity = PlanMapper.createPlannedEntity(plannedMeal);
+        return mealLocalDataSource
+                .isMealExists(plannedMeal.getMeal().getId())
                 .flatMapCompletable(isExists -> {
                     if (isExists) {
-                        return planLocalDataSource.addMealToPlan(meal, date);
+                        return planLocalDataSource.addMealToPlan(plannedEntity);
                     } else {
+                        var mealEntity = MealMapper
+                                .domainToCachedEntity(plannedMeal.getMeal(), CacheType.NONE);
                         return mealLocalDataSource
-                                .insertMeal(MealMapper.domainToCachedEntity(meal, CacheType.NONE))
-                                .andThen(planLocalDataSource.addMealToPlan(meal, date));
+                                .insertMeal(mealEntity)
+                                .andThen(planLocalDataSource.addMealToPlan(plannedEntity));
                     }
                 }).onErrorResumeNext(throwable ->
                         Completable.error(AppErrorHandler.handle(throwable)));
@@ -42,8 +47,8 @@ public class PlanRepositoryImpl implements PlanRepository{
 
 
     @Override
-    public Completable removePlannedMealFromDay(String mealId, LocalDate date) {
-        return planLocalDataSource.removeMealFromDay(mealId, date)
+    public Completable removePlannedMealFromDay(PlannedMeal plannedMeal) {
+        return planLocalDataSource.removeMealFromDay(PlanMapper.createPlannedEntity(plannedMeal))
                 .onErrorResumeNext(throwable ->
                         Completable.error(AppErrorHandler.handle(throwable)));
     }
@@ -55,22 +60,23 @@ public class PlanRepositoryImpl implements PlanRepository{
                         Completable.error(AppErrorHandler.handle(throwable)));
     }
 
-    @Override
-    public Flowable<List<PlannedMeal>> getPlannedMealsForDay(LocalDate date) {
+    public Flowable<DayPlan> getPlannedMealsForDay(LocalDate date) {
         return planLocalDataSource
                 .getMealsForDay(date)
-                .map(PlanMapper::toDomainEntityList)
-                .onErrorResumeNext(throwable -> Flowable.error(AppErrorHandler.handle(throwable)));
+                .map(meals -> PlanMapper.groupByDay(meals).get(0))
+                .onErrorResumeNext(throwable ->
+                        Flowable.error(AppErrorHandler.handle(throwable)));
     }
 
     @Override
-    public Flowable<List<PlannedMeal>> getPlannedMealsForNextTwoWeeks() {
+    public Flowable<List<DayPlan>> getPlannedMealsForNextTwoWeeks() {
         LocalDate startOfWeek = LocalDate.now().with(DayOfWeek.SATURDAY);
         LocalDate endDate = startOfWeek.plusWeeks(2);
 
         return planLocalDataSource
                 .getMealsForDateRange(startOfWeek, endDate)
-                .map(PlanMapper::toDomainEntityList)
-                .onErrorResumeNext(throwable -> Flowable.error(AppErrorHandler.handle(throwable)));
+                .map(PlanMapper::groupByDay)
+                .onErrorResumeNext(throwable ->
+                        Flowable.error(AppErrorHandler.handle(throwable)));
     }
 }

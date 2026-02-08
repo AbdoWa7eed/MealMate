@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class PlannedMealDetailEntity implements Serializable {
 
     @Embedded
-    private PlannedMealsEntity plannedMeal;
+    private PlannedMealEntity plannedMeal;
 
     @Relation(
             parentColumn = "mealId",
@@ -17,11 +17,11 @@ public class PlannedMealDetailEntity implements Serializable {
     private MealEntity meal;
 
 
-    public PlannedMealsEntity getPlannedMeal() {
+    public PlannedMealEntity getPlannedMeal() {
         return plannedMeal;
     }
 
-    public void setPlannedMeal(PlannedMealsEntity plannedMeal) {
+    public void setPlannedMeal(PlannedMealEntity plannedMeal) {
         this.plannedMeal = plannedMeal;
     }
 

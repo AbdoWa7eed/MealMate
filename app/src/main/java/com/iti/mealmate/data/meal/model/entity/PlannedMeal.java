@@ -1,10 +1,8 @@
 package com.iti.mealmate.data.meal.model.entity;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 public class PlannedMeal {
-
     private Meal meal;
     private LocalDate plannedDate;
 
@@ -17,13 +15,12 @@ public class PlannedMeal {
         return meal;
     }
 
-    public LocalDate getPlannedDate() {
-        return plannedDate;
-    }
-
-
     public void setMeal(Meal meal) {
         this.meal = meal;
+    }
+
+    public LocalDate getPlannedDate() {
+        return plannedDate;
     }
 
     public void setPlannedDate(LocalDate plannedDate) {

@@ -19,6 +19,7 @@ import com.iti.mealmate.data.meal.datasource.local.datasource.favorite.FavoriteL
 import com.iti.mealmate.data.meal.datasource.local.datasource.favorite.FavoriteLocalDataSourceImpl;
 import com.iti.mealmate.data.meal.datasource.local.datasource.meal.MealLocalDataSource;
 import com.iti.mealmate.data.meal.datasource.local.datasource.meal.MealLocalDataSourceImpl;
+import com.iti.mealmate.data.meal.datasource.local.datasource.plan.PlanLocalDataSourceImpl;
 import com.iti.mealmate.data.meal.datasource.remote.FirestoreMealHelper;
 import com.iti.mealmate.data.meal.datasource.remote.MealRemoteDataSource;
 import com.iti.mealmate.data.meal.datasource.remote.MealRemoteDataSourceImpl;
@@ -31,6 +32,8 @@ import com.iti.mealmate.data.filter.repo.FilterRepository;
 import com.iti.mealmate.data.filter.repo.FilterRepositoryImpl;
 import com.iti.mealmate.data.meal.repo.MealRepository;
 import com.iti.mealmate.data.meal.repo.MealRepositoryImpl;
+import com.iti.mealmate.data.meal.repo.plan.PlanRepository;
+import com.iti.mealmate.data.meal.repo.plan.PlanRepositoryImpl;
 import com.iti.mealmate.data.source.local.db.AppDatabase;
 import com.iti.mealmate.data.source.local.prefs.PreferencesHelper;
 import com.iti.mealmate.data.source.remote.api.ApiClient;
@@ -48,6 +51,8 @@ public final class ServiceLocator {
     private static FavoriteRepository favoriteRepository;
     private static AppConnectivityManager connectivityManager;
     private static MealLocalDataSource mealLocalDataSource;
+
+    private static PlanRepository planRepository;
 
     private static AppDatabase appDatabase;
 
@@ -88,7 +93,8 @@ public final class ServiceLocator {
         mealLocalDataSource = new MealLocalDataSourceImpl(appDatabase.mealDao());
         mealRepository = new MealRepositoryImpl(mealRemoteDataSource, connectivityManager, favoriteLocalDataSource, mealLocalDataSource);
         favoriteRepository = new FavoriteRepositoryImpl(favoriteLocalDataSource, mealLocalDataSource);
-
+        PlanLocalDataSourceImpl planLocalDataSource = new PlanLocalDataSourceImpl(appDatabase.planDao());
+        planRepository = new PlanRepositoryImpl(planLocalDataSource, mealLocalDataSource);
         FilterApiService filterApiService =
                 ApiClient.getInstance().create(FilterApiService.class);
         FilterRemoteDataSource filterRemoteDataSource =
@@ -131,6 +137,11 @@ public final class ServiceLocator {
     public static MealLocalDataSource getMealLocalDataSource() {
         checkInit();
         return mealLocalDataSource;
+    }
+
+    public static PlanRepository getPlanRepository() {
+        checkInit();
+        return planRepository;
     }
 
 

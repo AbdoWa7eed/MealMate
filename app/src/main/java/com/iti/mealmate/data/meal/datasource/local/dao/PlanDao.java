@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
-import com.iti.mealmate.data.meal.datasource.local.entity.PlannedMealsEntity;
+import com.iti.mealmate.data.meal.datasource.local.entity.PlannedMealEntity;
 import com.iti.mealmate.data.meal.datasource.local.entity.PlannedMealDetailEntity;
 
 import io.reactivex.rxjava3.core.Completable;
@@ -18,7 +18,7 @@ import java.util.List;
 public interface PlanDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Completable addToPlan(PlannedMealsEntity plan);
+    Completable addToPlan(PlannedMealEntity plan);
 
     @Query("DELETE FROM planned_meals WHERE mealId = :mealId AND plannedDate = :plannedDate")
     Completable removeMealFromDay(String mealId, long plannedDate);

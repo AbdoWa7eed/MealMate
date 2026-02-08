@@ -97,7 +97,7 @@ public class HomeFragment extends Fragment implements HomeView {
 
     private void navigateToMealDetails(Meal meal) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(com.iti.mealmate.ui.mealdetail.view.MealDetailsActivity.EXTRA_MEAL, meal);
+        bundle.putSerializable(MealDetailsActivity.EXTRA_MEAL, meal);
         ActivityExtensions.navigateToActivity(requireActivity(), MealDetailsActivity.class, bundle);
     }
 

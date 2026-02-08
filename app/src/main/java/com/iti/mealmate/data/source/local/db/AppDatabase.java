@@ -10,12 +10,12 @@ import com.iti.mealmate.data.meal.datasource.local.converter.CacheTypeConverter;
 import com.iti.mealmate.data.meal.datasource.local.dao.MealDao;
 import com.iti.mealmate.data.meal.datasource.local.dao.PlanDao;
 import com.iti.mealmate.data.meal.datasource.local.entity.MealEntity;
-import com.iti.mealmate.data.meal.datasource.local.entity.PlannedMealsEntity;
+import com.iti.mealmate.data.meal.datasource.local.entity.PlannedMealEntity;
 import com.iti.mealmate.data.meal.datasource.local.converter.MealIngredientConverter;
 
 @Database(entities = {
     MealEntity.class,
-    PlannedMealsEntity.class
+    PlannedMealEntity.class
 }, version = 1, exportSchema = false)
 @TypeConverters({MealIngredientConverter.class, CacheTypeConverter.class})
 public abstract class AppDatabase extends RoomDatabase {

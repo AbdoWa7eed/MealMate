@@ -21,14 +21,14 @@ import androidx.room.Index;
                 )
         }
 )
-public class PlannedMealsEntity {
+public class PlannedMealEntity {
 
     @NonNull
     private  String mealId;
 
     private long plannedDate;
 
-    public PlannedMealsEntity(@NonNull String mealId, long plannedDate) {
+    public PlannedMealEntity(@NonNull String mealId, long plannedDate) {
         this.mealId = mealId;
         this.plannedDate = plannedDate;
     }

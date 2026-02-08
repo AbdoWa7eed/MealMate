@@ -3,11 +3,14 @@ package com.iti.mealmate.ui.mealdetail.presenter;
 import com.iti.mealmate.core.network.NoConnectivityException;
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.data.meal.model.entity.MealIngredient;
+import com.iti.mealmate.data.meal.model.entity.PlannedMeal;
 import com.iti.mealmate.data.meal.repo.MealRepository;
 import com.iti.mealmate.data.meal.repo.favorite.FavoriteRepository;
+import com.iti.mealmate.data.meal.repo.plan.PlanRepository;
 import com.iti.mealmate.ui.mealdetail.MealDetailsPresenter;
 import com.iti.mealmate.ui.mealdetail.MealDetailsView;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,15 +24,21 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
     private final MealDetailsView view;
     private final MealRepository mealRepository;
     private final FavoriteRepository favoriteRepository;
+
+    private final PlanRepository planRepository;
     private final CompositeDisposable disposables = new CompositeDisposable();
 
     private Meal meal;
     private String pendingMealId;
 
-    public MealDetailsPresenterImpl(MealDetailsView view, MealRepository mealRepository, FavoriteRepository favoriteRepository) {
+    public MealDetailsPresenterImpl(MealDetailsView view,
+                                    MealRepository mealRepository,
+                                    FavoriteRepository favoriteRepository,
+                                    PlanRepository planRepository) {
         this.view = view;
         this.mealRepository = mealRepository;
         this.favoriteRepository = favoriteRepository;
+        this.planRepository = planRepository;
     }
 
     @Override
@@ -125,7 +134,14 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
     }
 
     @Override
-    public void addToPlan() {
+    public void addToPlan(LocalDate date) {
+        var addToPlanRequest = planRepository
+                .addPlannedMeal(new PlannedMeal(meal, date)).subscribe(
+                        () -> view.showSuccessMessage("Added To Plan"),
+                        throwable -> view.showErrorMessage(throwable.getMessage())
+                );
+
+        disposables.add(addToPlanRequest);
     }
 
     @Override
