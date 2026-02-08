@@ -14,6 +14,7 @@ import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.databinding.FragmentFavoritesBinding;
 import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.common.ActivityExtensions;
+import com.iti.mealmate.ui.common.DialogUtils;
 import com.iti.mealmate.ui.favorites.FavoritePresenter;
 import com.iti.mealmate.ui.favorites.FavoriteView;
 import com.iti.mealmate.ui.favorites.presenter.FavoritePresenterImpl;
@@ -56,7 +57,12 @@ public class FavoritesFragment extends Fragment implements FavoriteView {
     }
 
     private void showDeleteConfirmation(Meal meal) {
-        presenter.toggleFavorite(meal);
+        DialogUtils.showConfirmationDialog(
+                requireContext(),
+                getString(R.string.remove_favorite_title),
+                getString(R.string.remove_favorite_message),
+                v -> presenter.removeFavorite(meal)
+        );
     }
 
     @Override

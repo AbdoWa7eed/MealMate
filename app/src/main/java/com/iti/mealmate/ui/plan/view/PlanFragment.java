@@ -1,6 +1,5 @@
 package com.iti.mealmate.ui.plan.view;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +19,7 @@ import com.iti.mealmate.data.meal.model.entity.PlannedMeal;
 import com.iti.mealmate.databinding.FragmentPlanBinding;
 import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.common.ActivityExtensions;
+import com.iti.mealmate.ui.common.DialogUtils;
 import com.iti.mealmate.ui.mealdetail.view.MealDetailsActivity;
 import com.iti.mealmate.ui.meallist.view.MealListActivity;
 import com.iti.mealmate.ui.plan.PlanPresenter;
@@ -62,10 +62,19 @@ public class PlanFragment extends Fragment implements PlanView {
     }
 
     private void setupRecyclerView() {
-        plansAdapter = new PlansAdapter(presenter::removeMeal, this::navigateToMealDetails);
+        plansAdapter = new PlansAdapter(this::showConfirmationDialog, this::navigateToMealDetails);
         binding.recyclerPlan.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerPlan.setAdapter(plansAdapter);
         binding.recyclerPlan.setHasFixedSize(false);
+    }
+
+    private void showConfirmationDialog(PlannedMeal meal) {
+        DialogUtils.showConfirmationDialog(
+                requireContext(),
+                getString(R.string.remove_plan_title),
+                getString(R.string.remove_plan_message),
+                v -> presenter.removeMeal(meal)
+        );
     }
 
     private void navigateToMealDetails(PlannedMeal meal) {
