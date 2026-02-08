@@ -49,31 +49,27 @@ public class FavoritePresenterImpl implements FavoritePresenter {
     }
 
     @Override
-    public void toggleFavorite(Meal meal) {
-        boolean previousStatus = meal.isFavorite();
-        Completable action = previousStatus
-                ? favoriteRepository.removeFromFavorites(meal)
-                : favoriteRepository.addToFavorites(meal);
-
-        disposables.add(action
+    public void removeFavorite(Meal meal) {
+        disposables.add(favoriteRepository.removeFromFavorites(meal)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> onFavoriteToggled(meal, !previousStatus),
-                        throwable -> {
-                            meal.setFavorite(previousStatus);
-                            loadFavorites();
-                            view.showErrorMessage(throwable.getMessage());
-                        }
+                        () -> onFavoriteRemoved(meal),
+                        throwable -> onFavoriteRemoveError(meal, throwable)
                 ));
     }
 
-    private void onFavoriteToggled(Meal meal, boolean isFavorite) {
-        meal.setFavorite(isFavorite);
-        view.showSuccessMessage(isFavorite ? "Added to favorites" : "Removed from favorites");
+    private void onFavoriteRemoved(Meal meal) {
+        meal.setFavorite(false);
+        view.showSuccessMessage("Removed from favorites");
         loadFavorites();
     }
 
+    private void onFavoriteRemoveError(Meal meal, Throwable throwable) {
+        meal.setFavorite(true);
+        loadFavorites();
+        view.showErrorMessage(throwable.getMessage());
+    }
 
     @Override
     public void onDestroy() {

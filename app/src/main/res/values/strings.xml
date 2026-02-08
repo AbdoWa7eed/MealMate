@@ -137,4 +137,11 @@
 
     <string name="placeholder_date_range">Oct 23 - Oct 29</string>
     <string name="placeholder_day">Monday</string>
+
+    <string name="remove_plan_title">Remove Meal</string>
+    <string name="remove_plan_message">Are you sure you want to remove this meal from your plan?</string>
+
+    <string name="remove_favorite_title">Remove Favorite</string>
+    <string name="remove_favorite_message">Are you sure you want to remove this meal from your favorites?</string>
+
 </resources>
