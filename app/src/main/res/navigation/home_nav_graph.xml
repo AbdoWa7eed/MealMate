@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/planFragment"
-        android:name="com.iti.mealmate.ui.plan.PlanFragment"
+        android:name="com.iti.mealmate.ui.plan.view.PlanFragment"
         android:label="@string/plan" />
 
     <fragment
