@@ -15,9 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.iti.mealmate.R;
 import com.iti.mealmate.core.util.DateUtils;
 import com.iti.mealmate.data.meal.model.entity.DayPlan;
+import com.iti.mealmate.data.meal.model.entity.Meal;
+import com.iti.mealmate.data.meal.model.entity.PlannedMeal;
 import com.iti.mealmate.databinding.FragmentPlanBinding;
 import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.common.ActivityExtensions;
+import com.iti.mealmate.ui.mealdetail.view.MealDetailsActivity;
+import com.iti.mealmate.ui.meallist.view.MealListActivity;
 import com.iti.mealmate.ui.plan.PlanPresenter;
 import com.iti.mealmate.ui.plan.PlanView;
 import com.iti.mealmate.ui.plan.presenter.PlanPresenterImpl;
@@ -58,10 +62,16 @@ public class PlanFragment extends Fragment implements PlanView {
     }
 
     private void setupRecyclerView() {
-        plansAdapter = new PlansAdapter(presenter::removeMeal);
+        plansAdapter = new PlansAdapter(presenter::removeMeal, this::navigateToMealDetails);
         binding.recyclerPlan.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerPlan.setAdapter(plansAdapter);
         binding.recyclerPlan.setHasFixedSize(false);
+    }
+
+    private void navigateToMealDetails(PlannedMeal meal) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(MealDetailsActivity.EXTRA_MEAL, meal.getMeal());
+        ActivityExtensions.navigateToActivity(requireActivity(), MealDetailsActivity.class, bundle);
     }
 
     private void setupWeekSelector() {

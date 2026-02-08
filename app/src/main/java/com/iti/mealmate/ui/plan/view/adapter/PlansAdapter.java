@@ -24,10 +24,13 @@ public class PlansAdapter
     private final List<DayPlan> plans = new ArrayList<>();
     private final SparseBooleanArray expandedStates = new SparseBooleanArray();
     private final Consumer<PlannedMeal> onMealRemoveListener;
+    private final Consumer<PlannedMeal> onMealSelected;
 
 
-    public  PlansAdapter(Consumer<PlannedMeal> onMealRemoveListener) {
+
+    public  PlansAdapter(Consumer<PlannedMeal> onMealRemoveListener,Consumer<PlannedMeal> onMealSelected ) {
         this.onMealRemoveListener = onMealRemoveListener;
+        this.onMealSelected = onMealSelected;
         expandedStates.clear();
     }
 
@@ -85,6 +88,9 @@ public class PlansAdapter
         holder.binding.recyclerDayMeals.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.binding.recyclerDayMeals.setAdapter(mealsAdapter);
         mealsAdapter.setOnMealRemoveListener(onMealRemoveListener);
+        mealsAdapter.setOnMealSelected(onMealSelected);
+
+
     }
 
     @Override

@@ -19,13 +19,18 @@ public class PlannedMealsAdapter
         extends RecyclerView.Adapter<PlannedMealsAdapter.PlannedMealViewHolder> {
 
 
-
-
     private final List<PlannedMeal> meals = new ArrayList<>();
     private Consumer<PlannedMeal> removeListener;
 
+    private Consumer<PlannedMeal> onMealSelected;
+
+
     public void setOnMealRemoveListener(Consumer<PlannedMeal> listener) {
         this.removeListener = listener;
+    }
+
+    public void setOnMealSelected(Consumer<PlannedMeal> listener) {
+        this.onMealSelected = listener;
     }
 
     public void submitList(List<PlannedMeal> newMeals) {
@@ -61,6 +66,12 @@ public class PlannedMealsAdapter
                 removeListener.accept(plannedMeal);
             }
         });
+        holder.binding.getRoot().setOnClickListener(v -> {
+                    if (onMealSelected != null) {
+                        onMealSelected.accept(plannedMeal);
+                    }
+                }
+        );
     }
 
     @Override
