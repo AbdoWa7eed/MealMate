@@ -1,7 +1,7 @@
 package com.iti.mealmate.data.meal.datasource.local.datasource.plan;
 
 import com.iti.mealmate.data.meal.datasource.local.entity.PlannedMealDetailEntity;
-import com.iti.mealmate.data.meal.model.entity.Meal;
+import com.iti.mealmate.data.meal.datasource.local.entity.PlannedMealEntity;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
@@ -11,9 +11,9 @@ import java.util.List;
 
 public interface PlanLocalDataSource {
 
-    Completable addMealToPlan(Meal meal, LocalDate date);
+    Completable addMealToPlan(PlannedMealEntity plannedMeal);
 
-    Completable removeMealFromDay(String mealId, LocalDate date);
+    Completable removeMealFromDay(PlannedMealEntity plannedMeal);
 
     Completable clearAllPlans();
 

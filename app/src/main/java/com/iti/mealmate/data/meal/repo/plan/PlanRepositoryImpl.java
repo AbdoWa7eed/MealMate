@@ -27,14 +27,15 @@ public class PlanRepositoryImpl implements PlanRepository{
 
     @Override
     public Completable addPlannedMeal(Meal meal, LocalDate date) {
+        var mealEntity = PlanMapper.createPlannedEntity(meal.getId(), date);
         return mealLocalDataSource.isMealExists(meal.getId())
                 .flatMapCompletable(isExists -> {
                     if (isExists) {
-                        return planLocalDataSource.addMealToPlan(meal, date);
+                        return planLocalDataSource.addMealToPlan(mealEntity);
                     } else {
                         return mealLocalDataSource
                                 .insertMeal(MealMapper.domainToCachedEntity(meal, CacheType.NONE))
-                                .andThen(planLocalDataSource.addMealToPlan(meal, date));
+                                .andThen(planLocalDataSource.addMealToPlan(mealEntity));
                     }
                 }).onErrorResumeNext(throwable ->
                         Completable.error(AppErrorHandler.handle(throwable)));
@@ -43,7 +44,7 @@ public class PlanRepositoryImpl implements PlanRepository{
 
     @Override
     public Completable removePlannedMealFromDay(String mealId, LocalDate date) {
-        return planLocalDataSource.removeMealFromDay(mealId, date)
+        return planLocalDataSource.removeMealFromDay(PlanMapper.createPlannedEntity(mealId, date))
                 .onErrorResumeNext(throwable ->
                         Completable.error(AppErrorHandler.handle(throwable)));
     }

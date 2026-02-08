@@ -2,9 +2,7 @@ package com.iti.mealmate.data.meal.datasource.local.datasource.plan;
 
 import com.iti.mealmate.data.meal.datasource.local.dao.PlanDao;
 import com.iti.mealmate.data.meal.datasource.local.entity.PlannedMealDetailEntity;
-import com.iti.mealmate.data.meal.datasource.local.entity.PlannedMealsEntity;
-import com.iti.mealmate.data.meal.model.entity.Meal;
-
+import com.iti.mealmate.data.meal.datasource.local.entity.PlannedMealEntity;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 
@@ -21,16 +19,13 @@ public class PlanLocalDataSourceImpl implements PlanLocalDataSource {
     }
 
     @Override
-    public Completable addMealToPlan(Meal meal, LocalDate date) {
-        long plannedDateMillis = date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        PlannedMealsEntity entity = new PlannedMealsEntity(meal.getId(), plannedDateMillis);
-        return planDao.addToPlan(entity);
+    public Completable addMealToPlan(PlannedMealEntity plannedMeal) {
+        return planDao.addToPlan(plannedMeal);
     }
 
     @Override
-    public Completable removeMealFromDay(String mealId, LocalDate date) {
-        long plannedDateMillis = date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        return planDao.removeMealFromDay(mealId, plannedDateMillis);
+    public Completable removeMealFromDay(PlannedMealEntity plannedMeal) {
+        return planDao.removeMealFromDay(plannedMeal.getMealId(), plannedMeal.getPlannedDate());
     }
 
     @Override
