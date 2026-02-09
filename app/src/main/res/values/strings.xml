@@ -158,4 +158,5 @@
     <string name="syncing">Syncing…</string>
     <string name="version_format">Version %s (Build %d)</string>
 
+    <string name="update">Update</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.iti.mealmate.data.auth.datasource;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.iti.mealmate.data.auth.mapper.AuthMapper;
 import com.iti.mealmate.data.auth.model.AuthProvider;
 import com.iti.mealmate.data.auth.model.LoginRequest;
@@ -32,25 +33,27 @@ public class AuthDataSourceImpl implements AuthDataSource {
         return firebaseAuthHelper.registerWithEmail(registerRequest)
                 .flatMap(firebaseUser -> {
                     UserModel newUser = AuthMapper.fromEmailRegistration(registerRequest, firebaseUser);
-                    return firestoreUserHelper.saveUser(newUser).andThen(Single.just(newUser));
+                    return firestoreUserHelper.saveUser(newUser)
+                            .andThen(firestoreUserHelper.getUser(firebaseUser.getUid()));
                 });
     }
 
     @Override
     public Single<UserModel> signInWithGoogle(String idToken) {
         return firebaseAuthHelper.signInWithGoogle(idToken)
-                .flatMap(firebaseUser -> {
-                    UserModel newUser = AuthMapper.fromSocialLogin(firebaseUser, AuthProvider.GOOGLE);
-                    return firestoreUserHelper.saveUser(newUser)
-                            .andThen(Single.just(newUser));
-                });
+                .flatMap(firebaseUser -> getOrCreateUser(firebaseUser, AuthProvider.GOOGLE));
     }
 
     @Override
     public Single<UserModel> signInWithFacebook(String accessToken) {
         return firebaseAuthHelper.signInWithFacebook(accessToken)
-                .flatMap(firebaseUser -> {
-                    UserModel newUser = AuthMapper.fromSocialLogin(firebaseUser, AuthProvider.FACEBOOK);
+                .flatMap(firebaseUser -> getOrCreateUser(firebaseUser, AuthProvider.FACEBOOK));
+    }
+
+    private Single<UserModel> getOrCreateUser(FirebaseUser firebaseUser, AuthProvider provider) {
+        return firestoreUserHelper.getUser(firebaseUser.getUid())
+                .onErrorResumeNext(error -> {
+                    UserModel newUser = AuthMapper.fromSocialLogin(firebaseUser, provider);
                     return firestoreUserHelper.saveUser(newUser)
                             .andThen(Single.just(newUser));
                 });
