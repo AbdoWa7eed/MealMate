@@ -32,8 +32,7 @@ public class AuthDataSourceImpl implements AuthDataSource {
         return firebaseAuthHelper.registerWithEmail(registerRequest)
                 .flatMap(firebaseUser -> {
                     UserModel newUser = AuthMapper.fromEmailRegistration(registerRequest, firebaseUser);
-                    return firestoreUserHelper.saveUser(newUser)
-                            .andThen(Single.just(newUser));
+                    return firestoreUserHelper.saveUser(newUser).andThen(Single.just(newUser));
                 });
     }
 

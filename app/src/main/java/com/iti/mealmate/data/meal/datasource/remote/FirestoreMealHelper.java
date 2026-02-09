@@ -2,11 +2,10 @@ package com.iti.mealmate.data.meal.datasource.remote;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.iti.mealmate.core.util.DateUtils;
 import com.iti.mealmate.data.meal.exceptions.MealNotFoundException;
 import com.iti.mealmate.data.meal.model.response.MealOfTheDay;
 import com.iti.mealmate.core.util.RxTask;
-
-import java.time.LocalDate;
 
 import io.reactivex.rxjava3.core.Single;
 
@@ -20,18 +19,18 @@ public class FirestoreMealHelper {
     }
 
     public Single<MealOfTheDay> saveMealOfTheDay(MealOfTheDay mealOfTheDay) {
-        String date = getTodayDate();
-        mealOfTheDay.setDate(date);
+        String today = DateUtils.todayString();
+        mealOfTheDay.setDate(today);
 
         return RxTask.firebaseToSingleTask(
                 firestore.collection(DAILY_MEALS)
-                        .document(date)
+                        .document(today)
                         .set(mealOfTheDay)
         ).map(aVoid -> mealOfTheDay);
     }
 
     public Single<MealOfTheDay> getMealOfTheDay() {
-        return getDocument(getTodayDate())
+        return getDocument(DateUtils.todayString())
                 .flatMap(this::validateAndExtractMealOfTheDay);
     }
 
@@ -58,7 +57,5 @@ public class FirestoreMealHelper {
         return Single.just(meal);
     }
 
-    private String getTodayDate() {
-        return LocalDate.now().toString();
-    }
+
 }

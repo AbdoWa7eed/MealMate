@@ -13,6 +13,11 @@ public final class DateUtils {
     private DateUtils() {
     }
 
+
+    public static String  todayString() {
+        return LocalDate.now().toString();
+
+    }
     public static long todayAtStartOfDay() {
         return LocalDate.now()
                 .atStartOfDay(ZoneId.systemDefault())

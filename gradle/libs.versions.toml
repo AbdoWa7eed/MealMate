@@ -26,6 +26,7 @@ rxandroid = "3.0.2"
 rxjava = "3.1.12"
 shimmer = "0.5.0"
 androidYoutubePlayer = "13.0.0"
+firebaseStorage = "22.0.1"
 
 [libraries]
 adapter-rxjava3 = { module = "com.squareup.retrofit2:adapter-rxjava3", version.ref = "retrofit" }
@@ -58,6 +59,7 @@ rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroi
 rxjava = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
 shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmer" }
 android-youtube-player = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:core", version.ref = "androidYoutubePlayer" }
+firebase-storage = { module = "com.google.firebase:firebase-storage" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

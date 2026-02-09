@@ -15,7 +15,10 @@ public class AuthMapper {
                 null,
                 AuthProvider.BASIC,
                 System.currentTimeMillis(),
-                System.currentTimeMillis()
+                System.currentTimeMillis(),
+                0,
+                0,
+                0
         );
     }
 
@@ -30,7 +33,10 @@ public class AuthMapper {
                 profileImageUrl,
                 provider,
                 System.currentTimeMillis(),
-                System.currentTimeMillis()
+                System.currentTimeMillis(),
+                0,
+                0,
+                0
         );
     }
 

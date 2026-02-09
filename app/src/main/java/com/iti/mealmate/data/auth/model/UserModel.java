@@ -12,8 +12,16 @@ public class UserModel {
     private long createdAt;
     private long lastLogin;
 
+    private long lastSyncedDate;
+
+    private int favoriteMealsCount;
+
+    private int plannedMealsCount;
+
+
     public UserModel() {
     }
+
 
     public UserModel(String uid,
                      String email,
@@ -21,7 +29,10 @@ public class UserModel {
                      String imageUrl,
                      AuthProvider provider,
                      long createdAt,
-                     long lastLogin) {
+                     long lastLogin,
+                     long lastSyncedDate,
+                     int favoriteMealsCount,
+                     int plannedMealsCount) {
 
         this.uid = uid;
         this.email = email;
@@ -30,6 +41,9 @@ public class UserModel {
         this.provider = provider;
         this.createdAt = createdAt;
         this.lastLogin = lastLogin;
+        this.lastSyncedDate = lastSyncedDate;
+        this.favoriteMealsCount = favoriteMealsCount;
+        this.plannedMealsCount = plannedMealsCount;
     }
 
 
@@ -87,5 +101,29 @@ public class UserModel {
 
     public void setLastLogin(long lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    public long getLastSyncedDate() {
+        return lastSyncedDate;
+    }
+
+    public void setLastSyncedDate(long lastSyncedDate) {
+        this.lastSyncedDate = lastSyncedDate;
+    }
+
+    public int getFavoriteMealsCount() {
+        return favoriteMealsCount;
+    }
+
+    public void setFavoriteMealsCount(int favoriteMealsCount) {
+        this.favoriteMealsCount = favoriteMealsCount;
+    }
+
+    public int getPlannedMealsCount() {
+        return plannedMealsCount;
+    }
+
+    public void setPlannedMealsCount(int plannedMealsCount) {
+        this.plannedMealsCount = plannedMealsCount;
     }
 }
