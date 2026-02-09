@@ -44,27 +44,4 @@ public class FirestoreUserHelper {
         );
     }
 
-    public Completable updateUser(UserModel user) {
-        return Completable.create(emitter ->
-                firestore.collection(USERS_COLLECTION)
-                        .document(user.getUid())
-                        .update(
-                                "name", user.getName(),
-                                "email", user.getEmail(),
-                                "imageUrl", user.getImageUrl()
-                        )
-                        .addOnSuccessListener(aVoid -> emitter.onComplete())
-                        .addOnFailureListener(emitter::onError)
-        );
-    }
-
-    public Single<Boolean> userExists(String uid) {
-        return Single.create(emitter ->
-                firestore.collection(USERS_COLLECTION)
-                        .document(uid)
-                        .get()
-                        .addOnSuccessListener(doc -> emitter.onSuccess(doc.exists()))
-                        .addOnFailureListener(emitter::onError)
-        );
-    }
 }

@@ -39,6 +39,12 @@ import com.iti.mealmate.data.source.local.prefs.PreferencesHelper;
 import com.iti.mealmate.data.source.remote.api.ApiClient;
 import com.iti.mealmate.data.source.remote.firebase.FirebaseAuthHelper;
 import com.iti.mealmate.data.source.remote.firebase.FirestoreUserHelper;
+import com.iti.mealmate.data.profile.repo.ProfileRepository;
+import com.iti.mealmate.data.profile.repo.ProfileRepositoryImpl;
+import com.iti.mealmate.data.profile.datasource.ProfileDataSource;
+import com.iti.mealmate.data.profile.datasource.ProfileDataSourceImpl;
+import com.iti.mealmate.data.profile.datasource.FirebaseProfileHelper;
+import com.google.firebase.storage.FirebaseStorage;
 
 public final class ServiceLocator {
 
@@ -51,8 +57,10 @@ public final class ServiceLocator {
     private static FavoriteRepository favoriteRepository;
     private static AppConnectivityManager connectivityManager;
     private static MealLocalDataSource mealLocalDataSource;
+    private static ProfileDataSource profileDataSource;
 
     private static PlanRepository planRepository;
+    private static ProfileRepository profileRepository;
 
     private static AppDatabase appDatabase;
 
@@ -101,6 +109,9 @@ public final class ServiceLocator {
                 new FilterRemoteDataSourceImpl(filterApiService);
         filterRepository = new FilterRepositoryImpl(filterRemoteDataSource, connectivityManager);
 
+        profileDataSource = new ProfileDataSourceImpl(new FirebaseProfileHelper(firestore, FirebaseStorage.getInstance()));
+        profileRepository = new ProfileRepositoryImpl(profileDataSource, connectivityManager);
+
         initialized = true;
     }
 
@@ -142,6 +153,11 @@ public final class ServiceLocator {
     public static PlanRepository getPlanRepository() {
         checkInit();
         return planRepository;
+    }
+
+    public static ProfileRepository getProfileRepository() {
+        checkInit();
+        return profileRepository;
     }
 
 

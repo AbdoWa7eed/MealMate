@@ -54,11 +54,11 @@ public class FirebaseProfileHelper {
 
         return uploadProfileImage(uid, imageUri)
                 .flatMap(imageUrl ->
-                        RxTask.firebaseToSingleTask(
+                        RxTask.firebaseVoidToCompletable(
                                 firestore.collection(USERS_COLLECTION)
                                         .document(uid)
                                         .update("imageUrl", imageUrl)
-                        ).map(v -> imageUrl)
+                        ).toSingle(() -> imageUrl)
                 );
     }
 
@@ -76,10 +76,10 @@ public class FirebaseProfileHelper {
 
     private Single<UserModel> updateUserData(UserModel userModel) {
 
-        return RxTask.firebaseToSingleTask(
+        return RxTask.firebaseVoidToCompletable(
                 firestore.collection(USERS_COLLECTION)
                         .document(userModel.getUid())
                         .set(userModel)
-        ).map(v -> userModel);
+        ).toSingle(() -> userModel);
     }
 }

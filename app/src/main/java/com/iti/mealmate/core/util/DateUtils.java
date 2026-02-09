@@ -5,7 +5,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Locale;
 
 public final class DateUtils {
@@ -88,6 +87,15 @@ public final class DateUtils {
         LocalDate endOfNextWeek = startOfCurrentWeek.plusDays(13);
 
         return getFormattedDateRange(startOfCurrentWeek, endOfNextWeek);
-
     }
+
+    public static String formatSyncDate(long timestamp) {
+        if (timestamp <= 0) return "Never";
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm", Locale.getDefault());
+        return Instant.ofEpochMilli(timestamp)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime()
+                .format(dateFormat);
+    }
+
 }

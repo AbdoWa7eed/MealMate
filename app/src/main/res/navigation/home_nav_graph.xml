@@ -28,6 +28,6 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.iti.mealmate.ui.profile.ProfileFragment"
+        android:name="com.iti.mealmate.ui.profile.view.ProfileFragment"
         android:label="@string/profile" />
 </navigation>
