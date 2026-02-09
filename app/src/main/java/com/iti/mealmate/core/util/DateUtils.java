@@ -35,16 +35,19 @@ public final class DateUtils {
     }
 
 
-    public static LocalDate endOfNextWeek() {
+    public static LocalDate startOfCurrentWeek() {
         LocalDate today = LocalDate.now();
-        int daysUntilNextSaturday = DayOfWeek.SATURDAY.getValue() - today.getDayOfWeek().getValue();
-        if (daysUntilNextSaturday <= 0) {
-            daysUntilNextSaturday += 7;
+        LocalDate saturday = today.with(DayOfWeek.SATURDAY);
+
+        if (today.getDayOfWeek().getValue() < DayOfWeek.SATURDAY.getValue()) {
+            saturday = saturday.minusWeeks(1);
         }
 
-        LocalDate nextSaturday = today.plusDays(daysUntilNextSaturday);
+        return saturday;
+    }
 
-        return nextSaturday.plusDays(6);
+    public static LocalDate endOfNextWeek() {
+        return startOfCurrentWeek().plusDays(13);
     }
 
     public static long endOfNextWeekMillis() {

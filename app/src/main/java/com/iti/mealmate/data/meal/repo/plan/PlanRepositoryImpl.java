@@ -1,6 +1,7 @@
 package com.iti.mealmate.data.meal.repo.plan;
 
 import com.iti.mealmate.core.error.AppErrorHandler;
+import com.iti.mealmate.core.util.DateUtils;
 import com.iti.mealmate.data.meal.datasource.local.datasource.meal.MealLocalDataSource;
 import com.iti.mealmate.data.meal.datasource.local.datasource.plan.PlanLocalDataSource;
 import com.iti.mealmate.data.meal.datasource.local.datasource.plan.PlanLocalDataSourceImpl;
@@ -10,7 +11,6 @@ import com.iti.mealmate.data.meal.model.entity.PlannedMeal;
 import com.iti.mealmate.data.meal.model.mapper.MealMapper;
 import com.iti.mealmate.data.meal.model.mapper.PlanMapper;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -70,11 +70,8 @@ public class PlanRepositoryImpl implements PlanRepository {
 
     @Override
     public Flowable<List<DayPlan>> getPlannedMealsForNextTwoWeeks() {
-        LocalDate startOfWeek = LocalDate.now().with(DayOfWeek.SATURDAY);
-        LocalDate endDate = startOfWeek.plusWeeks(2);
-
         return planLocalDataSource
-                .getMealsForDateRange(startOfWeek, endDate)
+                .getMealsForDateRange(DateUtils.startOfCurrentWeek(), DateUtils.endOfNextWeek())
                 .map(PlanMapper::groupByDay)
                 .onErrorResumeNext(throwable ->
                         Flowable.error(AppErrorHandler.handle(throwable)));
