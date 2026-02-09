@@ -144,4 +144,18 @@
     <string name="remove_favorite_title">Remove Favorite</string>
     <string name="remove_favorite_message">Are you sure you want to remove this meal from your favorites?</string>
 
+    <string name="profile_image">Profile Image</string>
+    <string name="edit_profile_image">Edit Profile Image</string>
+    <string name="saved_plans">Saved Plans</string>
+    <string name="favorite_plans">Favorite Plans</string>
+    <string name="sync_backup">Sync / Backup</string>
+    <string name="sync_icon">Sync Icon</string>
+    <string name="logout_icon">Logout Icon</string>
+    <string name="logout">Logout</string>
+    <string name="navigate">Navigate</string>
+    <string name="last_synced">Last synced: %s</string>
+    <string name="never_synced">Never synced</string>
+    <string name="syncing">Syncing…</string>
+    <string name="version_format">Version %s (Build %d)</string>
+
 </resources>
