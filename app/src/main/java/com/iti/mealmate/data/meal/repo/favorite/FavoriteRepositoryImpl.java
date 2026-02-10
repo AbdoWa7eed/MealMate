@@ -16,7 +16,6 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FavoriteRepositoryImpl implements FavoriteRepository {
 
@@ -24,8 +23,6 @@ public class FavoriteRepositoryImpl implements FavoriteRepository {
     private final MealLocalDataSource mealLocalDataSource;
     private final UserMealSyncDataSource syncDataSource;
     private final AppConnectivityManager connectivityManager;
-
-    private final AtomicBoolean favoritesFetched = new AtomicBoolean(false);
 
 
     public FavoriteRepositoryImpl(
@@ -41,16 +38,19 @@ public class FavoriteRepositoryImpl implements FavoriteRepository {
     }
 
     @Override
-    public Flowable<List<Meal>> getAllFavoriteIds(String uid) {
-        return Flowable.defer(() -> getLocalFavorites()
+    public Flowable<List<Meal>> getAllFavorites(String uid) {
+        return getLocalFavorites()
+                .take(1)
                 .flatMap(favorites -> {
-                    if (!favorites.isEmpty() || favoritesFetched.get()) {
-                        return Flowable.just(favorites);
+                    if (favorites.isEmpty()) {
+                        return fetchAndCacheRemoteFavorites(uid)
+                                .onErrorResumeNext(Flowable::error);
+                    } else {
+                        return getLocalFavorites();
                     }
-                    return fetchAndCacheRemoteFavorites(uid)
-                            .doOnNext(favs -> favoritesFetched.set(true));
                 })
-                .onErrorResumeNext(throwable -> Flowable.error(AppErrorHandler.handle(throwable))));
+                .onErrorResumeNext(throwable ->
+                        Flowable.error(AppErrorHandler.handle(throwable)));
     }
 
     @Override
@@ -90,7 +90,7 @@ public class FavoriteRepositoryImpl implements FavoriteRepository {
         return RxTask.withConnectivity(
                         syncDataSource.downloadFavorites(uid)
                                 .flatMapCompletable(this::cacheRemoteFavorites)
-                                .andThen(getLocalFavorites().firstOrError()), // Single<List<Meal>>
+                                .andThen(getLocalFavorites().firstOrError()),
                         connectivityManager
                 )
                 .toFlowable()

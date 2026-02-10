@@ -1,14 +1,19 @@
 package com.iti.mealmate.data.meal.model.entity;
 
+import com.google.firebase.firestore.Exclude;
+
 import java.time.LocalDate;
 
 public class PlannedMeal {
     private Meal meal;
-    private LocalDate plannedDate;
+    private String plannedDate;
+
+    public PlannedMeal() {
+    }
 
     public PlannedMeal(Meal meal, LocalDate plannedDate) {
         this.meal = meal;
-        this.plannedDate = plannedDate;
+        this.plannedDate = plannedDate.toString();
     }
 
     public Meal getMeal() {
@@ -18,12 +23,20 @@ public class PlannedMeal {
     public void setMeal(Meal meal) {
         this.meal = meal;
     }
-
-    public LocalDate getPlannedDate() {
+    public String getPlannedDate() {
         return plannedDate;
     }
 
-    public void setPlannedDate(LocalDate plannedDate) {
+    public void setPlannedDate(String plannedDate) {
         this.plannedDate = plannedDate;
+    }
+
+    @Exclude
+    public LocalDate getPlannedLocalDate() {
+        return plannedDate != null ? LocalDate.parse(plannedDate) : null;
+    }
+
+    public void setPlannedLocalDate(LocalDate plannedDate) {
+        this.plannedDate = plannedDate != null ? plannedDate.toString() : null;
     }
 }

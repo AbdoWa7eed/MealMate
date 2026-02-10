@@ -27,14 +27,14 @@ public class PlanMapper {
     public static PlannedMealEntity createPlannedEntity(PlannedMeal plannedMeal) {
         return new PlannedMealEntity(
                 plannedMeal.getMeal().getId(),
-                DateUtils.dateToTimeStamp(plannedMeal.getPlannedDate()));
+                DateUtils.dateToTimeStamp(plannedMeal.getPlannedLocalDate()));
     }
 
 
     public static List<DayPlan> groupByDay(List<PlannedMealDetailEntity> mealDetails) {
         return mealDetails.stream()
                 .map(PlanMapper::toPlannedMealEntity)
-                .collect(Collectors.groupingBy(PlannedMeal::getPlannedDate, Collectors.toList()))
+                .collect(Collectors.groupingBy(PlannedMeal::getPlannedLocalDate, Collectors.toList()))
                 .entrySet().stream()
                 .map(e -> new DayPlan(e.getKey(), e.getValue()))
                 .sorted(Comparator.comparing(DayPlan::getDate))

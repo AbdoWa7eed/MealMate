@@ -1,6 +1,8 @@
 package com.iti.mealmate.data.source.remote.firebase;
 
 import android.net.Uri;
+import android.util.Log;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -104,9 +106,10 @@ public class FirestoreUserHelper {
 
     public Completable syncPlans(String uid, List<DayPlan> plans) {
         CollectionReference ref = getUserDoc(uid).collection(PLANS);
-        List<String> ids = plans.stream().map(p -> p.getDate().toString()).collect(Collectors.toList());
+        List<String> ids = plans.stream().map(DayPlan::getDate).collect(Collectors.toList());
         int totalMeals = plans.stream().mapToInt(p -> p.getMeals().size()).sum();
 
+        Log.d("TEXT", "syncPlans:  " + totalMeals);
         return RxTask.firebaseToSingleTask(ref.get())
                 .flatMapCompletable(qs -> {
                     List<Completable> deletes = qs.getDocuments().stream()
@@ -114,7 +117,7 @@ public class FirestoreUserHelper {
                             .map(d -> RxTask.firebaseVoidToCompletable(d.getReference().delete()))
                             .collect(Collectors.toList());
                     List<Completable> uploads = plans.stream()
-                            .map(p -> RxTask.firebaseVoidToCompletable(ref.document(p.getDate().toString()).set(p)))
+                            .map(p -> RxTask.firebaseVoidToCompletable(ref.document(p.getDate()).set(p)))
                             .collect(Collectors.toList());
                     return Completable.concat(deletes)
                             .andThen(Completable.concat(uploads))

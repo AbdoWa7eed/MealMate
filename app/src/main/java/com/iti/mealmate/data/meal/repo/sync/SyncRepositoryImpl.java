@@ -35,13 +35,11 @@ public class SyncRepositoryImpl implements SyncRepository {
     public Completable syncFavorites(String uid) {
         return favoriteLocalDataSource.getUserFavorites()
                 .firstOrError()
-                .flatMapCompletable(favorites -> {
-                    if (favorites.isEmpty()) return Completable.complete();
-                    return RxTask.withConnectivity(
-                            syncDataSource.uploadFavorites(uid, MealMapper.cachedEntitiesToDomain(favorites)).toSingleDefault(Void.TYPE),
-                            connectivityManager
-                    ).ignoreElement();
-                })
+                .flatMapCompletable(favorites -> RxTask.withConnectivity(
+                        syncDataSource.uploadFavorites(uid, MealMapper
+                                .cachedEntitiesToDomain(favorites)).toSingleDefault(Void.TYPE),
+                        connectivityManager
+                ).ignoreElement())
                 .onErrorResumeNext(throwable -> Completable.error(AppErrorHandler.handle(throwable)));
     }
 
@@ -52,15 +50,13 @@ public class SyncRepositoryImpl implements SyncRepository {
 
         return planLocalDataSource.getMealsForDateRange(start, end)
                 .firstOrError()
-                .flatMapCompletable(dayPlans -> {
-                    if (dayPlans.isEmpty()) return Completable.complete();
-                    return RxTask.withConnectivity(
-                            syncDataSource.uploadPlans(uid, PlanMapper.groupByDay(dayPlans))
-                                    .toSingleDefault(Void.TYPE),
-                            connectivityManager
-                    ).ignoreElement();
-                })
-                .onErrorResumeNext(throwable -> Completable.error(AppErrorHandler.handle(throwable)));
+                .flatMapCompletable(dayPlans -> RxTask.withConnectivity(
+                        syncDataSource.uploadPlans(uid, PlanMapper.groupByDay(dayPlans))
+                                .toSingleDefault(Void.TYPE),
+                        connectivityManager
+                ).ignoreElement())
+                .onErrorResumeNext(throwable ->
+                        Completable.error(AppErrorHandler.handle(throwable)));
     }
 
     @Override

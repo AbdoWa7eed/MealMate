@@ -17,25 +17,47 @@ public class FavoriteUiStateHandler {
         hideGuestMode();
         binding.rvFavorites.setVisibility(View.GONE);
         binding.emptyStateLayout.emptyStateContainer.setVisibility(View.GONE);
+        binding.errorOverlay.getRoot().setVisibility(View.GONE);
+        binding.shimmerLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.shimmerLayout.shimmerContainer.startShimmer();
     }
 
     public void showContent() {
         hideGuestMode();
+        binding.shimmerLayout.shimmerContainer.stopShimmer();
+        binding.shimmerLayout.getRoot().setVisibility(View.GONE);
+        binding.errorOverlay.getRoot().setVisibility(View.GONE);
         binding.rvFavorites.setVisibility(View.VISIBLE);
         binding.emptyStateLayout.emptyStateContainer.setVisibility(View.GONE);
     }
 
     public void showEmptyState(String message) {
         hideGuestMode();
+        binding.shimmerLayout.shimmerContainer.stopShimmer();
+        binding.shimmerLayout.getRoot().setVisibility(View.GONE);
+        binding.errorOverlay.getRoot().setVisibility(View.GONE);
         binding.rvFavorites.setVisibility(View.GONE);
         binding.emptyStateLayout.emptyStateContainer.setVisibility(View.VISIBLE);
         binding.emptyStateLayout.textEmptyState.setText(message);
     }
 
     public void showGuestMode(Activity activity) {
+        binding.shimmerLayout.shimmerContainer.stopShimmer();
+        binding.shimmerLayout.getRoot().setVisibility(View.GONE);
+        binding.errorOverlay.getRoot().setVisibility(View.GONE);
         binding.rvFavorites.setVisibility(View.GONE);
         binding.emptyStateLayout.emptyStateContainer.setVisibility(View.GONE);
         GuestOverlayHelper.showGuestOverlay(binding.getRoot(), activity);
+    }
+
+    public void showErrorPage(String message) {
+        hideGuestMode();
+        binding.shimmerLayout.shimmerContainer.stopShimmer();
+        binding.shimmerLayout.getRoot().setVisibility(View.GONE);
+        binding.rvFavorites.setVisibility(View.GONE);
+        binding.emptyStateLayout.emptyStateContainer.setVisibility(View.GONE);
+        binding.errorOverlay.getRoot().setVisibility(View.VISIBLE);
+        binding.errorOverlay.errorSubtitle.setText(message);
     }
 
     public void hideGuestMode() {
@@ -43,6 +65,9 @@ public class FavoriteUiStateHandler {
     }
 
     public void hideEmptyState() {
+        binding.shimmerLayout.shimmerContainer.stopShimmer();
+        binding.shimmerLayout.getRoot().setVisibility(View.GONE);
+        binding.errorOverlay.getRoot().setVisibility(View.GONE);
         binding.emptyStateLayout.emptyStateContainer.setVisibility(View.GONE);
         binding.rvFavorites.setVisibility(View.VISIBLE);
     }

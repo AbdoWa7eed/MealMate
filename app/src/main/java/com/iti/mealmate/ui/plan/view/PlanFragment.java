@@ -121,7 +121,7 @@ public class PlanFragment extends Fragment implements PlanView {
 
     @Override
     public void showPageError(String message) {
-        PlanView.super.showPageError(message);
+        planUiStateHandler.showErrorPage(message);
     }
 
     @Override

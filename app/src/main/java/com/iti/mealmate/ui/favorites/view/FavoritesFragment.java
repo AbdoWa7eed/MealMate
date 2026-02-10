@@ -78,8 +78,10 @@ public class FavoritesFragment extends Fragment implements FavoriteView {
         uiStateHandler.showEmptyState(getString(R.string.no_favorites_message));
     }
 
+
     @Override
     public void showLoading() {
+        uiStateHandler.showLoading();
     }
 
     @Override
@@ -88,7 +90,7 @@ public class FavoritesFragment extends Fragment implements FavoriteView {
 
     @Override
     public void showPageError(String message) {
-        ActivityExtensions.showErrorSnackBar(requireActivity(), message);
+        uiStateHandler.showErrorPage(message);
     }
 
     @Override

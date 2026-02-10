@@ -1,5 +1,7 @@
 package com.iti.mealmate.data.meal.model.entity;
 
+import com.google.firebase.firestore.Exclude;
+
 import java.io.Serializable;
 import java.text.Normalizer;
 
@@ -23,6 +25,7 @@ public class MealIngredient implements Serializable {
         return measure;
     }
 
+    @Exclude
     public String getImageUrl() {
         if (name == null || name.isEmpty()) return"";
         String normalized = Normalizer.normalize(name, Normalizer.Form.NFD)

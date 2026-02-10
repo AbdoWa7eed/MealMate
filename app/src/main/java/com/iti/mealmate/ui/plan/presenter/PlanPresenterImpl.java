@@ -1,5 +1,7 @@
 package com.iti.mealmate.ui.plan.presenter;
 
+import android.util.Log;
+
 import com.iti.mealmate.core.util.DateUtils;
 import com.iti.mealmate.data.meal.model.entity.DayPlan;
 import com.iti.mealmate.data.meal.model.entity.PlannedMeal;
@@ -20,11 +22,9 @@ public class PlanPresenterImpl implements PlanPresenter {
     private final PlanRepository planRepository;
 
     private List<DayPlan> plannedList;
-
     private final CompositeDisposable disposables;
 
     private final PlanView view;
-
     private final PreferencesHelper preferencesHelper;
     private WeekPlanStatus status = WeekPlanStatus.CURRENT_WEEK;
 
@@ -49,14 +49,14 @@ public class PlanPresenterImpl implements PlanPresenter {
                 .getPlannedMealsForNextTwoWeeks(preferencesHelper.getUserId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::loadData,
-                        throwable -> view.showPageError(throwable.getMessage()));
+                .subscribe(this::loadData, throwable -> view.showPageError(throwable.getMessage()));
         disposables.add(request);
     }
 
     private void loadData(List<DayPlan> plannedList) {
         if (plannedList == null || plannedList.isEmpty()) {
             view.showEmptyState();
+            this.plannedList = plannedList;
             return;
         }
         this.plannedList = plannedList;
@@ -69,11 +69,10 @@ public class PlanPresenterImpl implements PlanPresenter {
 
     @Override
     public void loadCurrentWeek() {
-        if(plannedList == null)
-            return;
+        if(plannedList == null) return;
         var currentWeakList = plannedList
                 .stream()
-                .filter(dayPlan -> DateUtils.isCurrentWeek(dayPlan.getDate()))
+                .filter(dayPlan -> DateUtils.isCurrentWeek(dayPlan.getLocalDate()))
                 .collect(Collectors.toList());
         status = WeekPlanStatus.CURRENT_WEEK;
         if(currentWeakList.isEmpty()){
@@ -85,11 +84,10 @@ public class PlanPresenterImpl implements PlanPresenter {
 
     @Override
     public void loadNextWeek() {
-        if(plannedList == null)
-            return;
+        if(plannedList == null) return;
         var nextWeakList = plannedList
                 .stream()
-                .filter(dayPlan -> !DateUtils.isCurrentWeek(dayPlan.getDate()))
+                .filter(dayPlan -> !DateUtils.isCurrentWeek(dayPlan.getLocalDate()))
                 .collect(Collectors.toList());
         status = WeekPlanStatus.NEXT_WEEK;
         if(nextWeakList.isEmpty()){
@@ -115,6 +113,7 @@ public class PlanPresenterImpl implements PlanPresenter {
 
     @Override
     public void onDestroy() {
+        plannedList = null;
         disposables.clear();
     }
 }

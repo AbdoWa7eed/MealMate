@@ -1,23 +1,35 @@
 package com.iti.mealmate.data.meal.model.entity;
 
+import com.google.firebase.firestore.Exclude;
+
 import java.time.LocalDate;
 import java.util.List;
-
 public class DayPlan {
 
-    private LocalDate date;
+    private String date;
     private List<PlannedMeal> meals;
+
+    public DayPlan() {}
+
     public DayPlan(LocalDate date, List<PlannedMeal> meals) {
-        this.date = date;
+        this.date = date.toString();
         this.meals = meals;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
+    }
+    @Exclude
+    public LocalDate getLocalDate() {
+        return date != null ? LocalDate.parse(date) : null;
+    }
+
+    public void setLocalDate(LocalDate date) {
+        this.date = date != null ? date.toString() : null;
     }
 
     public List<PlannedMeal> getMeals() {
@@ -28,8 +40,9 @@ public class DayPlan {
         this.meals = meals;
     }
 
-    public boolean isToday() {
-        return date.equals(LocalDate.now());
-    }
 
+    @Exclude
+    public boolean isToday() {
+        return getLocalDate().equals(LocalDate.now());
+    }
 }
