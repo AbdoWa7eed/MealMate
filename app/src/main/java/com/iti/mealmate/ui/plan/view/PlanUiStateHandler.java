@@ -2,6 +2,7 @@ package com.iti.mealmate.ui.plan.view;
 
 import android.app.Activity;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -25,21 +26,42 @@ public class PlanUiStateHandler {
 
     public void showLoading() {
         hideGuestMode();
-        binding.recyclerPlan.setVisibility(View.GONE);
+        binding.scrollableContent.setVisibility(View.INVISIBLE);
         binding.emptyStateLayout.emptyStateContainer.setVisibility(View.GONE);
+        binding.errorOverlay.getRoot().setVisibility(View.GONE);
+        binding.shimmerLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.shimmerLayout.shimmerContainer.startShimmer();
     }
 
     public void showContent() {
         hideGuestMode();
+        binding.scrollableContent.setVisibility(View.VISIBLE);
+        binding.shimmerLayout.shimmerContainer.stopShimmer();
+        binding.shimmerLayout.getRoot().setVisibility(View.GONE);
+        binding.errorOverlay.getRoot().setVisibility(View.GONE);
         binding.recyclerPlan.setVisibility(View.VISIBLE);
         binding.emptyStateLayout.emptyStateContainer.setVisibility(View.GONE);
     }
 
     public void showEmptyState(String message) {
         hideGuestMode();
+        binding.shimmerLayout.shimmerContainer.stopShimmer();
+        binding.shimmerLayout.getRoot().setVisibility(View.GONE);
+        binding.errorOverlay.getRoot().setVisibility(View.GONE);
+        binding.scrollableContent.setVisibility(View.VISIBLE);
+        binding.recyclerPlan.setVisibility(View.GONE);
         binding.recyclerPlan.setVisibility(View.GONE);
         binding.emptyStateLayout.emptyStateContainer.setVisibility(View.VISIBLE);
         binding.emptyStateLayout.textEmptyState.setText(message);
+    }
+
+    public void showErrorPage(String message) {
+        hideGuestMode();
+        binding.shimmerLayout.shimmerContainer.stopShimmer();
+        binding.shimmerLayout.getRoot().setVisibility(View.GONE);
+        binding.scrollableContent.setVisibility(View.GONE);
+        binding.errorOverlay.getRoot().setVisibility(View.VISIBLE);
+        binding.errorOverlay.errorSubtitle.setText(message);
     }
 
     public void showGuestMode(Activity activity) {

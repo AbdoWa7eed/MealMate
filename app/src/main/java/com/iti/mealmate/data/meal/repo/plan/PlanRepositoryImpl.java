@@ -1,5 +1,7 @@
 package com.iti.mealmate.data.meal.repo.plan;
 
+import android.util.Log;
+
 import com.iti.mealmate.core.error.AppErrorHandler;
 import com.iti.mealmate.core.network.AppConnectivityManager;
 import com.iti.mealmate.core.util.DateUtils;
@@ -16,7 +18,6 @@ import com.iti.mealmate.data.meal.model.mapper.PlanMapper;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
@@ -27,8 +28,6 @@ public class PlanRepositoryImpl implements PlanRepository {
     private final UserMealSyncDataSource syncDataSource;
 
     private final AppConnectivityManager connectivityManager;
-
-    private final AtomicBoolean plansFetched = new AtomicBoolean(false);
 
 
     public PlanRepositoryImpl(PlanLocalDataSourceImpl planLocalDataSource,
@@ -69,40 +68,35 @@ public class PlanRepositoryImpl implements PlanRepository {
     }
 
 
+
     @Override
     public Flowable<List<DayPlan>> getPlannedMealsForNextTwoWeeks(String uid) {
         LocalDate start = DateUtils.startOfCurrentWeek();
         LocalDate end = DateUtils.endOfNextWeek();
 
-        return Flowable.defer(() -> {
-            return getLocalPlans(start, end)
-                    .flatMap(dayPlans -> {
-                        if (!dayPlans.isEmpty() || plansFetched.get()) {
-                            return Flowable.just(dayPlans);
-                        }
-                        return fetchAndCacheRemotePlans(uid, start, end)
-                                .doOnNext(plans -> plansFetched.set(true));
-                    })
-                    .onErrorResumeNext(throwable -> Flowable.error(AppErrorHandler.handle(throwable)));
-        });
+        return getLocalPlans(start, end)
+                .take(1)
+                .flatMap(list -> {
+                    if (list.isEmpty()) {
+                        return RxTask.withConnectivity(
+                                        syncDataSource.downloadPlans(uid),
+                                        connectivityManager
+                                )
+                                .flatMapCompletable(this::cacheRemotePlans)
+                                .andThen(getLocalPlans(start, end))
+                                .onErrorResumeNext(Flowable::error);
+                    } else {
+                        return getLocalPlans(start, end);
+                    }
+                })
+                .onErrorResumeNext(throwable ->
+                        Flowable.error(AppErrorHandler.handle(throwable)));
     }
 
     private Flowable<List<DayPlan>> getLocalPlans(LocalDate start, LocalDate end) {
         return planLocalDataSource
-                .getMealsForDateRange(start, end).map(PlanMapper::groupByDay);
-    }
-
-    private Flowable<List<DayPlan>> fetchAndCacheRemotePlans(String uid, LocalDate start, LocalDate end) {
-        return RxTask.withConnectivity(
-                        syncDataSource.downloadPlans(uid)
-                                .flatMapCompletable(this::cacheRemotePlans)
-                                .andThen(getLocalPlans(start, end).firstOrError()),
-                        connectivityManager
-                )
-                .toFlowable()
-                .onErrorResumeNext(throwable ->
-                        Flowable.error(AppErrorHandler.handle(throwable))
-                );
+                .getMealsForDateRange(start, end)
+                .map(PlanMapper::groupByDay);
     }
 
     private Completable cacheRemotePlans(List<DayPlan> remotePlans) {
@@ -110,5 +104,6 @@ public class PlanRepositoryImpl implements PlanRepository {
                 .flatMapIterable(DayPlan::getMeals)
                 .concatMapCompletable(this::addPlannedMeal);
     }
+
 
 }

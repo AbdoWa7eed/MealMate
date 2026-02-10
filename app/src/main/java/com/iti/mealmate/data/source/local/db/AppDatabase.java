@@ -40,8 +40,4 @@ public abstract class AppDatabase extends RoomDatabase {
         }
         return INSTANCE;
     }
-
-    public synchronized void clearAll() {
-        INSTANCE.clearAllTables();
-    }
 }

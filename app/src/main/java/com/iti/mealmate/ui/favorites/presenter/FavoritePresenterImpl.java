@@ -1,14 +1,17 @@
 package com.iti.mealmate.ui.favorites.presenter;
 
 
+import android.util.Log;
+
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.data.meal.repo.favorite.FavoriteRepository;
 import com.iti.mealmate.data.source.local.prefs.PreferencesHelper;
 import com.iti.mealmate.ui.favorites.FavoritePresenter;
 import com.iti.mealmate.ui.favorites.FavoriteView;
 
+import java.util.List;
+
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -40,22 +43,23 @@ public class FavoritePresenterImpl implements FavoritePresenter {
             return;
         }
         view.showLoading();
-        disposables.add(favoriteRepository.getAllFavoriteIds(uid)
+        disposables.add(favoriteRepository.getAllFavorites(uid)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(favorites -> {
-                            view.hideLoading();
-                            if (favorites.isEmpty()) {
-                                view.showEmptyState();
-                            } else {
-                                view.showFavorites(favorites);
-                            }
-                        },
+                .subscribe(this::onLoadSuccess,
                         throwable -> {
                             view.hideLoading();
                             view.showPageError(throwable.getMessage());
                         }
                 ));
+    }
+
+    private void onLoadSuccess(List<Meal> favorites) {
+        if (favorites.isEmpty()) {
+            view.showEmptyState();
+        } else {
+            view.showFavorites(favorites);
+        }
     }
 
     @Override
@@ -72,12 +76,10 @@ public class FavoritePresenterImpl implements FavoritePresenter {
     private void onFavoriteRemoved(Meal meal) {
         meal.setFavorite(false);
         view.showSuccessMessage("Removed from favorites");
-        loadFavorites();
     }
 
     private void onFavoriteRemoveError(Meal meal, Throwable throwable) {
         meal.setFavorite(true);
-        loadFavorites();
         view.showErrorMessage(throwable.getMessage());
     }
 

@@ -55,15 +55,17 @@ public class ProfilePresenterImpl implements ProfilePresenter {
 
     @Override
     public void loadUserProfile() {
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser == null) {
+        String uid = preferencesHelper.getUserId();
+        if (uid == null) {
             view.showGuestMode();
             return;
         }
 
-        view.showLoading();
+        if(currentUser == null){
+            view.showLoading();
+        }
 
-        disposables.add(profileRepository.getUserProfile(firebaseUser.getUid())
+        disposables.add(profileRepository.getUserProfile(uid)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onUserProfileLoaded, this::onError));
@@ -71,7 +73,6 @@ public class ProfilePresenterImpl implements ProfilePresenter {
 
     private void onUserProfileLoaded(UserModel user) {
         this.currentUser = user;
-        view.hideLoading();
         view.showUserProfile(user);
         view.showLastSyncTime(DateUtils.formatSyncDate(user.getLastSyncedDate()));
     }
@@ -102,7 +103,10 @@ public class ProfilePresenterImpl implements ProfilePresenter {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                view::navigateToLogin,
+                                () -> {
+                                    view.navigateToLogin();
+                                    appDatabase.clearAllTables();
+                                },
                                 throwable -> view.showErrorMessage(throwable.getMessage())
                         )
         );

@@ -92,15 +92,29 @@
                 tools:itemCount="5"
                 tools:listitem="@layout/item_plan_day" />
 
+
+            <include
+                android:id="@+id/empty_state_layout"
+                layout="@layout/layout_empty_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/text_date_range"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
+
+
     <include
-        android:id="@+id/empty_state_layout"
-        layout="@layout/layout_empty_state"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:id="@+id/shimmer_layout"
+        layout="@layout/layout_plan_shimmer_overlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -109,6 +123,17 @@
     <include
         android:id="@+id/guest_overlay"
         layout="@layout/layout_guest_overlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/error_overlay"
+        layout="@layout/layout_error_overlay"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"

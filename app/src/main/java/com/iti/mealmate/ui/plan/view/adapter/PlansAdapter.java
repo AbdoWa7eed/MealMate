@@ -65,7 +65,7 @@ public class PlansAdapter
 
         boolean isExpanded = expandedStates.get(position, false);
 
-        holder.binding.textDayName.setText(plan.getDate().getDayOfWeek().name());
+        holder.binding.textDayName.setText(plan.getLocalDate().getDayOfWeek().name());
 
         holder.binding.textTodayBadge.setVisibility(
                 plan.isToday() ? View.VISIBLE : View.GONE
