@@ -1,5 +1,6 @@
 package com.iti.mealmate.data.meal.datasource.local.datasource.plan;
 
+import com.iti.mealmate.core.util.DateUtils;
 import com.iti.mealmate.data.meal.datasource.local.dao.PlanDao;
 import com.iti.mealmate.data.meal.datasource.local.entity.PlannedMealDetailEntity;
 import com.iti.mealmate.data.meal.datasource.local.entity.PlannedMealEntity;
@@ -41,8 +42,9 @@ public class PlanLocalDataSourceImpl implements PlanLocalDataSource {
 
     @Override
     public Flowable<List<PlannedMealDetailEntity>> getMealsForDateRange(LocalDate startDate, LocalDate endDate) {
-        long startMillis = startDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        long endMillis = endDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        return planDao.getPlannedMealsWithDetailsForRange(startMillis, endMillis);
+
+        return planDao.getPlannedMealsWithDetailsForRange(
+                DateUtils.dateToTimeStamp(startDate),
+                DateUtils.dateToTimeStamp(endDate));
     }
 }

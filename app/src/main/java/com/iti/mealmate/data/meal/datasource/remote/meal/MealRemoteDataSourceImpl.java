@@ -1,6 +1,7 @@
-package com.iti.mealmate.data.meal.datasource.remote;
+package com.iti.mealmate.data.meal.datasource.remote.meal;
 
 import com.iti.mealmate.data.meal.api.MealApiService;
+import com.iti.mealmate.data.meal.datasource.remote.FirestoreMealHelper;
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.data.meal.model.mapper.MealMapper;
 import com.iti.mealmate.data.meal.model.response.MealOfTheDay;

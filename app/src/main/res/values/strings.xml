@@ -158,5 +158,8 @@
     <string name="syncing">Syncing…</string>
     <string name="version_format">Version %s (Build %d)</string>
 
+    <string name="unsynced_data_title">Data May Be Lost</string>
+    <string name="unsynced_data_message"> If you log out now, you plans and favorites may be lost. Are you sure you want to proceed?</string>
+
     <string name="update">Update</string>
 </resources>

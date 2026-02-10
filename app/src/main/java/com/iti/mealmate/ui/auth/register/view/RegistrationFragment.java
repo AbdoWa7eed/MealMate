@@ -36,7 +36,9 @@ public class RegistrationFragment extends Fragment implements RegistrationView {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentRegistrationBinding.inflate(inflater, container, false);
-        presenter = new RegistrationPresenterImpl(this, ServiceLocator.getAuthRepository());
+        presenter = new RegistrationPresenterImpl(this,
+                ServiceLocator.getAuthRepository(),
+                ServiceLocator.getPreferencesHelper());
         return binding.getRoot();
     }
 

@@ -4,11 +4,10 @@ import com.iti.mealmate.core.util.DateUtils;
 import com.iti.mealmate.data.meal.model.entity.DayPlan;
 import com.iti.mealmate.data.meal.model.entity.PlannedMeal;
 import com.iti.mealmate.data.meal.repo.plan.PlanRepository;
+import com.iti.mealmate.data.source.local.prefs.PreferencesHelper;
 import com.iti.mealmate.ui.plan.PlanPresenter;
 import com.iti.mealmate.ui.plan.PlanView;
 import com.iti.mealmate.ui.plan.WeekPlanStatus;
-
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,19 +24,29 @@ public class PlanPresenterImpl implements PlanPresenter {
     private final CompositeDisposable disposables;
 
     private final PlanView view;
+
+    private final PreferencesHelper preferencesHelper;
     private WeekPlanStatus status = WeekPlanStatus.CURRENT_WEEK;
 
-    public PlanPresenterImpl(PlanView view, PlanRepository planRepository) {
+    public PlanPresenterImpl(PlanView view, PlanRepository planRepository,
+                             PreferencesHelper preferencesHelper) {
         this.planRepository = planRepository;
         this.view = view;
+        this.preferencesHelper = preferencesHelper;
         disposables = new CompositeDisposable();
     }
 
 
     @Override
     public void onViewCreated() {
+        String uid = preferencesHelper.getUserId();
+        if(uid == null){
+            // TODO: HANDLE GUEST USER
+            view.showPageError("User Not Found");
+            return;
+        }
         var request = planRepository
-                .getPlannedMealsForNextTwoWeeks()
+                .getPlannedMealsForNextTwoWeeks(preferencesHelper.getUserId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::loadData,

@@ -1,4 +1,4 @@
-package com.iti.mealmate.data.meal.datasource.remote;
+package com.iti.mealmate.data.meal.datasource.remote.meal;
 
 
 import com.iti.mealmate.data.meal.model.entity.Meal;

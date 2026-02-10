@@ -10,11 +10,12 @@ import java.util.List;
 
 public interface FavoriteRepository {
 
-    Flowable<List<Meal>> getAllFavoriteIds();
+    Flowable<List<Meal>> getAllFavoriteIds(String uid);
 
     Single<Boolean> isFavorite(String mealId);
 
     Completable addToFavorites(Meal meal);
 
     Completable removeFromFavorites(Meal meal);
+
 }

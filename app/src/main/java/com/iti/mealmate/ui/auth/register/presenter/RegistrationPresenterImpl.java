@@ -5,7 +5,9 @@ import android.util.Patterns;
 import com.iti.mealmate.R;
 import com.iti.mealmate.core.network.NoConnectivityException;
 import com.iti.mealmate.data.auth.model.RegisterRequest;
+import com.iti.mealmate.data.auth.model.UserModel;
 import com.iti.mealmate.data.auth.repo.AuthRepository;
+import com.iti.mealmate.data.source.local.prefs.PreferencesHelper;
 import com.iti.mealmate.ui.auth.register.RegistrationPresenter;
 import com.iti.mealmate.ui.auth.register.RegistrationView;
 
@@ -18,11 +20,14 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
 
     private final RegistrationView view;
     private final AuthRepository repository;
+
+    private final PreferencesHelper preferencesHelper;
     private final CompositeDisposable compositeDisposable;
 
-    public RegistrationPresenterImpl(RegistrationView view, AuthRepository repository) {
+    public RegistrationPresenterImpl(RegistrationView view, AuthRepository repository, PreferencesHelper preferencesHelper) {
         this.view = view;
         this.repository = repository;
+        this.preferencesHelper = preferencesHelper;
         this.compositeDisposable = new CompositeDisposable();
     }
 
@@ -39,28 +44,32 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         Disposable disposable = repository.registerWithEmail(request)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(user -> {
-                    view.hideLoading();
-                    view.navigateToHome(user);
-                }, throwable -> {
-                    view.hideLoading();
-                    if (throwable instanceof NoConnectivityException) {
-                        view.noInternetError();
-                    } else {
-                        String message =
-                                throwable != null && throwable.getMessage() != null
-                                        && !throwable.getMessage().isEmpty()
-                                        ? throwable.getMessage()
-                                        : view instanceof android.content.Context
-                                                ? ((android.content.Context) view)
-                                                .getString(R.string.error_subtitle_default)
-                                                : "Something went wrong";
-                        view.showPageError(message);
-                    }
-                });
+                .subscribe(this::onSuccess, this::onError);
         compositeDisposable.add(disposable);
     }
 
+    private void onSuccess(UserModel userModel) {
+        preferencesHelper.setUserId(userModel.getUid());
+        view.navigateToHome(userModel);
+        view.hideLoading();
+    }
+
+    private void onError(Throwable throwable) {
+        view.hideLoading();
+        if (throwable instanceof NoConnectivityException) {
+            view.noInternetError();
+        } else {
+            String message =
+                    throwable != null && throwable.getMessage() != null
+                            && !throwable.getMessage().isEmpty()
+                            ? throwable.getMessage()
+                            : view instanceof android.content.Context
+                            ? ((android.content.Context) view)
+                            .getString(R.string.error_subtitle_default)
+                            : "Something went wrong";
+            view.showPageError(message);
+        }
+    }
     private boolean validateAllFields(String name, String email, String password, String confirmPassword) {
         boolean isValid = true;
 

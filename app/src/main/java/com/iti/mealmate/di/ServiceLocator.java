@@ -26,14 +26,18 @@ import com.iti.mealmate.data.meal.datasource.local.datasource.meal.MealLocalData
 import com.iti.mealmate.data.meal.datasource.local.datasource.meal.MealLocalDataSourceImpl;
 import com.iti.mealmate.data.meal.datasource.local.datasource.plan.PlanLocalDataSourceImpl;
 import com.iti.mealmate.data.meal.datasource.remote.FirestoreMealHelper;
-import com.iti.mealmate.data.meal.datasource.remote.MealRemoteDataSource;
-import com.iti.mealmate.data.meal.datasource.remote.MealRemoteDataSourceImpl;
+import com.iti.mealmate.data.meal.datasource.remote.meal.MealRemoteDataSource;
+import com.iti.mealmate.data.meal.datasource.remote.meal.MealRemoteDataSourceImpl;
+import com.iti.mealmate.data.meal.datasource.remote.sync.UserMealSyncDataSource;
+import com.iti.mealmate.data.meal.datasource.remote.sync.UserMealSyncDataSourceImpl;
 import com.iti.mealmate.data.meal.repo.MealRepository;
 import com.iti.mealmate.data.meal.repo.MealRepositoryImpl;
 import com.iti.mealmate.data.meal.repo.favorite.FavoriteRepository;
 import com.iti.mealmate.data.meal.repo.favorite.FavoriteRepositoryImpl;
 import com.iti.mealmate.data.meal.repo.plan.PlanRepository;
 import com.iti.mealmate.data.meal.repo.plan.PlanRepositoryImpl;
+import com.iti.mealmate.data.meal.repo.sync.SyncRepository;
+import com.iti.mealmate.data.meal.repo.sync.SyncRepositoryImpl;
 import com.iti.mealmate.data.profile.datasource.ProfileDataSource;
 import com.iti.mealmate.data.profile.datasource.ProfileDataSourceImpl;
 import com.iti.mealmate.data.profile.repo.ProfileRepository;
@@ -59,12 +63,16 @@ public final class ServiceLocator {
     private static PlanRepository planRepository;
     private static ProfileRepository profileRepository;
 
+    private static SyncRepository syncRepository;
+
+
     private static FirebaseAuthHelper firebaseAuthHelper;
     private static FirestoreUserHelper firestoreUserHelper;
 
     private static FirestoreMealHelper firestoreMealHelper;
 
-    private ServiceLocator() {}
+    private ServiceLocator() {
+    }
 
     public static synchronized void init(Context context) {
         if (initialized) return;
@@ -77,6 +85,7 @@ public final class ServiceLocator {
 
         initialized = true;
     }
+
     private static void initLocal(Context context) {
         preferencesHelper = new PreferencesHelper(context);
         connectivityManager = new AppConnectivityManagerImpl(context);
@@ -98,39 +107,90 @@ public final class ServiceLocator {
 
 
         firebaseAuthHelper = new FirebaseAuthHelper(FirebaseAuth.getInstance());
-        firestoreUserHelper = new FirestoreUserHelper(firestore,  FirebaseStorage.getInstance());
+        firestoreUserHelper = new FirestoreUserHelper(firestore, FirebaseStorage.getInstance());
         firestoreMealHelper = new FirestoreMealHelper(firestore);
     }
 
     private static void initRepositories() {
+        // Auth
         AuthDataSource authDataSource = new AuthDataSourceImpl(firebaseAuthHelper, firestoreUserHelper);
         authRepository = new AuthRepositoryImpl(authDataSource, connectivityManager);
+
+        // Meal
         MealApiService mealApiService = ApiClient.getInstance().create(MealApiService.class);
         MealRemoteDataSource mealRemoteDataSource = new MealRemoteDataSourceImpl(mealApiService, firestoreMealHelper);
-        FavoriteLocalDataSource favoriteLocalDataSource = new FavoriteLocalDataSourceImpl(appDatabase.mealDao());
-        MealLocalDataSource mealLocalDataSource = new MealLocalDataSourceImpl(appDatabase.mealDao());
-        mealRepository = new MealRepositoryImpl(mealRemoteDataSource, connectivityManager, favoriteLocalDataSource, mealLocalDataSource);
-        favoriteRepository = new FavoriteRepositoryImpl(favoriteLocalDataSource, mealLocalDataSource);
-        PlanLocalDataSourceImpl planLocalDataSource = new PlanLocalDataSourceImpl(appDatabase.planDao());
-        planRepository = new PlanRepositoryImpl(planLocalDataSource, mealLocalDataSource);
 
+        MealLocalDataSource mealLocalDataSource = new MealLocalDataSourceImpl(appDatabase.mealDao());
+        FavoriteLocalDataSource favoriteLocalDataSource = new FavoriteLocalDataSourceImpl(appDatabase.mealDao());
+
+        UserMealSyncDataSource userSyncDataSource = new UserMealSyncDataSourceImpl(firestoreUserHelper);
+
+        mealRepository = new MealRepositoryImpl(mealRemoteDataSource, connectivityManager, favoriteLocalDataSource, mealLocalDataSource);
+        favoriteRepository = new FavoriteRepositoryImpl(favoriteLocalDataSource, mealLocalDataSource, userSyncDataSource, connectivityManager);
+
+        // Plan
+        PlanLocalDataSourceImpl planLocalDataSource = new PlanLocalDataSourceImpl(appDatabase.planDao());
+        planRepository = new PlanRepositoryImpl(planLocalDataSource, mealLocalDataSource, userSyncDataSource, connectivityManager);
+
+        // Sync
+        syncRepository = new SyncRepositoryImpl(favoriteLocalDataSource, planLocalDataSource, userSyncDataSource, connectivityManager);
+
+        // Filter
         FilterApiService filterApiService = ApiClient.getInstance().create(FilterApiService.class);
         FilterRemoteDataSource filterRemoteDataSource = new FilterRemoteDataSourceImpl(filterApiService);
         filterRepository = new FilterRepositoryImpl(filterRemoteDataSource, connectivityManager);
 
+        // Profile
         ProfileDataSource profileDataSource = new ProfileDataSourceImpl(firestoreUserHelper);
         profileRepository = new ProfileRepositoryImpl(profileDataSource, connectivityManager);
     }
 
-    public static PreferencesHelper getPreferencesHelper() { checkInit(); return preferencesHelper; }
-    public static AuthRepository getAuthRepository() { checkInit(); return authRepository; }
-    public static MealRepository getMealRepository() { checkInit(); return mealRepository; }
-    public static FilterRepository getFilterRepository() { checkInit(); return filterRepository; }
-    public static FavoriteRepository getFavoriteRepository() { checkInit(); return favoriteRepository; }
-    public static PlanRepository getPlanRepository() { checkInit(); return planRepository; }
-    public static ProfileRepository getProfileRepository() { checkInit(); return profileRepository; }
+    public static PreferencesHelper getPreferencesHelper() {
+        checkInit();
+        return preferencesHelper;
+    }
+
+    public static AppDatabase getAppDatabase() {
+        return appDatabase;
+    }
+
+    public static AuthRepository getAuthRepository() {
+        checkInit();
+        return authRepository;
+    }
+
+    public static MealRepository getMealRepository() {
+        checkInit();
+        return mealRepository;
+    }
+
+    public static FilterRepository getFilterRepository() {
+        checkInit();
+        return filterRepository;
+    }
+
+    public static FavoriteRepository getFavoriteRepository() {
+        checkInit();
+        return favoriteRepository;
+    }
+
+    public static PlanRepository getPlanRepository() {
+        checkInit();
+        return planRepository;
+    }
+
+    public static ProfileRepository getProfileRepository() {
+        checkInit();
+        return profileRepository;
+    }
+
+    public static SyncRepository getSyncRepository() {
+        checkInit();
+        return syncRepository;
+    }
 
     private static void checkInit() {
-        if (!initialized) throw new IllegalStateException("ServiceLocator.init() must be called first");
+        if (!initialized)
+            throw new IllegalStateException("ServiceLocator.init() must be called first");
     }
 }

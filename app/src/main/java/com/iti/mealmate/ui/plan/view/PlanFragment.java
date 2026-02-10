@@ -14,14 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.iti.mealmate.R;
 import com.iti.mealmate.core.util.DateUtils;
 import com.iti.mealmate.data.meal.model.entity.DayPlan;
-import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.data.meal.model.entity.PlannedMeal;
 import com.iti.mealmate.databinding.FragmentPlanBinding;
 import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.common.ActivityExtensions;
 import com.iti.mealmate.ui.common.DialogUtils;
 import com.iti.mealmate.ui.mealdetail.view.MealDetailsActivity;
-import com.iti.mealmate.ui.meallist.view.MealListActivity;
 import com.iti.mealmate.ui.plan.PlanPresenter;
 import com.iti.mealmate.ui.plan.PlanView;
 import com.iti.mealmate.ui.plan.presenter.PlanPresenterImpl;
@@ -43,7 +41,7 @@ public class PlanFragment extends Fragment implements PlanView {
             Bundle savedInstanceState) {
 
         binding = FragmentPlanBinding.inflate(inflater, container, false);
-        presenter = new PlanPresenterImpl(this, ServiceLocator.getPlanRepository());
+        presenter = new PlanPresenterImpl(this, ServiceLocator.getPlanRepository(), ServiceLocator.getPreferencesHelper());
 
         return binding.getRoot();
     }

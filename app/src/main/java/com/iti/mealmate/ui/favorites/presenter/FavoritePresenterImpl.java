@@ -3,6 +3,7 @@ package com.iti.mealmate.ui.favorites.presenter;
 
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.data.meal.repo.favorite.FavoriteRepository;
+import com.iti.mealmate.data.source.local.prefs.PreferencesHelper;
 import com.iti.mealmate.ui.favorites.FavoritePresenter;
 import com.iti.mealmate.ui.favorites.FavoriteView;
 
@@ -15,11 +16,15 @@ public class FavoritePresenterImpl implements FavoritePresenter {
 
     private final FavoriteView view;
     private final FavoriteRepository favoriteRepository;
+
+    private final PreferencesHelper preferencesHelper;
     private final CompositeDisposable disposables = new CompositeDisposable();
 
-    public FavoritePresenterImpl(FavoriteView view, FavoriteRepository favoriteRepository) {
+    public FavoritePresenterImpl(FavoriteView view, FavoriteRepository favoriteRepository,
+                                 PreferencesHelper preferencesHelper) {
         this.view = view;
         this.favoriteRepository = favoriteRepository;
+        this.preferencesHelper = preferencesHelper;
     }
 
     @Override
@@ -29,8 +34,14 @@ public class FavoritePresenterImpl implements FavoritePresenter {
 
     @Override
     public void loadFavorites() {
+        String uid = preferencesHelper.getUserId();
+        if(uid == null) {
+            view.showPageError("User not logged in");
+            // TODO : SHOW GUEST VIEW
+            return;
+        }
         view.showLoading();
-        disposables.add(favoriteRepository.getAllFavoriteIds()
+        disposables.add(favoriteRepository.getAllFavoriteIds(uid)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(favorites -> {
