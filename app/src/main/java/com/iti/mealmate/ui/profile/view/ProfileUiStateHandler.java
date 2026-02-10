@@ -7,6 +7,7 @@ import android.view.animation.AnimationUtils;
 
 import com.iti.mealmate.R;
 import com.iti.mealmate.databinding.FragmentProfileBinding;
+import com.iti.mealmate.ui.common.ErrorOverlayHelper;
 import com.iti.mealmate.ui.profile.ProfileView;
 
 public class ProfileUiStateHandler {
@@ -20,6 +21,7 @@ public class ProfileUiStateHandler {
     }
 
     public void showLoading() {
+        hideError();
         binding.viewShimmer.shimmerProfileContainer.startShimmer();
         binding.viewShimmer.shimmerProfileContainer.setVisibility(View.VISIBLE);
 
@@ -29,10 +31,12 @@ public class ProfileUiStateHandler {
         binding.layoutStatsCard.setVisibility(View.INVISIBLE);
         binding.btnSync.setVisibility(View.INVISIBLE);
         binding.btnLogout.setVisibility(View.INVISIBLE);
+        binding.btnUpdateProfileImage.setVisibility(View.INVISIBLE);
         binding.textVersion.setVisibility(View.INVISIBLE);
     }
 
     public void showContent() {
+        hideError();
         binding.viewShimmer.shimmerProfileContainer.stopShimmer();
         binding.viewShimmer.shimmerProfileContainer.setVisibility(View.GONE);
 
@@ -43,6 +47,42 @@ public class ProfileUiStateHandler {
         binding.btnSync.setVisibility(View.VISIBLE);
         binding.btnLogout.setVisibility(View.VISIBLE);
         binding.textVersion.setVisibility(View.VISIBLE);
+    }
+
+    public void showError(String message, Runnable retryAction) {
+        stopAndHideLoading();
+        hideContent();
+        ErrorOverlayHelper.showError(binding.errorOverlay.getRoot(), message, retryAction);
+    }
+
+    public void showNoInternetError(Runnable retryAction) {
+        stopAndHideLoading();
+        hideContent();
+        ErrorOverlayHelper.showNetworkError(binding.errorOverlay.getRoot(), retryAction);
+    }
+
+    public void hideError() {
+        ErrorOverlayHelper.hideError(binding.errorOverlay.getRoot());
+    }
+
+    public void hideLoading() {
+        binding.viewShimmer.shimmerProfileContainer.stopShimmer();
+        binding.viewShimmer.shimmerProfileContainer.setVisibility(View.GONE);
+    }
+
+    private void stopAndHideLoading() {
+        hideLoading();
+    }
+
+    private void hideContent() {
+        binding.layoutProfileImage.setVisibility(View.GONE);
+        binding.textUserName.setVisibility(View.GONE);
+        binding.textUserEmail.setVisibility(View.GONE);
+        binding.layoutStatsCard.setVisibility(View.GONE);
+        binding.btnSync.setVisibility(View.GONE);
+        binding.btnLogout.setVisibility(View.GONE);
+        binding.btnUpdateProfileImage.setVisibility(View.GONE);
+        binding.textVersion.setVisibility(View.GONE);
     }
 
     public void setLoading(ProfileView.LoadingType type, boolean isLoading) {

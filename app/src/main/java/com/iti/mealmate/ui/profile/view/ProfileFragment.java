@@ -159,7 +159,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
     @Override
     public void hideLoading() {
-        uiStateHandler.showContent();
+        uiStateHandler.hideLoading();
     }
 
     @Override
@@ -169,7 +169,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
     @Override
     public void showPageError(String message) {
-        ActivityExtensions.showErrorSnackBar(requireActivity(), message);
+        uiStateHandler.showError(message, presenter::loadUserProfile);
     }
 
     @Override
@@ -179,7 +179,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
     @Override
     public void noInternetError() {
-        ActivityExtensions.showErrorSnackBar(requireActivity(), getString(R.string.error_network_subtitle));
+        uiStateHandler.showNoInternetError(presenter::loadUserProfile);
     }
 
     @Override

@@ -77,10 +77,12 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     }
 
     private void onError(Throwable throwable) {
-        if(throwable instanceof NoConnectivityException)
+        if (throwable instanceof NoConnectivityException) {
             view.noInternetError();
+        } else {
+            view.showPageError(throwable.getMessage());
+        }
         view.hideLoading();
-        view.showErrorMessage(throwable.getMessage());
     }
 
     @Override
