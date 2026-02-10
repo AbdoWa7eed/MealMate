@@ -1,19 +1,24 @@
 package com.iti.mealmate.di;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.MemoryCacheSettings;
+import com.google.firebase.storage.FirebaseStorage;
 import com.iti.mealmate.core.network.AppConnectivityManager;
 import com.iti.mealmate.core.network.AppConnectivityManagerImpl;
 import com.iti.mealmate.data.auth.datasource.AuthDataSource;
 import com.iti.mealmate.data.auth.datasource.AuthDataSourceImpl;
 import com.iti.mealmate.data.auth.repo.AuthRepository;
 import com.iti.mealmate.data.auth.repo.AuthRepositoryImpl;
+import com.iti.mealmate.data.filter.api.FilterApiService;
+import com.iti.mealmate.data.filter.datasource.remote.FilterRemoteDataSource;
+import com.iti.mealmate.data.filter.datasource.remote.FilterRemoteDataSourceImpl;
+import com.iti.mealmate.data.filter.repo.FilterRepository;
+import com.iti.mealmate.data.filter.repo.FilterRepositoryImpl;
 import com.iti.mealmate.data.meal.api.MealApiService;
 import com.iti.mealmate.data.meal.datasource.local.datasource.favorite.FavoriteLocalDataSource;
 import com.iti.mealmate.data.meal.datasource.local.datasource.favorite.FavoriteLocalDataSourceImpl;
@@ -23,147 +28,109 @@ import com.iti.mealmate.data.meal.datasource.local.datasource.plan.PlanLocalData
 import com.iti.mealmate.data.meal.datasource.remote.FirestoreMealHelper;
 import com.iti.mealmate.data.meal.datasource.remote.MealRemoteDataSource;
 import com.iti.mealmate.data.meal.datasource.remote.MealRemoteDataSourceImpl;
-import com.iti.mealmate.data.meal.repo.favorite.FavoriteRepository;
-import com.iti.mealmate.data.meal.repo.favorite.FavoriteRepositoryImpl;
-import com.iti.mealmate.data.filter.api.FilterApiService;
-import com.iti.mealmate.data.filter.datasource.remote.FilterRemoteDataSource;
-import com.iti.mealmate.data.filter.datasource.remote.FilterRemoteDataSourceImpl;
-import com.iti.mealmate.data.filter.repo.FilterRepository;
-import com.iti.mealmate.data.filter.repo.FilterRepositoryImpl;
 import com.iti.mealmate.data.meal.repo.MealRepository;
 import com.iti.mealmate.data.meal.repo.MealRepositoryImpl;
+import com.iti.mealmate.data.meal.repo.favorite.FavoriteRepository;
+import com.iti.mealmate.data.meal.repo.favorite.FavoriteRepositoryImpl;
 import com.iti.mealmate.data.meal.repo.plan.PlanRepository;
 import com.iti.mealmate.data.meal.repo.plan.PlanRepositoryImpl;
+import com.iti.mealmate.data.profile.datasource.ProfileDataSource;
+import com.iti.mealmate.data.profile.datasource.ProfileDataSourceImpl;
+import com.iti.mealmate.data.profile.repo.ProfileRepository;
+import com.iti.mealmate.data.profile.repo.ProfileRepositoryImpl;
 import com.iti.mealmate.data.source.local.db.AppDatabase;
 import com.iti.mealmate.data.source.local.prefs.PreferencesHelper;
 import com.iti.mealmate.data.source.remote.api.ApiClient;
 import com.iti.mealmate.data.source.remote.firebase.FirebaseAuthHelper;
 import com.iti.mealmate.data.source.remote.firebase.FirestoreUserHelper;
-import com.iti.mealmate.data.profile.repo.ProfileRepository;
-import com.iti.mealmate.data.profile.repo.ProfileRepositoryImpl;
-import com.iti.mealmate.data.profile.datasource.ProfileDataSource;
-import com.iti.mealmate.data.profile.datasource.ProfileDataSourceImpl;
-import com.iti.mealmate.data.profile.datasource.FirebaseProfileHelper;
-import com.google.firebase.storage.FirebaseStorage;
 
 public final class ServiceLocator {
 
     private static boolean initialized = false;
 
     private static PreferencesHelper preferencesHelper;
+    private static AppConnectivityManager connectivityManager;
+    private static AppDatabase appDatabase;
+
     private static AuthRepository authRepository;
     private static MealRepository mealRepository;
     private static FilterRepository filterRepository;
     private static FavoriteRepository favoriteRepository;
-    private static AppConnectivityManager connectivityManager;
-    private static MealLocalDataSource mealLocalDataSource;
-    private static ProfileDataSource profileDataSource;
-
     private static PlanRepository planRepository;
     private static ProfileRepository profileRepository;
 
-    private static AppDatabase appDatabase;
+    private static FirebaseAuthHelper firebaseAuthHelper;
+    private static FirestoreUserHelper firestoreUserHelper;
+
+    private static FirestoreMealHelper firestoreMealHelper;
 
     private ServiceLocator() {}
 
     public static synchronized void init(Context context) {
         if (initialized) return;
+
         Context appContext = context.getApplicationContext();
-        preferencesHelper = new PreferencesHelper(appContext);
-        connectivityManager = new AppConnectivityManagerImpl(appContext);
-        appDatabase = AppDatabase.getInstance(appContext);
-        if (FirebaseApp.getApps(appContext).isEmpty()) {
-            FirebaseApp.initializeApp(appContext);
+
+        initLocal(appContext);
+        initFirebase(appContext);
+        initRepositories();
+
+        initialized = true;
+    }
+    private static void initLocal(Context context) {
+        preferencesHelper = new PreferencesHelper(context);
+        connectivityManager = new AppConnectivityManagerImpl(context);
+        appDatabase = AppDatabase.getInstance(context);
+    }
+
+
+    private static void initFirebase(Context context) {
+        if (FirebaseApp.getApps(context).isEmpty()) {
+            FirebaseApp.initializeApp(context);
         }
-        FirebaseFirestoreSettings settings =
+
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.setFirestoreSettings(
                 new FirebaseFirestoreSettings.Builder()
                         .setLocalCacheSettings(MemoryCacheSettings.newBuilder().build())
-                        .build();
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.setFirestoreSettings(settings);
+                        .build()
+        );
 
-        FirebaseAuthHelper firebaseAuthHelper =
-                new FirebaseAuthHelper(FirebaseAuth.getInstance());
-        FirestoreUserHelper firestoreUserHelper =
-                new FirestoreUserHelper(firestore);
-        AuthDataSource authDataSource =
-                new AuthDataSourceImpl(firebaseAuthHelper, firestoreUserHelper);
+
+        firebaseAuthHelper = new FirebaseAuthHelper(FirebaseAuth.getInstance());
+        firestoreUserHelper = new FirestoreUserHelper(firestore,  FirebaseStorage.getInstance());
+        firestoreMealHelper = new FirestoreMealHelper(firestore);
+    }
+
+    private static void initRepositories() {
+        AuthDataSource authDataSource = new AuthDataSourceImpl(firebaseAuthHelper, firestoreUserHelper);
         authRepository = new AuthRepositoryImpl(authDataSource, connectivityManager);
-
-        MealApiService mealApiService =
-                ApiClient.getInstance().create(MealApiService.class);
-        FirestoreMealHelper firestoreMealHelper =
-                new FirestoreMealHelper(firestore);
-        MealRemoteDataSource mealRemoteDataSource =
-                new MealRemoteDataSourceImpl(mealApiService, firestoreMealHelper);
-        FavoriteLocalDataSource favoriteLocalDataSource =
-                new FavoriteLocalDataSourceImpl(appDatabase.mealDao());
-        mealLocalDataSource = new MealLocalDataSourceImpl(appDatabase.mealDao());
+        MealApiService mealApiService = ApiClient.getInstance().create(MealApiService.class);
+        MealRemoteDataSource mealRemoteDataSource = new MealRemoteDataSourceImpl(mealApiService, firestoreMealHelper);
+        FavoriteLocalDataSource favoriteLocalDataSource = new FavoriteLocalDataSourceImpl(appDatabase.mealDao());
+        MealLocalDataSource mealLocalDataSource = new MealLocalDataSourceImpl(appDatabase.mealDao());
         mealRepository = new MealRepositoryImpl(mealRemoteDataSource, connectivityManager, favoriteLocalDataSource, mealLocalDataSource);
         favoriteRepository = new FavoriteRepositoryImpl(favoriteLocalDataSource, mealLocalDataSource);
         PlanLocalDataSourceImpl planLocalDataSource = new PlanLocalDataSourceImpl(appDatabase.planDao());
         planRepository = new PlanRepositoryImpl(planLocalDataSource, mealLocalDataSource);
-        FilterApiService filterApiService =
-                ApiClient.getInstance().create(FilterApiService.class);
-        FilterRemoteDataSource filterRemoteDataSource =
-                new FilterRemoteDataSourceImpl(filterApiService);
+
+        FilterApiService filterApiService = ApiClient.getInstance().create(FilterApiService.class);
+        FilterRemoteDataSource filterRemoteDataSource = new FilterRemoteDataSourceImpl(filterApiService);
         filterRepository = new FilterRepositoryImpl(filterRemoteDataSource, connectivityManager);
 
-        profileDataSource = new ProfileDataSourceImpl(new FirebaseProfileHelper(firestore, FirebaseStorage.getInstance()));
+        ProfileDataSource profileDataSource = new ProfileDataSourceImpl(firestoreUserHelper);
         profileRepository = new ProfileRepositoryImpl(profileDataSource, connectivityManager);
-
-        initialized = true;
     }
 
-    public static PreferencesHelper getPreferencesHelper() {
-        checkInit();
-        return preferencesHelper;
-    }
-
-    public static AuthRepository getAuthRepository() {
-        checkInit();
-        return authRepository;
-    }
-
-    public static MealRepository getMealRepository() {
-        checkInit();
-        return mealRepository;
-    }
-
-    public static FilterRepository getFilterRepository() {
-        checkInit();
-        return filterRepository;
-    }
-
-    public static AppConnectivityManager getConnectivityManager() {
-        checkInit();
-        return connectivityManager;
-    }
-
-    public static FavoriteRepository getFavoriteRepository() {
-        checkInit();
-        return favoriteRepository;
-    }
-
-    public static MealLocalDataSource getMealLocalDataSource() {
-        checkInit();
-        return mealLocalDataSource;
-    }
-
-    public static PlanRepository getPlanRepository() {
-        checkInit();
-        return planRepository;
-    }
-
-    public static ProfileRepository getProfileRepository() {
-        checkInit();
-        return profileRepository;
-    }
-
+    public static PreferencesHelper getPreferencesHelper() { checkInit(); return preferencesHelper; }
+    public static AuthRepository getAuthRepository() { checkInit(); return authRepository; }
+    public static MealRepository getMealRepository() { checkInit(); return mealRepository; }
+    public static FilterRepository getFilterRepository() { checkInit(); return filterRepository; }
+    public static FavoriteRepository getFavoriteRepository() { checkInit(); return favoriteRepository; }
+    public static PlanRepository getPlanRepository() { checkInit(); return planRepository; }
+    public static ProfileRepository getProfileRepository() { checkInit(); return profileRepository; }
 
     private static void checkInit() {
-        if (!initialized) {
-            throw new IllegalStateException("ServiceLocator.init() must be called first");
-        }
+        if (!initialized) throw new IllegalStateException("ServiceLocator.init() must be called first");
     }
 }
