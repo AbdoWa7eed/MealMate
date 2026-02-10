@@ -52,7 +52,9 @@ public class FavoritesFragment extends Fragment implements FavoriteView {
     }
 
     private void initPresenter() {
-        presenter = new FavoritePresenterImpl(this, ServiceLocator.getFavoriteRepository());
+        presenter = new FavoritePresenterImpl(this,
+                ServiceLocator.getFavoriteRepository(),
+                ServiceLocator.getPreferencesHelper());
         presenter.onViewCreated();
     }
 

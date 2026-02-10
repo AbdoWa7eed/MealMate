@@ -1,7 +1,6 @@
 package com.iti.mealmate.data.meal.repo.plan;
 
 import com.iti.mealmate.data.meal.model.entity.DayPlan;
-import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.data.meal.model.entity.PlannedMeal;
 
 import io.reactivex.rxjava3.core.Completable;
@@ -16,9 +15,5 @@ public interface PlanRepository {
 
     Completable removePlannedMealFromDay(PlannedMeal meal);
 
-    Completable clearAllPlans();
-
-    Flowable<DayPlan> getPlannedMealsForDay(LocalDate date);
-
-    Flowable<List<DayPlan>> getPlannedMealsForNextTwoWeeks();
+    Flowable<List<DayPlan>> getPlannedMealsForNextTwoWeeks(String uid);
 }

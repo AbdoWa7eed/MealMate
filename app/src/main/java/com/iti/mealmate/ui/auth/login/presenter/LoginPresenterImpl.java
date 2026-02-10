@@ -7,6 +7,7 @@ import com.iti.mealmate.core.network.NoConnectivityException;
 import com.iti.mealmate.data.auth.model.LoginRequest;
 import com.iti.mealmate.data.auth.model.UserModel;
 import com.iti.mealmate.data.auth.repo.AuthRepository;
+import com.iti.mealmate.data.source.local.prefs.PreferencesHelper;
 import com.iti.mealmate.ui.auth.login.LoginPresenter;
 import com.iti.mealmate.ui.auth.login.LoginView;
 import com.iti.mealmate.core.util.FacebookLoginProvider;
@@ -23,14 +24,17 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     private final AuthRepository repository;
 
+    private final PreferencesHelper preferencesHelper;
+
     private final CompositeDisposable compositeDisposable;
 
     private final Context context;
 
-    public LoginPresenterImpl(Context context, LoginView view, AuthRepository repository) {
+    public LoginPresenterImpl(Context context, LoginView view, AuthRepository repository, PreferencesHelper preferencesHelper) {
         this.context = context;
         this.view = view;
         this.repository = repository;
+        this.preferencesHelper = preferencesHelper;
         this.compositeDisposable = new CompositeDisposable();
     }
 
@@ -47,12 +51,12 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     private void performLogin(String email, String password) {
         view.showLoading();
-        var loginWithEmailRequset = repository
+        var loginWithEmailRequest = repository
                 .loginWithEmail(new LoginRequest(email, password))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onSuccess, this::onError);
-        compositeDisposable.add(loginWithEmailRequset);
+        compositeDisposable.add(loginWithEmailRequest);
     }
 
     private boolean validateInputs(String email, String password) {
@@ -136,6 +140,7 @@ public class LoginPresenterImpl implements LoginPresenter {
 
 
     private void onSuccess(UserModel userModel) {
+        preferencesHelper.setUserId(userModel.getUid());
         view.navigateToHome(userModel);
         view.hideLoading();
     }

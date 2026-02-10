@@ -42,7 +42,9 @@ public class LoginFragment extends Fragment implements LoginView, FacebookLoginP
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
-        presenter = new LoginPresenterImpl(requireContext(), this, ServiceLocator.getAuthRepository());
+        presenter = new LoginPresenterImpl(requireContext(), this,
+                ServiceLocator.getAuthRepository(),
+                ServiceLocator.getPreferencesHelper());
         return binding.getRoot();
     }
 

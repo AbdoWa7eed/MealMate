@@ -3,6 +3,8 @@ package com.iti.mealmate.ui.profile.view;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +20,7 @@ import com.iti.mealmate.databinding.FragmentProfileBinding;
 import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.auth.AuthenticationActivity;
 import com.iti.mealmate.ui.common.ActivityExtensions;
+import com.iti.mealmate.ui.common.DialogUtils;
 import com.iti.mealmate.ui.profile.ProfileView;
 import com.iti.mealmate.ui.profile.presenter.ProfilePresenterImpl;
 
@@ -26,7 +29,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
     private FragmentProfileBinding binding;
     private ProfilePresenterImpl presenter;
     private ProfileUiStateHandler uiStateHandler;
-    private androidx.activity.result.ActivityResultLauncher<androidx.activity.result.PickVisualMediaRequest> pickMedia;
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,7 +59,10 @@ public class ProfileFragment extends Fragment implements ProfileView {
         presenter = new ProfilePresenterImpl(
                 this,
                 ServiceLocator.getAuthRepository(),
-                ServiceLocator.getProfileRepository()
+                ServiceLocator.getProfileRepository(),
+                ServiceLocator.getPreferencesHelper(),
+                ServiceLocator.getSyncRepository(),
+                ServiceLocator.getAppDatabase()
         );
 
         setupClickListeners();
@@ -64,10 +70,19 @@ public class ProfileFragment extends Fragment implements ProfileView {
     }
 
     private void setupClickListeners() {
-        binding.btnLogout.setOnClickListener(v -> presenter.logout());
+        binding.btnLogout.setOnClickListener(v -> showLogoutDialog());
         binding.btnSync.setOnClickListener(v -> presenter.syncData());
         binding.btnEditProfileImage.setOnClickListener(v -> presenter.onEditIconClicked());
         binding.btnUpdateProfileImage.setOnClickListener(v -> presenter.updateProfileImage());
+    }
+
+    private void showLogoutDialog() {
+        DialogUtils.showConfirmationDialog(
+                requireContext(),
+                getString(R.string.unsynced_data_title),
+                getString(R.string.unsynced_data_message),
+                v -> presenter.logout()
+        );
     }
 
     @Override

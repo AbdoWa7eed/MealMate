@@ -1,7 +1,5 @@
 package com.iti.mealmate.data.meal.repo;
 
-import android.util.Log;
-
 import com.iti.mealmate.core.error.AppErrorHandler;
 import com.iti.mealmate.core.network.AppConnectivityManager;
 import com.iti.mealmate.core.util.RxTask;
@@ -9,7 +7,7 @@ import com.iti.mealmate.data.meal.datasource.local.datasource.favorite.FavoriteL
 import com.iti.mealmate.data.meal.datasource.local.datasource.meal.MealLocalDataSource;
 import com.iti.mealmate.data.meal.datasource.local.entity.CacheType;
 import com.iti.mealmate.data.meal.datasource.local.entity.MealEntity;
-import com.iti.mealmate.data.meal.datasource.remote.MealRemoteDataSource;
+import com.iti.mealmate.data.meal.datasource.remote.meal.MealRemoteDataSource;
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.data.meal.model.entity.MealLight;
 import com.iti.mealmate.data.meal.model.mapper.MealMapper;
