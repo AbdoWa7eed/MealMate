@@ -4,6 +4,7 @@ import com.iti.mealmate.core.network.NoConnectivityException;
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.data.meal.repo.MealRepository;
 import com.iti.mealmate.data.meal.repo.favorite.FavoriteRepository;
+import com.iti.mealmate.data.source.local.prefs.PreferencesHelper;
 import com.iti.mealmate.ui.home.HomePresenter;
 import com.iti.mealmate.ui.home.HomeView;
 
@@ -21,14 +22,16 @@ public class HomePresenterImpl implements HomePresenter {
     private final HomeView view;
     private final MealRepository mealRepository;
     private final FavoriteRepository favoriteRepository;
+    private final PreferencesHelper preferencesHelper;
     private final CompositeDisposable disposables = new CompositeDisposable();
     private HomeData data;
     private Disposable currentHomeRequest;
 
-    public HomePresenterImpl(HomeView view, MealRepository mealRepository, FavoriteRepository favoriteRepository) {
+    public HomePresenterImpl(HomeView view, MealRepository mealRepository, FavoriteRepository favoriteRepository, PreferencesHelper preferencesHelper) {
         this.view = view;
         this.mealRepository = mealRepository;
         this.favoriteRepository = favoriteRepository;
+        this.preferencesHelper = preferencesHelper;
     }
 
     @Override
@@ -67,6 +70,10 @@ public class HomePresenterImpl implements HomePresenter {
 
     @Override
     public void toggleFavorite(Meal meal) {
+        if (preferencesHelper.getUserId() == null) {
+            view.showErrorMessage("This action is not allowed for guest users");
+            return;
+        }
         boolean previousStatus = meal.isFavorite();
         Completable action = previousStatus
                 ? favoriteRepository.removeFromFavorites(meal)

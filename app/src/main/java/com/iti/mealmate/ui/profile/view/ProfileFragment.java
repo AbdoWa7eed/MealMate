@@ -87,7 +87,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
     @Override
     public void openImagePicker() {
-        pickMedia.launch(new androidx.activity.result.PickVisualMediaRequest.Builder()
+        pickMedia.launch(new PickVisualMediaRequest.Builder()
                 .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                 .build());
     }
@@ -150,6 +150,11 @@ public class ProfileFragment extends Fragment implements ProfileView {
     @Override
     public void navigateToLogin() {
         ActivityExtensions.navigateAndFinish(requireActivity(), AuthenticationActivity.class);
+    }
+
+    @Override
+    public void showGuestMode() {
+        uiStateHandler.showGuestMode(requireActivity());
     }
 
     @Override

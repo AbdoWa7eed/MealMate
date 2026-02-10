@@ -41,10 +41,10 @@ public class PlanPresenterImpl implements PlanPresenter {
     public void onViewCreated() {
         String uid = preferencesHelper.getUserId();
         if(uid == null){
-            // TODO: HANDLE GUEST USER
-            view.showPageError("User Not Found");
+            view.showGuestMode();
             return;
         }
+        view.showLoading();
         var request = planRepository
                 .getPlannedMealsForNextTwoWeeks(preferencesHelper.getUserId())
                 .subscribeOn(Schedulers.io())

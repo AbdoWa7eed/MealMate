@@ -1,5 +1,6 @@
 package com.iti.mealmate.ui.profile.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.animation.Animation;
@@ -8,6 +9,7 @@ import android.view.animation.AnimationUtils;
 import com.iti.mealmate.R;
 import com.iti.mealmate.databinding.FragmentProfileBinding;
 import com.iti.mealmate.ui.common.ErrorOverlayHelper;
+import com.iti.mealmate.ui.common.GuestOverlayHelper;
 import com.iti.mealmate.ui.profile.ProfileView;
 
 public class ProfileUiStateHandler {
@@ -22,6 +24,7 @@ public class ProfileUiStateHandler {
 
     public void showLoading() {
         hideError();
+        hideGuestMode();
         binding.viewShimmer.shimmerProfileContainer.startShimmer();
         binding.viewShimmer.shimmerProfileContainer.setVisibility(View.VISIBLE);
 
@@ -37,6 +40,7 @@ public class ProfileUiStateHandler {
 
     public void showContent() {
         hideError();
+        hideGuestMode();
         binding.viewShimmer.shimmerProfileContainer.stopShimmer();
         binding.viewShimmer.shimmerProfileContainer.setVisibility(View.GONE);
 
@@ -72,6 +76,17 @@ public class ProfileUiStateHandler {
 
     private void stopAndHideLoading() {
         hideLoading();
+    }
+
+    public void showGuestMode(Activity activity) {
+        stopAndHideLoading();
+        hideContent();
+        hideError();
+        GuestOverlayHelper.showGuestOverlay(binding.getRoot(), activity);
+    }
+
+    public void hideGuestMode() {
+        GuestOverlayHelper.hideGuestOverlay(binding.guestOverlay.getRoot());
     }
 
     private void hideContent() {

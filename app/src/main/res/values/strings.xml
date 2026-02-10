@@ -117,7 +117,7 @@
     <string name="meal_details_items_count">%d items</string>
     <string name="meal_name_placeholder">Creamy Spaghetti Carbonara</string>
 
-    <string name="no_plans_message">You haven\'t added any plans yet.\nStart exploring!</string>
+    <string name="no_plans_message">You haven\'t added any plans yet.Start exploring!</string>
 
 
     <string name="cd_meal_image">Meal Image</string>
@@ -162,4 +162,7 @@
     <string name="unsynced_data_message"> If you log out now, you plans and favorites may be lost. Are you sure you want to proceed?</string>
 
     <string name="update">Update</string>
+    <string name="guest_title">Exclusive Features Await!</string>
+    <string name="guest_subtitle">Please log in to sync your data, save your favorite meals, and plan your weekly menu.</string>
+    <string name="login_signup">Log In / Sign Up</string>
 </resources>

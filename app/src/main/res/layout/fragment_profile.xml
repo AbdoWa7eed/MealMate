@@ -379,4 +379,11 @@
         android:layout_height="match_parent"
         android:visibility="gone" />
 
+    <include
+        android:id="@+id/guest_overlay"
+        layout="@layout/layout_guest_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
 </FrameLayout>

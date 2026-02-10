@@ -64,6 +64,7 @@ public class PlanFragment extends Fragment implements PlanView {
         binding.recyclerPlan.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerPlan.setAdapter(plansAdapter);
         binding.recyclerPlan.setHasFixedSize(false);
+
     }
 
     private void showConfirmationDialog(PlannedMeal meal) {
@@ -93,13 +94,13 @@ public class PlanFragment extends Fragment implements PlanView {
             planUiStateHandler.toggleWeek(nextWeek, thisWeek);
             presenter.loadNextWeek();
         });
+        binding.textDateRange.setText(DateUtils.getTwoWeekDateRange());
     }
 
     @Override
     public void showPlannedMeals(List<DayPlan> plannedMealList) {
         planUiStateHandler.showContent();
         plansAdapter.submitList(plannedMealList);
-        binding.textDateRange.setText(DateUtils.getTwoWeekDateRange());
     }
 
     @Override
@@ -136,6 +137,11 @@ public class PlanFragment extends Fragment implements PlanView {
     @Override
     public void noInternetError() {
         PlanView.super.noInternetError();
+    }
+
+    @Override
+    public void showGuestMode() {
+        planUiStateHandler.showGuestMode(requireActivity());
     }
 
     @Override

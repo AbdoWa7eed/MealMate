@@ -74,7 +74,8 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                 this, 
                 ServiceLocator.getMealRepository(),
                 ServiceLocator.getFavoriteRepository(),
-                ServiceLocator.getPlanRepository()
+                ServiceLocator.getPlanRepository(),
+                ServiceLocator.getPreferencesHelper()
         );
     }
 

@@ -57,7 +57,7 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     public void loadUserProfile() {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser == null) {
-            view.navigateToLogin();
+            view.showGuestMode();
             return;
         }
 

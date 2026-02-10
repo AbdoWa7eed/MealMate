@@ -46,7 +46,8 @@ public class HomeFragment extends Fragment implements HomeView {
         if (presenter == null) {
             presenter = new HomePresenterImpl(this,
                     ServiceLocator.getMealRepository(),
-                    ServiceLocator.getFavoriteRepository());
+                    ServiceLocator.getFavoriteRepository(),
+                    ServiceLocator.getPreferencesHelper());
             presenter.loadHomeData();
         }
     }
