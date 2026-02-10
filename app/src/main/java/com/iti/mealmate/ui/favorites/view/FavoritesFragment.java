@@ -106,6 +106,11 @@ public class FavoritesFragment extends Fragment implements FavoriteView {
         ActivityExtensions.showSuccessSnackBar(requireActivity(), message);
     }
 
+    @Override
+    public void showGuestMode() {
+        uiStateHandler.showGuestMode(requireActivity());
+    }
+
     public void navigateToDetails(Meal meal) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(MealDetailsActivity.EXTRA_MEAL, meal);

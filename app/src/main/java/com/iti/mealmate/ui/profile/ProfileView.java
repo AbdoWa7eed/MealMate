@@ -15,6 +15,7 @@ public interface ProfileView extends BaseView {
     void showOriginalImage(String imageUrl);
     void setEditIconState(boolean isImagePicked);
     void navigateToLogin();
+    void showGuestMode();
 
     enum LoadingType {
         SYNC, IMAGE_UPLOAD, LOGOUT

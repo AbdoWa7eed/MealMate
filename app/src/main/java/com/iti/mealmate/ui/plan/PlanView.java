@@ -10,4 +10,6 @@ public interface PlanView extends BaseView {
 
     void showEmptyState();
 
+    void showGuestMode();
+
 }

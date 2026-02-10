@@ -141,7 +141,7 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     private void onSuccess(UserModel userModel) {
         preferencesHelper.setUserId(userModel.getUid());
-        view.navigateToHome(userModel);
+        view.navigateToHome();
         view.hideLoading();
     }
 

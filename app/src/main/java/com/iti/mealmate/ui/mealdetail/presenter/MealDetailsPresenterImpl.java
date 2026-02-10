@@ -7,6 +7,7 @@ import com.iti.mealmate.data.meal.model.entity.PlannedMeal;
 import com.iti.mealmate.data.meal.repo.MealRepository;
 import com.iti.mealmate.data.meal.repo.favorite.FavoriteRepository;
 import com.iti.mealmate.data.meal.repo.plan.PlanRepository;
+import com.iti.mealmate.data.source.local.prefs.PreferencesHelper;
 import com.iti.mealmate.ui.mealdetail.MealDetailsPresenter;
 import com.iti.mealmate.ui.mealdetail.MealDetailsView;
 
@@ -26,6 +27,7 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
     private final FavoriteRepository favoriteRepository;
 
     private final PlanRepository planRepository;
+    private final PreferencesHelper preferencesHelper;
     private final CompositeDisposable disposables = new CompositeDisposable();
 
     private Meal meal;
@@ -34,11 +36,13 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
     public MealDetailsPresenterImpl(MealDetailsView view,
                                     MealRepository mealRepository,
                                     FavoriteRepository favoriteRepository,
-                                    PlanRepository planRepository) {
+                                    PlanRepository planRepository,
+                                    PreferencesHelper preferencesHelper) {
         this.view = view;
         this.mealRepository = mealRepository;
         this.favoriteRepository = favoriteRepository;
         this.planRepository = planRepository;
+        this.preferencesHelper = preferencesHelper;
     }
 
     @Override
@@ -135,6 +139,10 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
 
     @Override
     public void addToPlan(LocalDate date) {
+        if (preferencesHelper.getUserId() == null) {
+            view.showErrorMessage("This action is not allowed for guest users");
+            return;
+        }
         var addToPlanRequest = planRepository
                 .addPlannedMeal(new PlannedMeal(meal, date)).subscribe(
                         () -> view.showSuccessMessage("Added To Plan"),
@@ -153,6 +161,11 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
     @Override
     public void toggleFavorite() {
         if (meal == null) return;
+
+        if (preferencesHelper.getUserId() == null) {
+            view.showErrorMessage("This action is not allowed for guest users");
+            return;
+        }
 
         boolean previousState = meal.isFavorite();
 

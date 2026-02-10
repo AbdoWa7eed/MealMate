@@ -57,6 +57,7 @@ public class LoginFragment extends Fragment implements LoginView, FacebookLoginP
             String password = Objects.requireNonNull(binding.passwordInput.getText()).toString();
             presenter.login(email, password);
         });
+        binding.guestButton.setOnClickListener(v -> navigateToHome());
         binding.googleButton.setOnClickListener(v -> presenter.loginWithGoogle());
         binding.facebookButton.setOnClickListener(v -> presenter.loginWithFacebook());
     }
@@ -66,8 +67,7 @@ public class LoginFragment extends Fragment implements LoginView, FacebookLoginP
     }
 
     @Override
-    public void navigateToHome(UserModel user) {
-        ActivityExtensions.showSuccessSnackBar(requireActivity(), "Welcome " + user.getName());
+    public void navigateToHome() {
         ActivityExtensions.navigateAndFinish(requireActivity(), HomeActivity.class);
     }
 

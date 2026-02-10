@@ -36,8 +36,7 @@ public class FavoritePresenterImpl implements FavoritePresenter {
     public void loadFavorites() {
         String uid = preferencesHelper.getUserId();
         if(uid == null) {
-            view.showPageError("User not logged in");
-            // TODO : SHOW GUEST VIEW
+            view.showGuestMode();
             return;
         }
         view.showLoading();

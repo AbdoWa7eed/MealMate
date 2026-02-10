@@ -16,6 +16,7 @@ import com.iti.mealmate.data.meal.model.mapper.PlanMapper;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
@@ -26,6 +27,9 @@ public class PlanRepositoryImpl implements PlanRepository {
     private final UserMealSyncDataSource syncDataSource;
 
     private final AppConnectivityManager connectivityManager;
+
+    private final AtomicBoolean plansFetched = new AtomicBoolean(false);
+
 
     public PlanRepositoryImpl(PlanLocalDataSourceImpl planLocalDataSource,
                               MealLocalDataSource mealLocalDataSource,
@@ -70,16 +74,17 @@ public class PlanRepositoryImpl implements PlanRepository {
         LocalDate start = DateUtils.startOfCurrentWeek();
         LocalDate end = DateUtils.endOfNextWeek();
 
-        return getLocalPlans(start, end)
-                .flatMap(dayPlans -> {
-                    if (!dayPlans.isEmpty()) {
-                        return Flowable.just(dayPlans);
-                    }
-                    return fetchAndCacheRemotePlans(uid, start, end);
-                })
-                .onErrorResumeNext(throwable ->
-                        Flowable.error(AppErrorHandler.handle(throwable))
-                );
+        return Flowable.defer(() -> {
+            return getLocalPlans(start, end)
+                    .flatMap(dayPlans -> {
+                        if (!dayPlans.isEmpty() || plansFetched.get()) {
+                            return Flowable.just(dayPlans);
+                        }
+                        return fetchAndCacheRemotePlans(uid, start, end)
+                                .doOnNext(plans -> plansFetched.set(true));
+                    })
+                    .onErrorResumeNext(throwable -> Flowable.error(AppErrorHandler.handle(throwable)));
+        });
     }
 
     private Flowable<List<DayPlan>> getLocalPlans(LocalDate start, LocalDate end) {

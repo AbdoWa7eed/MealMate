@@ -1,5 +1,6 @@
 package com.iti.mealmate.ui.plan.view;
 
+import android.app.Activity;
 import android.graphics.Typeface;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -10,6 +11,7 @@ import androidx.core.content.ContextCompat;
 
 import com.iti.mealmate.R;
 import com.iti.mealmate.databinding.FragmentPlanBinding;
+import com.iti.mealmate.ui.common.GuestOverlayHelper;
 
 public class PlanUiStateHandler {
 
@@ -22,19 +24,32 @@ public class PlanUiStateHandler {
     }
 
     public void showLoading() {
+        hideGuestMode();
         binding.recyclerPlan.setVisibility(View.GONE);
         binding.emptyStateLayout.emptyStateContainer.setVisibility(View.GONE);
     }
 
     public void showContent() {
+        hideGuestMode();
         binding.recyclerPlan.setVisibility(View.VISIBLE);
         binding.emptyStateLayout.emptyStateContainer.setVisibility(View.GONE);
     }
 
     public void showEmptyState(String message) {
+        hideGuestMode();
         binding.recyclerPlan.setVisibility(View.GONE);
         binding.emptyStateLayout.emptyStateContainer.setVisibility(View.VISIBLE);
         binding.emptyStateLayout.textEmptyState.setText(message);
+    }
+
+    public void showGuestMode(Activity activity) {
+        binding.scrollableContent.setVisibility(View.GONE);
+        binding.emptyStateLayout.emptyStateContainer.setVisibility(View.GONE);
+        GuestOverlayHelper.showGuestOverlay(binding.getRoot(), activity);
+    }
+
+    public void hideGuestMode() {
+        GuestOverlayHelper.hideGuestOverlay(binding.guestOverlay.getRoot());
     }
 
     public void initializeWeekSelector() {
