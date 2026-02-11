@@ -49,7 +49,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    runtimeOnly(libs.core.splashscreen)
+    implementation(libs.core.splashscreen)
     implementation(libs.navigation.fragment)
     implementation(libs.dotsindicator)
     implementation(platform(libs.firebase.bom))
