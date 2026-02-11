@@ -19,6 +19,7 @@ import com.iti.mealmate.databinding.FragmentPlanBinding;
 import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.common.ActivityExtensions;
 import com.iti.mealmate.ui.common.DialogUtils;
+import com.iti.mealmate.ui.common.ErrorOverlayHelper;
 import com.iti.mealmate.ui.mealdetail.view.MealDetailsActivity;
 import com.iti.mealmate.ui.plan.PlanPresenter;
 import com.iti.mealmate.ui.plan.PlanView;
@@ -121,7 +122,7 @@ public class PlanFragment extends Fragment implements PlanView {
 
     @Override
     public void showPageError(String message) {
-        planUiStateHandler.showErrorPage(message);
+        ErrorOverlayHelper.showError(binding.getRoot(), message, presenter::loadPlans);
     }
 
     @Override

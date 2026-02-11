@@ -44,6 +44,11 @@ public class PlanPresenterImpl implements PlanPresenter {
             view.showGuestMode();
             return;
         }
+        loadPlans();
+    }
+
+    @Override
+    public void loadPlans() {
         view.showLoading();
         var request = planRepository
                 .getPlannedMealsForNextTwoWeeks(preferencesHelper.getUserId())
@@ -52,6 +57,7 @@ public class PlanPresenterImpl implements PlanPresenter {
                 .subscribe(this::loadData, throwable -> view.showPageError(throwable.getMessage()));
         disposables.add(request);
     }
+
 
     private void loadData(List<DayPlan> plannedList) {
         if (plannedList == null || plannedList.isEmpty()) {

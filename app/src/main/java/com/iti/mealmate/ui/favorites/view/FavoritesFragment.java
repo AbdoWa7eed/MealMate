@@ -15,6 +15,7 @@ import com.iti.mealmate.databinding.FragmentFavoritesBinding;
 import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.common.ActivityExtensions;
 import com.iti.mealmate.ui.common.DialogUtils;
+import com.iti.mealmate.ui.common.ErrorOverlayHelper;
 import com.iti.mealmate.ui.favorites.FavoritePresenter;
 import com.iti.mealmate.ui.favorites.FavoriteView;
 import com.iti.mealmate.ui.favorites.presenter.FavoritePresenterImpl;
@@ -90,8 +91,9 @@ public class FavoritesFragment extends Fragment implements FavoriteView {
 
     @Override
     public void showPageError(String message) {
-        uiStateHandler.showErrorPage(message);
+        ErrorOverlayHelper.showError(binding.getRoot(), message, presenter::loadFavorites);
     }
+
 
     @Override
     public void showErrorMessage(String message) {

@@ -1,7 +1,5 @@
 package com.iti.mealmate.data.meal.repo.plan;
 
-import android.util.Log;
-
 import com.iti.mealmate.core.error.AppErrorHandler;
 import com.iti.mealmate.core.network.AppConnectivityManager;
 import com.iti.mealmate.core.util.DateUtils;
@@ -84,7 +82,7 @@ public class PlanRepositoryImpl implements PlanRepository {
                                 )
                                 .flatMapCompletable(this::cacheRemotePlans)
                                 .andThen(getLocalPlans(start, end))
-                                .onErrorResumeNext(Flowable::error);
+                                .onErrorResumeNext(throwable -> getLocalPlans(start, end));
                     } else {
                         return getLocalPlans(start, end);
                     }

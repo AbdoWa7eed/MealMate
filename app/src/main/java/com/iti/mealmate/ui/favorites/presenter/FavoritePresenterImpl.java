@@ -1,14 +1,9 @@
 package com.iti.mealmate.ui.favorites.presenter;
-
-
-import android.util.Log;
-
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.data.meal.repo.favorite.FavoriteRepository;
 import com.iti.mealmate.data.source.local.prefs.PreferencesHelper;
 import com.iti.mealmate.ui.favorites.FavoritePresenter;
 import com.iti.mealmate.ui.favorites.FavoriteView;
-
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -32,18 +27,18 @@ public class FavoritePresenterImpl implements FavoritePresenter {
 
     @Override
     public void onViewCreated() {
-        loadFavorites();
-    }
-
-    @Override
-    public void loadFavorites() {
         String uid = preferencesHelper.getUserId();
         if(uid == null) {
             view.showGuestMode();
             return;
         }
+        loadFavorites();
+    }
+
+    @Override
+    public void loadFavorites() {
         view.showLoading();
-        disposables.add(favoriteRepository.getAllFavorites(uid)
+        disposables.add(favoriteRepository.getAllFavorites(preferencesHelper.getUserId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onLoadSuccess,

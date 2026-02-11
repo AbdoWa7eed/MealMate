@@ -44,7 +44,7 @@ public class FavoriteRepositoryImpl implements FavoriteRepository {
                 .flatMap(favorites -> {
                     if (favorites.isEmpty()) {
                         return fetchAndCacheRemoteFavorites(uid)
-                                .onErrorResumeNext(Flowable::error);
+                                .onErrorResumeNext(throwable -> getLocalFavorites());
                     } else {
                         return getLocalFavorites();
                     }
