@@ -18,4 +18,7 @@ public interface FavoriteRepository {
 
     Completable removeFromFavorites(Meal meal);
 
+    void resetFetchFlag();
+
+
 }

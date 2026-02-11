@@ -1,6 +1,7 @@
 package com.iti.mealmate.di;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,31 +53,31 @@ public final class ServiceLocator {
 
     private static boolean initialized = false;
 
+    // Local
     private static PreferencesHelper preferencesHelper;
     private static AppConnectivityManager connectivityManager;
     private static AppDatabase appDatabase;
 
+    // Firebase
+    private static FirebaseAuthHelper firebaseAuthHelper;
+    private static FirestoreUserHelper firestoreUserHelper;
+    private static FirestoreMealHelper firestoreMealHelper;
+
+    // Repositories
     private static AuthRepository authRepository;
     private static MealRepository mealRepository;
-    private static FilterRepository filterRepository;
     private static FavoriteRepository favoriteRepository;
     private static PlanRepository planRepository;
     private static ProfileRepository profileRepository;
-
     private static SyncRepository syncRepository;
 
+    private static FilterRepository filterRepository;
 
-    private static FirebaseAuthHelper firebaseAuthHelper;
-    private static FirestoreUserHelper firestoreUserHelper;
 
-    private static FirestoreMealHelper firestoreMealHelper;
-
-    private ServiceLocator() {
-    }
+    private ServiceLocator() { }
 
     public static synchronized void init(Context context) {
         if (initialized) return;
-
         Context appContext = context.getApplicationContext();
 
         initLocal(appContext);
@@ -86,63 +87,9 @@ public final class ServiceLocator {
         initialized = true;
     }
 
-    private static void initLocal(Context context) {
-        preferencesHelper = new PreferencesHelper(context);
-        connectivityManager = new AppConnectivityManagerImpl(context);
-        appDatabase = AppDatabase.getInstance(context);
-    }
-
-
-    private static void initFirebase(Context context) {
-        if (FirebaseApp.getApps(context).isEmpty()) {
-            FirebaseApp.initializeApp(context);
-        }
-
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.setFirestoreSettings(
-                new FirebaseFirestoreSettings.Builder()
-                        .setLocalCacheSettings(MemoryCacheSettings.newBuilder().build())
-                        .build()
-        );
-
-
-        firebaseAuthHelper = new FirebaseAuthHelper(FirebaseAuth.getInstance());
-        firestoreUserHelper = new FirestoreUserHelper(firestore, FirebaseStorage.getInstance());
-        firestoreMealHelper = new FirestoreMealHelper(firestore);
-    }
-
-    private static void initRepositories() {
-        // Auth
-        AuthDataSource authDataSource = new AuthDataSourceImpl(firebaseAuthHelper, firestoreUserHelper);
-        authRepository = new AuthRepositoryImpl(authDataSource, connectivityManager);
-
-        // Meal
-        MealApiService mealApiService = ApiClient.getInstance().create(MealApiService.class);
-        MealRemoteDataSource mealRemoteDataSource = new MealRemoteDataSourceImpl(mealApiService, firestoreMealHelper);
-
-        MealLocalDataSource mealLocalDataSource = new MealLocalDataSourceImpl(appDatabase.mealDao());
-        FavoriteLocalDataSource favoriteLocalDataSource = new FavoriteLocalDataSourceImpl(appDatabase.mealDao());
-
-        UserMealSyncDataSource userSyncDataSource = new UserMealSyncDataSourceImpl(firestoreUserHelper);
-
-        mealRepository = new MealRepositoryImpl(mealRemoteDataSource, connectivityManager, favoriteLocalDataSource, mealLocalDataSource);
-        favoriteRepository = new FavoriteRepositoryImpl(favoriteLocalDataSource, mealLocalDataSource, userSyncDataSource, connectivityManager);
-
-        // Plan
-        PlanLocalDataSourceImpl planLocalDataSource = new PlanLocalDataSourceImpl(appDatabase.planDao());
-        planRepository = new PlanRepositoryImpl(planLocalDataSource, mealLocalDataSource, userSyncDataSource, connectivityManager);
-
-        // Sync
-        syncRepository = new SyncRepositoryImpl(favoriteLocalDataSource, planLocalDataSource, userSyncDataSource, connectivityManager);
-
-        // Filter
-        FilterApiService filterApiService = ApiClient.getInstance().create(FilterApiService.class);
-        FilterRemoteDataSource filterRemoteDataSource = new FilterRemoteDataSourceImpl(filterApiService);
-        filterRepository = new FilterRepositoryImpl(filterRemoteDataSource, connectivityManager);
-
-        // Profile
-        ProfileDataSource profileDataSource = new ProfileDataSourceImpl(firestoreUserHelper);
-        profileRepository = new ProfileRepositoryImpl(profileDataSource, connectivityManager);
+    public static void reset() {
+        if (favoriteRepository != null) favoriteRepository.resetFetchFlag();
+        if (planRepository != null) planRepository.resetFetchFlag();
     }
 
     public static PreferencesHelper getPreferencesHelper() {
@@ -151,6 +98,7 @@ public final class ServiceLocator {
     }
 
     public static AppDatabase getAppDatabase() {
+        checkInit();
         return appDatabase;
     }
 
@@ -162,11 +110,6 @@ public final class ServiceLocator {
     public static MealRepository getMealRepository() {
         checkInit();
         return mealRepository;
-    }
-
-    public static FilterRepository getFilterRepository() {
-        checkInit();
-        return filterRepository;
     }
 
     public static FavoriteRepository getFavoriteRepository() {
@@ -189,8 +132,69 @@ public final class ServiceLocator {
         return syncRepository;
     }
 
+    public static FilterRepository getFilterRepository() {
+        checkInit();
+        return filterRepository;
+    }
+
+
+    private static void initLocal(Context context) {
+        preferencesHelper = new PreferencesHelper(context);
+        connectivityManager = new AppConnectivityManagerImpl(context);
+        appDatabase = AppDatabase.getInstance(context);
+    }
+
+    private static void initFirebase(Context context) {
+        if (FirebaseApp.getApps(context).isEmpty()) {
+            FirebaseApp.initializeApp(context);
+        }
+
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.setFirestoreSettings(
+                new FirebaseFirestoreSettings.Builder()
+                        .setLocalCacheSettings(MemoryCacheSettings.newBuilder().build())
+                        .build()
+        );
+
+        firebaseAuthHelper = new FirebaseAuthHelper(FirebaseAuth.getInstance());
+        firestoreUserHelper = new FirestoreUserHelper(firestore, FirebaseStorage.getInstance());
+        firestoreMealHelper = new FirestoreMealHelper(firestore);
+    }
+
+    private static void initRepositories() {
+        // Auth
+        AuthDataSource authDataSource = new AuthDataSourceImpl(firebaseAuthHelper, firestoreUserHelper);
+        authRepository = new AuthRepositoryImpl(authDataSource, connectivityManager);
+
+        // Meal
+        MealApiService mealApiService = ApiClient.getInstance().create(MealApiService.class);
+        MealRemoteDataSource mealRemoteDataSource = new MealRemoteDataSourceImpl(mealApiService, firestoreMealHelper);
+        MealLocalDataSource mealLocalDataSource = new MealLocalDataSourceImpl(appDatabase.mealDao());
+        FavoriteLocalDataSource favoriteLocalDataSource = new FavoriteLocalDataSourceImpl(appDatabase.mealDao());
+        UserMealSyncDataSource userSyncDataSource = new UserMealSyncDataSourceImpl(firestoreUserHelper);
+
+        mealRepository = new MealRepositoryImpl(mealRemoteDataSource, connectivityManager, favoriteLocalDataSource, mealLocalDataSource);
+        favoriteRepository = new FavoriteRepositoryImpl(favoriteLocalDataSource, mealLocalDataSource, userSyncDataSource, connectivityManager);
+
+        // Plan
+        PlanLocalDataSourceImpl planLocalDataSource = new PlanLocalDataSourceImpl(appDatabase.planDao());
+        planRepository = new PlanRepositoryImpl(planLocalDataSource, mealLocalDataSource, userSyncDataSource, connectivityManager);
+
+        // Sync
+        syncRepository = new SyncRepositoryImpl(favoriteLocalDataSource, planLocalDataSource, userSyncDataSource, connectivityManager);
+
+        // Filter
+        FilterApiService filterApiService = ApiClient.getInstance().create(FilterApiService.class);
+        FilterRemoteDataSource filterRemoteDataSource = new FilterRemoteDataSourceImpl(filterApiService);
+        filterRepository = new FilterRepositoryImpl(filterRemoteDataSource, connectivityManager);
+
+        // Profile
+        ProfileDataSource profileDataSource = new ProfileDataSourceImpl(firestoreUserHelper);
+        profileRepository = new ProfileRepositoryImpl(profileDataSource, connectivityManager);
+    }
+
+
     private static void checkInit() {
-        if (!initialized)
-            throw new IllegalStateException("ServiceLocator.init() must be called first");
+        if (!initialized) throw new IllegalStateException("ServiceLocator.init() must be called first");
     }
 }

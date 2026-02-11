@@ -15,4 +15,6 @@ public interface PlanRepository {
     Completable removePlannedMealFromDay(PlannedMeal meal);
 
     Flowable<List<DayPlan>> getPlannedMealsForNextTwoWeeks(String uid);
+
+    void resetFetchFlag();
 }

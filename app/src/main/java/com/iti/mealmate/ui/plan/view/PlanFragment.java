@@ -146,6 +146,16 @@ public class PlanFragment extends Fragment implements PlanView {
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            binding.btnThisWeek.post(() -> {
+                planUiStateHandler.initializeWeekSelector();
+            });
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;

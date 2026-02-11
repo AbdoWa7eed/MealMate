@@ -16,6 +16,7 @@ import com.iti.mealmate.data.meal.model.mapper.PlanMapper;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
@@ -24,10 +25,9 @@ public class PlanRepositoryImpl implements PlanRepository {
     private final PlanLocalDataSource planLocalDataSource;
     private final MealLocalDataSource mealLocalDataSource;
     private final UserMealSyncDataSource syncDataSource;
-
     private final AppConnectivityManager connectivityManager;
 
-
+    private final AtomicBoolean hasFetchedFromFirebase = new AtomicBoolean(false);
     public PlanRepositoryImpl(PlanLocalDataSourceImpl planLocalDataSource,
                               MealLocalDataSource mealLocalDataSource,
                               UserMealSyncDataSource syncDataSource,
@@ -65,30 +65,38 @@ public class PlanRepositoryImpl implements PlanRepository {
                         Completable.error(AppErrorHandler.handle(throwable)));
     }
 
-
-
     @Override
     public Flowable<List<DayPlan>> getPlannedMealsForNextTwoWeeks(String uid) {
+
         LocalDate start = DateUtils.startOfCurrentWeek();
         LocalDate end = DateUtils.endOfNextWeek();
 
-        return getLocalPlans(start, end)
-                .take(1)
-                .flatMap(list -> {
-                    if (list.isEmpty()) {
+        Flowable<List<DayPlan>> localPlansFlowable = getLocalPlans(start, end);
+
+        return localPlansFlowable
+                .switchMap(list -> {
+                    if (!list.isEmpty()) {
+                        hasFetchedFromFirebase.set(true);
+                        return Flowable.just(list);
+                    }
+
+                    if (!hasFetchedFromFirebase.get()) {
                         return RxTask.withConnectivity(
                                         syncDataSource.downloadPlans(uid),
                                         connectivityManager
                                 )
                                 .flatMapCompletable(this::cacheRemotePlans)
-                                .andThen(getLocalPlans(start, end))
-                                .onErrorResumeNext(throwable -> getLocalPlans(start, end));
-                    } else {
-                        return getLocalPlans(start, end);
+                                .andThen(localPlansFlowable)
+                                .doOnNext(l -> hasFetchedFromFirebase.set(true))
+                                .onErrorResumeNext(throwable -> localPlansFlowable);
                     }
+
+                    return Flowable.just(list);
+
                 })
                 .onErrorResumeNext(throwable ->
-                        Flowable.error(AppErrorHandler.handle(throwable)));
+                        Flowable.error(AppErrorHandler.handle(throwable))
+                );
     }
 
     private Flowable<List<DayPlan>> getLocalPlans(LocalDate start, LocalDate end) {
@@ -101,6 +109,10 @@ public class PlanRepositoryImpl implements PlanRepository {
         return Flowable.fromIterable(remotePlans)
                 .flatMapIterable(DayPlan::getMeals)
                 .concatMapCompletable(this::addPlannedMeal);
+    }
+
+    public void resetFetchFlag() {
+        hasFetchedFromFirebase.set(false);
     }
 
 

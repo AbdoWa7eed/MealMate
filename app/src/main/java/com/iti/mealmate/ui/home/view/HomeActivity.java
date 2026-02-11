@@ -31,14 +31,28 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        if (savedInstanceState != null) {
-            restoreFragments();
-        } else {
+
+        if (savedInstanceState == null) {
+
             homeFragment = new HomeFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.home_nav_host, homeFragment)
-                    .commit();
+            discoverFragment = new DiscoverFragment();
+            planFragment = new PlanFragment();
+            favoritesFragment = new FavoritesFragment();
+            profileFragment = new ProfileFragment();
+
             activeFragment = homeFragment;
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+            transaction.add(R.id.home_nav_host, profileFragment, ProfileFragment.class.getSimpleName()).hide(profileFragment);
+            transaction.add(R.id.home_nav_host, favoritesFragment, FavoritesFragment.class.getSimpleName()).hide(favoritesFragment);
+            transaction.add(R.id.home_nav_host, planFragment, PlanFragment.class.getSimpleName()).hide(planFragment);
+            transaction.add(R.id.home_nav_host, discoverFragment, DiscoverFragment.class.getSimpleName()).hide(discoverFragment);
+            transaction.add(R.id.home_nav_host, homeFragment, HomeFragment.class.getSimpleName());
+
+            transaction.commit();
+        } else {
+            restoreFragments();
         }
 
         setupBottomNavigation();
@@ -63,44 +77,27 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private Fragment getFragmentForMenu(int menuId) {
-        if (menuId == R.id.homeFragment) {
-            if (homeFragment == null) homeFragment = new HomeFragment();
-            return homeFragment;
-        } else if (menuId == R.id.discoverFragment) {
-            if (discoverFragment == null) discoverFragment = new DiscoverFragment();
-            return discoverFragment;
-        } else if (menuId == R.id.planFragment) {
-            if (planFragment == null) planFragment = new PlanFragment();
-            return planFragment;
-        } else if (menuId == R.id.favoritesFragment) {
-            if (favoritesFragment == null) favoritesFragment = new FavoritesFragment();
-            return favoritesFragment;
-        } else if (menuId == R.id.profileFragment) {
-            if (profileFragment == null) profileFragment = new ProfileFragment();
-            return profileFragment;
-        } else {
-            return null;
-        }
+        if (menuId == R.id.homeFragment) return homeFragment;
+        if (menuId == R.id.discoverFragment) return discoverFragment;
+        if (menuId == R.id.planFragment) return planFragment;
+        if (menuId == R.id.favoritesFragment) return favoritesFragment;
+        if (menuId == R.id.profileFragment) return profileFragment;
+        return null;
     }
 
     private void switchFragment(Fragment target) {
         if (target == null || target == activeFragment) return;
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-        if (!target.isAdded()) {
-            String tag = target.getClass().getSimpleName();
-            transaction.add(R.id.home_nav_host, target, tag);
-        }
-
-        if (activeFragment != null) {
-            transaction.hide(activeFragment);
-        }
-
-        transaction.show(target).commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .hide(activeFragment)
+                .show(target)
+                .commit();
 
         activeFragment = target;
     }
+
+
 
 
 }

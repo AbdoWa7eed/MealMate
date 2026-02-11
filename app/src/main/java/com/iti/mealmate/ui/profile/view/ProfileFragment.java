@@ -61,9 +61,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
                 ServiceLocator.getAuthRepository(),
                 ServiceLocator.getProfileRepository(),
                 ServiceLocator.getPreferencesHelper(),
-                ServiceLocator.getSyncRepository(),
-                ServiceLocator.getAppDatabase()
-        );
+                ServiceLocator.getSyncRepository());
 
         setupClickListeners();
         presenter.onViewCreated();

@@ -1,7 +1,6 @@
 package com.iti.mealmate.data.source.remote.firebase;
 
 import android.net.Uri;
-import android.util.Log;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -108,8 +107,6 @@ public class FirestoreUserHelper {
         CollectionReference ref = getUserDoc(uid).collection(PLANS);
         List<String> ids = plans.stream().map(DayPlan::getDate).collect(Collectors.toList());
         int totalMeals = plans.stream().mapToInt(p -> p.getMeals().size()).sum();
-
-        Log.d("TEXT", "syncPlans:  " + totalMeals);
         return RxTask.firebaseToSingleTask(ref.get())
                 .flatMapCompletable(qs -> {
                     List<Completable> deletes = qs.getDocuments().stream()

@@ -16,6 +16,7 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FavoriteRepositoryImpl implements FavoriteRepository {
 
@@ -23,6 +24,8 @@ public class FavoriteRepositoryImpl implements FavoriteRepository {
     private final MealLocalDataSource mealLocalDataSource;
     private final UserMealSyncDataSource syncDataSource;
     private final AppConnectivityManager connectivityManager;
+
+    private final AtomicBoolean hasFetchedFromFirebase = new AtomicBoolean(false);
 
 
     public FavoriteRepositoryImpl(
@@ -39,18 +42,28 @@ public class FavoriteRepositoryImpl implements FavoriteRepository {
 
     @Override
     public Flowable<List<Meal>> getAllFavorites(String uid) {
-        return getLocalFavorites()
-                .take(1)
-                .flatMap(favorites -> {
-                    if (favorites.isEmpty()) {
-                        return fetchAndCacheRemoteFavorites(uid)
-                                .onErrorResumeNext(throwable -> getLocalFavorites());
-                    } else {
-                        return getLocalFavorites();
+
+        Flowable<List<Meal>> localFavoritesFlowable = getLocalFavorites();
+
+        return localFavoritesFlowable
+                .switchMap(favorites -> {
+                    if (!favorites.isEmpty()) {
+                        hasFetchedFromFirebase.set(true);
+                        return Flowable.just(favorites);
                     }
+
+                    if (!hasFetchedFromFirebase.get()) {
+
+                        return fetchAndCacheRemoteFavorites(uid)
+                                .doOnNext(list -> hasFetchedFromFirebase.set(true))
+                                .onErrorResumeNext(throwable -> localFavoritesFlowable);
+                    }
+
+                    return Flowable.just(favorites);
                 })
                 .onErrorResumeNext(throwable ->
-                        Flowable.error(AppErrorHandler.handle(throwable)));
+                        Flowable.error(AppErrorHandler.handle(throwable))
+                );
     }
 
     @Override
@@ -78,6 +91,11 @@ public class FavoriteRepositoryImpl implements FavoriteRepository {
     public Completable removeFromFavorites(Meal meal) {
         return favoriteLocalDataSource.removeFromFavorites(meal.getId())
                 .onErrorResumeNext(throwable -> Completable.error(AppErrorHandler.handle(throwable)));
+    }
+
+    @Override
+    public void resetFetchFlag() {
+        hasFetchedFromFirebase.set(false);
     }
 
 

@@ -10,6 +10,7 @@ import com.iti.mealmate.data.meal.repo.sync.SyncRepository;
 import com.iti.mealmate.data.profile.repo.ProfileRepository;
 import com.iti.mealmate.data.source.local.db.AppDatabase;
 import com.iti.mealmate.data.source.local.prefs.PreferencesHelper;
+import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.profile.ProfilePresenter;
 import com.iti.mealmate.ui.profile.ProfileView;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -28,7 +29,6 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     private final PreferencesHelper preferencesHelper;
 
     private final SyncRepository syncRepository;
-    private final AppDatabase appDatabase;
     private final CompositeDisposable disposables = new CompositeDisposable();
 
     private UserModel currentUser;
@@ -38,14 +38,12 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     public ProfilePresenterImpl(ProfileView view,
                                 AuthRepository authRepository,
                                 ProfileRepository profileRepository,
-                                PreferencesHelper preferencesHelper, SyncRepository syncRepository,
-                                AppDatabase appDatabase) {
+                                PreferencesHelper preferencesHelper, SyncRepository syncRepository) {
         this.view = view;
         this.authRepository = authRepository;
         this.profileRepository = profileRepository;
         this.preferencesHelper = preferencesHelper;
         this.syncRepository = syncRepository;
-        this.appDatabase = appDatabase;
     }
 
     @Override
@@ -99,14 +97,11 @@ public class ProfilePresenterImpl implements ProfilePresenter {
         view.setLoading(ProfileView.LoadingType.LOGOUT, false);
         preferencesHelper.setUserId(null);
         disposables.add(
-                Completable.fromAction(appDatabase::clearAllTables)
+                Completable.fromAction(ServiceLocator.getAppDatabase()::clearAllTables)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                () -> {
-                                    view.navigateToLogin();
-                                    appDatabase.clearAllTables();
-                                },
+                                view::navigateToLogin,
                                 throwable -> view.showErrorMessage(throwable.getMessage())
                         )
         );
@@ -207,5 +202,6 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     public void onDestroy() {
         currentUser = null;
         disposables.clear();
+        ServiceLocator.reset();
     }
 }
