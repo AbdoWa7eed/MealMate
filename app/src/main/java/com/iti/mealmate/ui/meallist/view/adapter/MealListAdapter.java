@@ -48,7 +48,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
 
         holder.binding.textMealName.setText(meal.getName());
 
-        ImageLoader.loadWithMealPlaceHolder(holder.itemView.getContext(), meal.getThumbnailUrl(), holder.binding.imageMealThumbnail);
+        ImageLoader.loadMealImage(holder.itemView.getContext(), meal.getThumbnailUrl(), holder.binding.imageMealThumbnail);
 
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {

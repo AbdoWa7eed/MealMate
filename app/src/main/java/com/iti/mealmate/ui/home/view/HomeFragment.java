@@ -72,7 +72,7 @@ public class HomeFragment extends Fragment implements HomeView {
     @Override
     public void showMealOfTheDay(Meal meal) {
         if (meal != null) {
-            ImageLoader.loadWithMealPlaceHolder(requireContext(), meal.getThumbnailUrl(), binding.imageMealOfDay);
+            ImageLoader.loadMealImage(requireContext(), meal.getThumbnailUrl(), binding.imageMealOfDay);
             binding.textMealOfDayName.setText(meal.getName());
             binding.textMealOfDayCountry.setText(meal.getArea());
             uiStateHandler.showContent();

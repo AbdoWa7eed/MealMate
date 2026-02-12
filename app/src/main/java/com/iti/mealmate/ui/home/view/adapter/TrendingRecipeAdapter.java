@@ -42,7 +42,7 @@ public class TrendingRecipeAdapter extends RecyclerView.Adapter<TrendingRecipeAd
         holder.binding.textTrendingCategory.setText(recipe.getCategory());
         holder.binding.textTrendingCountry.setText(recipe.getArea());
 
-        ImageLoader.loadWithMealPlaceHolder(holder.itemView.getContext(), recipe.getThumbnailUrl(), holder.binding.imageTrendingThumbnail);
+        ImageLoader.loadMealImage(holder.itemView.getContext(), recipe.getThumbnailUrl(), holder.binding.imageTrendingThumbnail);
 
         holder.binding.buttonFavImage.setImageResource(
                 recipe.isFavorite() ? R.drawable.ic_fav_filled_primary : R.drawable.ic_fav_filled

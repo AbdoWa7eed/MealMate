@@ -129,7 +129,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
     @Override
     public void showMealImage(String url) {
-        ImageLoader.loadWithMealPlaceHolder(this, url, binding.ivMealImage);
+        ImageLoader.loadMealImage(this, url, binding.ivMealImage);
     }
 
     @Override

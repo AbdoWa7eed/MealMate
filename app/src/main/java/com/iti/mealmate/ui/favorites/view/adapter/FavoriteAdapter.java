@@ -48,7 +48,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
         holder.binding.tvFavoriteCategory.setText(meal.getCategory());
         holder.binding.tvFavoriteCountry.setText(meal.getArea());
 
-        ImageLoader.loadWithMealPlaceHolder(holder.itemView.getContext(), meal.getThumbnailUrl(), holder.binding.imageFavoriteMeal);
+        ImageLoader.loadMealImage(holder.itemView.getContext(), meal.getThumbnailUrl(), holder.binding.imageFavoriteMeal);
 
         holder.binding.imageFavStatus.setImageResource(R.drawable.ic_fav_filled_primary);
 

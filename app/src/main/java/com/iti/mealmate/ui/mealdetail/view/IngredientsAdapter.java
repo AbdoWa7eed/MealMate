@@ -52,7 +52,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
             binding.tvIngredientName.setText(ingredient.getName());
             binding.tvIngredientMeasure.setText(ingredient.getMeasure());
             
-            ImageLoader.loadWithMealPlaceHolder(itemView.getContext(), ingredient.getImageUrl(), binding.ivIngredientImage);
+            ImageLoader.loadMealImage(itemView.getContext(), ingredient.getImageUrl(), binding.ivIngredientImage);
         }
     }
 }

@@ -15,7 +15,7 @@ public class ImageLoader {
     private static final int DEFAULT_PLACEHOLDER = R.drawable.meal_image_placeholder;
     private ImageLoader() {}
 
-    public static void loadWithMealPlaceHolder(Context context, String url, ImageView imageView) {
+    public static void loadMealImage(Context context, String url, ImageView imageView) {
         loadWithPlaceholder(context, url, imageView, DEFAULT_PLACEHOLDER, DEFAULT_PLACEHOLDER);
     }
 
@@ -24,7 +24,6 @@ public class ImageLoader {
         if (isValid(context, url)) {
             Glide.with(context)
                     .load(url)
-                    .placeholder(placeholder)
                     .error(error)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(imageView);
@@ -38,7 +37,6 @@ public class ImageLoader {
             Glide.with(context)
                     .load(uri)
                     .circleCrop()
-                    .placeholder(error)
                     .error(error)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(imageView);

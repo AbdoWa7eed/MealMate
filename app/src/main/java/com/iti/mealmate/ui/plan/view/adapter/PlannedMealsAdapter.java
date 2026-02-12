@@ -57,7 +57,7 @@ public class PlannedMealsAdapter
         holder.binding.textMealName.setText(meal.getName());
         holder.binding.textMealCategory.setText(meal.getCategory());
         holder.binding.textMealCountry.setText(meal.getArea());
-        ImageLoader.loadWithMealPlaceHolder(holder.itemView.getContext(), meal.getThumbnailUrl(), holder.binding.imageMealThumbnail);
+        ImageLoader.loadMealImage(holder.itemView.getContext(), meal.getThumbnailUrl(), holder.binding.imageMealThumbnail);
 
         holder.binding.buttonRemoveMeal.setOnClickListener(v -> {
             if (removeListener != null) {

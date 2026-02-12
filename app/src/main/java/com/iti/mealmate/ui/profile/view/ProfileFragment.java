@@ -115,7 +115,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
     private void loadProfileImage(String imageUrl) {
         if (imageUrl != null && !imageUrl.isEmpty()) {
-            ImageLoader.loadWithMealPlaceHolder(requireContext(), imageUrl, binding.imageProfile);
+            ImageLoader.loadMealImage(requireContext(), imageUrl, binding.imageProfile);
         } else {
             binding.imageProfile.setImageResource(R.drawable.user_image_placeholder);
         }

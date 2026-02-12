@@ -48,7 +48,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
             holder.binding.textDiscoverTitle.setText(item.getName());
 
             if (item.getImageUrl() != null && !item.getImageUrl().isEmpty()) {
-                ImageLoader.loadWithMealPlaceHolder(holder.binding.getRoot().getContext(), item.getImageUrl(), holder.binding.imageDiscoverThumbnail);
+                ImageLoader.loadMealImage(holder.binding.getRoot().getContext(), item.getImageUrl(), holder.binding.imageDiscoverThumbnail);
             }
 
             holder.binding.getRoot().setOnClickListener(v -> {

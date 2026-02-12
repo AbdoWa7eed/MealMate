@@ -115,23 +115,9 @@
             android:textColor="@color/colorTextPrimary"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/button_categories_see_all"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/card_meal_of_day" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_categories_see_all"
-            style="@style/CustomTextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="0dp"
-            android:padding="4dp"
-            android:text="@string/see_all"
-            android:textAlignment="center"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/text_categories_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/text_categories_title" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_categories"
