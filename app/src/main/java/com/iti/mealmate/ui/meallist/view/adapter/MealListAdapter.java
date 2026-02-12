@@ -1,0 +1,73 @@
+package com.iti.mealmate.ui.meallist.view.adapter;
+
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.iti.mealmate.data.meal.model.entity.MealLight;
+import com.iti.mealmate.ui.common.ImageLoader;
+import com.iti.mealmate.databinding.ItemMealListBinding;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealViewHolder> {
+
+    public interface OnMealClickListener {
+        void onMealClick(MealLight meal);
+    }
+
+    private final List<MealLight> meals = new ArrayList<>();
+    private OnMealClickListener listener;
+
+    public void setOnMealClickListener(OnMealClickListener listener) {
+        this.listener = listener;
+    }
+
+    public void submitList(List<MealLight> newMeals) {
+        meals.clear();
+        if (newMeals != null) {
+            meals.addAll(newMeals);
+        }
+        notifyDataSetChanged();
+    }
+
+    @NonNull
+    @Override
+    public MealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        ItemMealListBinding binding = ItemMealListBinding.inflate(
+                LayoutInflater.from(parent.getContext()), parent, false);
+        return new MealViewHolder(binding);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull MealViewHolder holder, int position) {
+        MealLight meal = meals.get(position);
+
+        holder.binding.textMealName.setText(meal.getName());
+
+        ImageLoader.loadMealImage(holder.itemView.getContext(), meal.getThumbnailUrl(), holder.binding.imageMealThumbnail);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onMealClick(meal);
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return meals.size();
+    }
+
+    static class MealViewHolder extends RecyclerView.ViewHolder {
+        final ItemMealListBinding binding;
+
+        MealViewHolder(@NonNull ItemMealListBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+    }
+}

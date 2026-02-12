@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    tools:context=".ui.mealdetail.view.MealDetailsActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/content_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_meal_image"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:contentDescription="@string/cd_meal_image"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_gradient_overlay"
+                app:layout_constraintBottom_toBottomOf="@id/iv_meal_image"
+                app:layout_constraintTop_toTopOf="@id/iv_meal_image"
+                app:layout_constraintVertical_bias="0.0"
+                tools:layout_editor_absoluteX="0dp" />
+
+            <LinearLayout
+                android:id="@+id/toolbar_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="48dp"
+                android:paddingBottom="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageButton
+                    android:id="@+id/btn_back"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_glass_circle"
+                    android:contentDescription="@string/cd_back_button"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_arrow_back"
+                    android:theme="@style/Theme.Material3.DayNight.NoActionBar"
+                    app:tint="@android:color/white" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/btn_favorite"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_glass_circle"
+                    android:contentDescription="@string/cd_favorite_button"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_fav_filled" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/video_button_container"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="56dp"
+                app:layout_constraintBottom_toBottomOf="@id/iv_meal_image"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <ImageButton
+                    android:id="@+id/btn_video"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_glass_circle"
+                    android:contentDescription="@string/cd_play_video"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_play_circle_filled"
+                    app:tint="@android:color/white" />
+
+                <ProgressBar
+                    android:id="@+id/progress_video"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:indeterminateTint="@android:color/white"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_country_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:background="@drawable/bg_badge"
+                android:fontFamily="@font/work_sans"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="2dp"
+                android:text="Italian"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/video_button_container"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/video_button_container" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/content_sheet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-40dp"
+                android:background="@drawable/bg_rounded_top_sheet"
+                android:paddingHorizontal="24dp"
+                android:paddingTop="32dp"
+                android:paddingBottom="30dp"
+                app:layout_constraintTop_toBottomOf="@id/iv_meal_image">
+
+                <TextView
+                    android:id="@+id/tv_meal_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/work_sans"
+                    android:text="@string/meal_name_placeholder"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/divider1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@color/colorSkeleton"
+                    app:layout_constraintTop_toBottomOf="@id/tv_meal_name" />
+
+                <TextView
+                    android:id="@+id/tv_ingredients_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="@font/work_sans"
+                    android:text="@string/meal_details_ingredients"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider1" />
+
+                <TextView
+                    android:id="@+id/tv_items_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_capsule_gray"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="4dp"
+                    android:textColor="@color/colorTextSecondary"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_ingredients_title"
+                    app:layout_constraintStart_toEndOf="@id/tv_ingredients_title"
+                    app:layout_constraintTop_toTopOf="@id/tv_ingredients_title"
+                    tools:text="4 items" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_ingredients"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/tv_ingredients_title"
+                    app:spanCount="2"
+                    tools:itemCount="4"
+                    tools:listitem="@layout/item_ingredient" />
+
+                <View
+                    android:id="@+id/divider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@color/colorSkeleton"
+                    app:layout_constraintTop_toBottomOf="@id/rv_ingredients" />
+
+                <TextView
+                    android:id="@+id/tv_preparation_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="@font/work_sans"
+                    android:text="@string/meal_details_preparation"
+                    android:textColor="@color/colorTextDark"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider2" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_preparation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/tv_preparation_title"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_preparation_step" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    app:layout_constraintTop_toBottomOf="@id/rv_preparation" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_gradient_white_fade"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_add_plan"
+            style="@style/CustomPrimaryButton"
+            android:layout_width="match_parent"
+            android:fontFamily="@font/work_sans"
+            android:text="@string/meal_details_add_to_plan"
+            app:icon="@drawable/ic_plan"
+            app:iconGravity="textStart"
+            app:iconTint="@android:color/white" />
+    </LinearLayout>
+
+    <include
+        android:id="@+id/shimmer_overlay"
+        layout="@layout/layout_meal_details_shimmer_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/error_overlay"
+        layout="@layout/layout_error_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/video_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="20dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

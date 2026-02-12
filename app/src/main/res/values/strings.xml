@@ -2,4 +2,167 @@
     <string name="app_name">MealMate</string>
     <string name="app_title">MealMate</string>
     <string name="app_slogan">Plan smarter. Eat better.</string>
+    <string name="next">Next</string>
+    <string name="get_started">Get Started</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="skip">Skip</string>
+
+    <string name="onboarding_title_1">Thousands of Recipes Await</string>
+    <string name="onboarding_description_1">Search by ingredient, country, or category to find the perfect meal for any occasion.</string>
+
+    <string name="onboarding_title_2">Weekly Meal Planning Made Easy</string>
+    <string name="onboarding_description_2">Say goodbye to meal planning stress. Organize your entire week in minutes.</string>
+
+    <string name="onboarding_title_3">Your Recipes, Everywhere</string>
+    <string name="onboarding_description_3">Bookmark favorites and sync across devices. Cook offline whenever you need.</string>
+    <string name="onboarding_image_description">Onboarding Image</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="login_subtitle">Let\'s get cooking again</string>
+    <string name="email_address_HINT">Email Address</string>
+    <string name="password">Password</string>
+    <string name="password_hint">Enter your password</string>
+    <string name="email_hint">name@example.com</string>
+    <string name="email">Email</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="login">Login</string>
+    <string name="or">OR</string>
+    <string name="google">Google</string>
+    <string name="facebook">Facebook</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="sign_up">Sign up</string>
+    <string name="continue_as_guest">Continue as guest</string>
+
+    <string name="register_subtitle">Create your account to start planning delicious meals.</string>
+    <string name="full_name">Full Name</string>
+    <string name="full_name_hint">Enter your full name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="confirm_password_hint">Confirm your password</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="sign_up_title">Join MealMate</string>
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="previous">Previous</string>
+
+    <string name="lorem_ipsum">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
+        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
+        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
+        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
+        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
+        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
+        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
+        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
+        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
+        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
+        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
+        bibendum, vel congue leo egestas.\n\n
+        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
+        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
+        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
+        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
+        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
+        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
+        est.\n\n
+        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
+        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
+        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
+        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
+        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
+        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
+        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
+        convallis.\n\n
+        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
+        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
+        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
+        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
+        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
+        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
+        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
+    </string>
+    <string name="home">Home</string>
+    <string name="discover">Discover</string>
+    <string name="plan">Plan</string>
+    <string name="favorites">Favorites</string>
+    <string name="profile">Profile</string>
+    <string name="trending_now">Trending Now</string>
+    <string name="categories">Categories</string>
+    <string name="recipe_thumbnail">Recipe thumbnail</string>
+    <string name="recipe_title">Avocado Salad Bowl</string>
+    <string name="recipe_category">Seafood</string>
+    <string name="recipe_country">China</string>
+    <string name="see_all">See all</string>
+
+    <string name="facebook_app_id">1227026426198292</string>
+    <string name="fb_login_protocol_scheme">fb1227026426198292</string>
+    <string name="facebook_client_token">4669bac4375e8a6f3c60dc7e5fd67dba</string>
+
+    <string name="error_title_default">Something went wrong</string>
+    <string name="error_subtitle_default">We couldn\'t load the content. Please try again.</string>
+    <string name="retry_button">Retry</string>
+    <string name="error_network_title">No Internet Connection</string>
+    <string name="error_network_subtitle">Please check your connection and try again.</string>
+    <string name="error_image_description">Error illustration</string>
+
+    <string name="discover_search_hint">Search for recipes...</string>
+    <string name="discover_chip_category">Category</string>
+    <string name="discover_chip_country">Country</string>
+    <string name="discover_chip_ingredients">Ingredients</string>
+    <string name="discover_empty_state">No results found. Try a different filter or search term.</string>
+    <string name="no_favorites_message">You haven\'t added any favorites yet. Start exploring!</string>
+    <string name="search_result">Search Result</string>
+
+    <string name="meal_details_ingredients">Ingredients</string>
+    <string name="meal_details_preparation">Preparation</string>
+    <string name="meal_details_add_to_plan">ADD TO WEEKLY PLAN</string>
+    <string name="meal_details_items_count">%d items</string>
+    <string name="meal_name_placeholder">Creamy Spaghetti Carbonara</string>
+
+    <string name="no_plans_message">You haven\'t added any plans yet.Start exploring!</string>
+
+
+    <string name="cd_meal_image">Meal Image</string>
+    <string name="cd_back_button">Navigate Back</string>
+    <string name="cd_favorite_button">Add to Favorites</string>
+    <string name="cd_play_video">Play Recipe Video</string>
+    <string name="cd_country_icon">Country Icon</string>
+    <string name="cd_ingredient_image">Ingredient Image</string>
+
+    <string name="this_week">This Week</string>
+    <string name="next_week">Next Week</string>
+    <string name="today_caps">TODAY</string>
+    <string name="confirmation_title">Confirmation</string>
+    <string name="confirmation_message">Are you sure you want to proceed?</string>
+    <string name="sure">Sure</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="placeholder_date_range">Oct 23 - Oct 29</string>
+    <string name="placeholder_day">Monday</string>
+
+    <string name="remove_plan_title">Remove Meal</string>
+    <string name="remove_plan_message">Are you sure you want to remove this meal from your plan?</string>
+
+    <string name="remove_favorite_title">Remove Favorite</string>
+    <string name="remove_favorite_message">Are you sure you want to remove this meal from your favorites?</string>
+
+    <string name="profile_image">Profile Image</string>
+    <string name="edit_profile_image">Edit Profile Image</string>
+    <string name="saved_plans">Saved Plans</string>
+    <string name="favorite_meals">Favorite Meals</string>
+    <string name="sync_backup">Sync / Backup</string>
+    <string name="sync_icon">Sync Icon</string>
+    <string name="logout_icon">Logout Icon</string>
+    <string name="logout">Logout</string>
+    <string name="navigate">Navigate</string>
+    <string name="last_synced">Last synced: %s</string>
+    <string name="never_synced">Never synced</string>
+    <string name="syncing">Syncing…</string>
+    <string name="version_format">Version %s (Build %d)</string>
+
+    <string name="unsynced_data_title">Data May Be Lost</string>
+    <string name="unsynced_data_message"> If you log out now, you plans and favorites may be lost. Are you sure you want to proceed?</string>
+
+    <string name="update">Update</string>
+    <string name="guest_title">Exclusive Features Await!</string>
+    <string name="guest_subtitle">Please log in to sync your data, save your favorite meals, and plan your weekly menu.</string>
+    <string name="login_signup">Log In / Sign Up</string>
 </resources>

@@ -1,0 +1,6 @@
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/logo_circled"
+    android:insetLeft="96dp"
+    android:insetRight="96dp"
+    android:insetTop="96dp"
+    android:insetBottom="96dp" />

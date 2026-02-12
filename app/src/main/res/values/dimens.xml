@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="snackbar_margin_bottom_home">84dp</dimen>
+    <dimen name="snackbar_margin_horizontal">16dp</dimen>
+    <dimen name="snackbar_margin_bottom_auth">16dp</dimen>
+
+
+</resources>

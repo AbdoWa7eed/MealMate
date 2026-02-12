@@ -1,0 +1,101 @@
+package com.iti.mealmate.core.util;
+
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
+public final class DateUtils {
+
+    private DateUtils() {
+    }
+
+
+    public static String  todayString() {
+        return LocalDate.now().toString();
+
+    }
+    public static long todayAtStartOfDay() {
+        return LocalDate.now()
+                .atStartOfDay(ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli();
+
+    }
+
+    public static long dateToTimeStamp(LocalDate date) {
+        return date.atStartOfDay(ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli();
+
+    }
+
+    public static LocalDate timestampToLocalDate(long timestamp) {
+        return Instant.ofEpochMilli(timestamp)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
+
+
+    public static LocalDate startOfCurrentWeek() {
+        LocalDate today = LocalDate.now();
+        LocalDate saturday = today.with(DayOfWeek.SATURDAY);
+
+        if (today.getDayOfWeek().getValue() < DayOfWeek.SATURDAY.getValue()) {
+            saturday = saturday.minusWeeks(1);
+        }
+
+        return saturday;
+    }
+
+    public static LocalDate endOfNextWeek() {
+        return startOfCurrentWeek().plusDays(13);
+    }
+
+    public static long endOfNextWeekMillis() {
+
+        return endOfNextWeek()
+                .atStartOfDay(ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli();
+    }
+
+
+    public static boolean isCurrentWeek(LocalDate date) {
+        LocalDate startOfWeek = LocalDate.now();
+        while (startOfWeek.getDayOfWeek() != DayOfWeek.SATURDAY) {
+            startOfWeek = startOfWeek.minusDays(1);
+        }
+        LocalDate endOfWeek = startOfWeek.plusDays(6);
+
+        return !date.isBefore(startOfWeek) && !date.isAfter(endOfWeek);
+    }
+
+    public static String getFormattedDateRange(LocalDate startDate, LocalDate endDate) {
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MMM dd", Locale.getDefault());
+        return startDate.format(dateFormat) + " - " + endDate.format(dateFormat);
+    }
+
+    public static String getTwoWeekDateRange() {
+        LocalDate today = LocalDate.now();
+        LocalDate startOfCurrentWeek = today;
+        while (startOfCurrentWeek.getDayOfWeek() != DayOfWeek.SATURDAY) {
+            startOfCurrentWeek = startOfCurrentWeek.minusDays(1);
+        }
+        LocalDate endOfNextWeek = startOfCurrentWeek.plusDays(13);
+
+        return getFormattedDateRange(startOfCurrentWeek, endOfNextWeek);
+    }
+
+    public static String formatSyncDate(long timestamp) {
+        if (timestamp <= 0) return "Never";
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm", Locale.getDefault());
+        return Instant.ofEpochMilli(timestamp)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime()
+                .format(dateFormat);
+    }
+
+}
