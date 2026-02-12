@@ -18,12 +18,12 @@ import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.auth.login.LoginPresenter;
 import com.iti.mealmate.ui.auth.login.LoginView;
 import com.iti.mealmate.ui.auth.login.presenter.LoginPresenterImpl;
+import com.iti.mealmate.ui.common.SnackBarUtils;
 import com.iti.mealmate.ui.home.view.HomeActivity;
 import com.iti.mealmate.ui.common.ActivityExtensions;
 import com.iti.mealmate.core.util.FacebookLoginProvider;
 
 import java.util.Objects;
-
 
 
 public class LoginFragment extends Fragment implements LoginView, FacebookLoginProvider {
@@ -101,15 +101,12 @@ public class LoginFragment extends Fragment implements LoginView, FacebookLoginP
 
     @Override
     public void showErrorMessage(String message) {
-        ActivityExtensions.showErrorSnackBar(requireActivity(), message);
+        SnackBarUtils.showAuthErrorSnackBar(requireActivity(), message);
     }
 
     @Override
     public void noInternetError() {
-        ActivityExtensions.showErrorSnackBar(
-                requireActivity(),
-                getString(R.string.error_network_subtitle)
-        );
+        SnackBarUtils.showAuthErrorSnackBar(requireActivity(), getString(R.string.error_network_subtitle));
     }
 
     @Override

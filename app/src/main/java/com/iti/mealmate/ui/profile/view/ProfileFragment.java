@@ -21,6 +21,7 @@ import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.auth.AuthenticationActivity;
 import com.iti.mealmate.ui.common.ActivityExtensions;
 import com.iti.mealmate.ui.common.DialogUtils;
+import com.iti.mealmate.ui.common.SnackBarUtils;
 import com.iti.mealmate.ui.profile.ProfileView;
 import com.iti.mealmate.ui.profile.presenter.ProfilePresenterImpl;
 
@@ -163,7 +164,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
     @Override
     public void showErrorMessage(String message) {
-        ActivityExtensions.showErrorSnackBar(requireActivity(), message);
+        SnackBarUtils.showHomeErrorSnackBar(requireActivity(), message);
     }
 
     @Override
@@ -173,7 +174,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
     @Override
     public void showSuccessMessage(String message) {
-        ActivityExtensions.showSuccessSnackBar(requireActivity(), message);
+        SnackBarUtils.showHomeSuccessSnackBar(requireActivity(), message);
     }
 
     @Override

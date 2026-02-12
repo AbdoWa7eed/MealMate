@@ -18,6 +18,7 @@ import com.iti.mealmate.ui.auth.register.RegistrationPresenter;
 import com.iti.mealmate.ui.auth.register.RegistrationView;
 import com.iti.mealmate.ui.auth.register.presenter.RegistrationPresenterImpl;
 import com.iti.mealmate.ui.common.ActivityExtensions;
+import com.iti.mealmate.ui.common.SnackBarUtils;
 import com.iti.mealmate.ui.home.view.HomeActivity;
 
 import java.util.Objects;
@@ -60,7 +61,6 @@ public class RegistrationFragment extends Fragment implements RegistrationView {
 
     @Override
     public void navigateToHome(UserModel user) {
-        ActivityExtensions.showSuccessSnackBar(requireActivity(), "Welcome " + user.getName());
         ActivityExtensions.navigateAndFinish(requireActivity(), HomeActivity.class);
     }
 
@@ -100,13 +100,13 @@ public class RegistrationFragment extends Fragment implements RegistrationView {
     }
 
     @Override
-    public void showPageError(String message) {
-        ActivityExtensions.showErrorSnackBar(requireActivity(), message);
+    public void showErrorMessage(String message) {
+        SnackBarUtils.showAuthErrorSnackBar(requireActivity(), message);
     }
 
     @Override
     public void noInternetError() {
-        ActivityExtensions.showErrorSnackBar(
+        SnackBarUtils.showAuthErrorSnackBar(
                 requireActivity(),
                 getString(R.string.error_network_subtitle)
         );

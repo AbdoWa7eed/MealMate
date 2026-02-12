@@ -134,7 +134,7 @@ public class LoginPresenterImpl implements LoginPresenter {
                     error != null && error.getMessage() != null && !error.getMessage().isEmpty()
                             ? error.getMessage()
                             : context.getString(R.string.error_subtitle_default);
-            view.showPageError(message);
+            view.showErrorMessage(message);
         }
     }
 

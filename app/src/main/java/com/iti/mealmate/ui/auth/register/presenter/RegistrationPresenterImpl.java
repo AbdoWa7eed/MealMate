@@ -1,5 +1,6 @@
 package com.iti.mealmate.ui.auth.register.presenter;
 
+import android.content.Context;
 import android.util.Patterns;
 
 import com.iti.mealmate.R;
@@ -59,15 +60,7 @@ public class RegistrationPresenterImpl implements RegistrationPresenter {
         if (throwable instanceof NoConnectivityException) {
             view.noInternetError();
         } else {
-            String message =
-                    throwable != null && throwable.getMessage() != null
-                            && !throwable.getMessage().isEmpty()
-                            ? throwable.getMessage()
-                            : view instanceof android.content.Context
-                            ? ((android.content.Context) view)
-                            .getString(R.string.error_subtitle_default)
-                            : "Something went wrong";
-            view.showPageError(message);
+            view.showPageError(throwable.getMessage());
         }
     }
     private boolean validateAllFields(String name, String email, String password, String confirmPassword) {

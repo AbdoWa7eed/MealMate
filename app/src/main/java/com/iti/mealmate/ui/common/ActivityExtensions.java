@@ -1,21 +1,16 @@
 package com.iti.mealmate.ui.common;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
-import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
-import com.google.android.material.snackbar.Snackbar;
 import com.iti.mealmate.R;
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -38,10 +33,6 @@ public class ActivityExtensions {
 
     public static void setStatusBarWithDarkIcons(Activity activity) {
         ActivityExtensions.setStatusBarColor(activity, R.color.colorBackground, true);
-    }
-
-    public static void setStatusBarColor(Activity activity) {
-        setStatusBarColor(activity, R.color.colorBackground, false);
     }
 
     public static void setStatusBarTransparent(Activity activity) {
@@ -87,24 +78,6 @@ public class ActivityExtensions {
         navigateToActivity(activity, target, null);
     }
 
-    public static void showToast(Context activity, String msg) {
-        Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
-    }
-
-    public static void enableBackButton(AppCompatActivity activity, MaterialToolbar toolbar) {
-        activity.setSupportActionBar(toolbar);
-        if (activity.getSupportActionBar() != null) {
-            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-        toolbar.setNavigationIconTint(
-                ContextCompat.getColor(activity, android.R.color.black)
-        );
-        toolbar.setNavigationOnClickListener(v ->
-                activity.getOnBackPressedDispatcher().onBackPressed()
-        );
-    }
-
     public static void enableBackButtonWithTitle(AppCompatActivity activity, MaterialToolbar toolbar, String title) {
         activity.setSupportActionBar(toolbar);
         if (activity.getSupportActionBar() != null) {
@@ -120,51 +93,6 @@ public class ActivityExtensions {
         );
     }
 
-    public static void setupToolbar(AppCompatActivity activity, int id) {
-        MaterialToolbar toolbar = activity.findViewById(id);
-        ActivityExtensions.enableBackButton(activity, toolbar);
-        ActivityExtensions.setStatusBarColor(activity);
-    }
-
-    public static void showErrorSnackBar(Activity activity, String msg) {
-        showSnackBar(activity, msg, R.color.colorError);
-    }
-
-    public static void showSuccessSnackBar(Activity activity, String msg) {
-        showSnackBar(activity, msg, R.color.colorSuccess);
-    }
-
-    private static void showSnackBar(
-            Activity activity,
-            String msg,
-            @ColorRes int backgroundColorRes
-    ) {
-
-        Snackbar snackbar = Snackbar.make(
-                activity.findViewById(android.R.id.content),
-                msg,
-                Snackbar.LENGTH_SHORT
-        );
-
-        snackbar.setBackgroundTint(activity.getColor(backgroundColorRes));
-        snackbar.setTextColor(activity.getColor(R.color.colorOnPrimary));
-
-        View snackbarView = snackbar.getView();
-
-        int marginBottom = activity.getResources()
-                .getDimensionPixelSize(R.dimen.snackbar_margin_bottom);
-
-        int marginHorizontal = activity.getResources()
-                .getDimensionPixelSize(R.dimen.snackbar_margin_horizontal);
-
-        ViewGroup.MarginLayoutParams params =
-                (ViewGroup.MarginLayoutParams) snackbarView.getLayoutParams();
-
-        params.setMargins(marginHorizontal, 0, marginHorizontal, marginBottom);
-        snackbarView.setLayoutParams(params);
-
-        snackbar.show();
-    }
 
 
     public static void navigateToFragment(AppCompatActivity activity, int containerId, Fragment fragment, String tag) {

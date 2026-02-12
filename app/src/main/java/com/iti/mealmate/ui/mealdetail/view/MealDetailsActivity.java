@@ -19,6 +19,7 @@ import com.iti.mealmate.data.meal.model.entity.MealIngredient;
 import com.iti.mealmate.databinding.ActivityMealDetailsBinding;
 import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.common.ActivityExtensions;
+import com.iti.mealmate.ui.common.SnackBarUtils;
 import com.iti.mealmate.ui.common.UiUtils;
 import com.iti.mealmate.ui.mealdetail.MealDetailsPresenter;
 import com.iti.mealmate.ui.mealdetail.MealDetailsView;
@@ -161,7 +162,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
     @Override
     public void showSuccessMessage(String message) {
-        ActivityExtensions.showSuccessSnackBar(this, message);
+        SnackBarUtils.showHomeSuccessSnackBar(this, message);
     }
 
     @Override
@@ -181,7 +182,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
     @Override
     public void showErrorMessage(String message) {
-        ActivityExtensions.showErrorSnackBar(this, message);
+        SnackBarUtils.showHomeErrorSnackBar(this, message);
     }
 
     @Override

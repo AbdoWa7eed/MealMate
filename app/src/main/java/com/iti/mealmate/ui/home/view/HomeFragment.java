@@ -14,6 +14,7 @@ import com.iti.mealmate.ui.common.ImageLoader;
 import com.iti.mealmate.databinding.FragmentHomeBinding;
 import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.common.ActivityExtensions;
+import com.iti.mealmate.ui.common.SnackBarUtils;
 import com.iti.mealmate.ui.home.HomePresenter;
 import com.iti.mealmate.ui.home.HomeView;
 import com.iti.mealmate.ui.home.presenter.HomePresenterImpl;
@@ -91,7 +92,7 @@ public class HomeFragment extends Fragment implements HomeView {
 
     @Override
     public void showSuccessMessage(String message) {
-        ActivityExtensions.showSuccessSnackBar(requireActivity(), message);
+        SnackBarUtils.showHomeSuccessSnackBar(requireActivity(), message);
     }
 
     private void navigateToMealDetails(Meal meal) {
@@ -122,7 +123,7 @@ public class HomeFragment extends Fragment implements HomeView {
 
     @Override
     public void showErrorMessage(String message) {
-        ActivityExtensions.showErrorSnackBar(requireActivity(), message);
+        SnackBarUtils.showHomeErrorSnackBar(requireActivity(), message);
     }
 
 

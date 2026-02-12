@@ -16,6 +16,7 @@ import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.common.ActivityExtensions;
 import com.iti.mealmate.ui.common.DialogUtils;
 import com.iti.mealmate.ui.common.ErrorOverlayHelper;
+import com.iti.mealmate.ui.common.SnackBarUtils;
 import com.iti.mealmate.ui.favorites.FavoritePresenter;
 import com.iti.mealmate.ui.favorites.FavoriteView;
 import com.iti.mealmate.ui.favorites.presenter.FavoritePresenterImpl;
@@ -97,17 +98,17 @@ public class FavoritesFragment extends Fragment implements FavoriteView {
 
     @Override
     public void showErrorMessage(String message) {
-        ActivityExtensions.showErrorSnackBar(requireActivity(), message);
+        SnackBarUtils.showHomeErrorSnackBar(requireActivity(), message);
     }
 
     @Override
     public void noInternetError() {
-        ActivityExtensions.showErrorSnackBar(requireActivity(), getString(R.string.error_network_subtitle));
+        SnackBarUtils.showHomeErrorSnackBar(requireActivity(), getString(R.string.error_network_subtitle));
     }
 
     @Override
     public void showSuccessMessage(String message) {
-        ActivityExtensions.showSuccessSnackBar(requireActivity(), message);
+        SnackBarUtils.showHomeSuccessSnackBar(requireActivity(), message);
     }
 
     @Override

@@ -147,7 +147,7 @@
     <string name="profile_image">Profile Image</string>
     <string name="edit_profile_image">Edit Profile Image</string>
     <string name="saved_plans">Saved Plans</string>
-    <string name="favorite_plans">Favorite Plans</string>
+    <string name="favorite_meals">Favorite Meals</string>
     <string name="sync_backup">Sync / Backup</string>
     <string name="sync_icon">Sync Icon</string>
     <string name="logout_icon">Logout Icon</string>

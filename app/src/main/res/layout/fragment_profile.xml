@@ -184,7 +184,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="@string/favorite_plans"
+                            android:text="@string/favorite_meals"
                             android:textColor="@color/colorTextSecondary"
                             android:textSize="12sp" />
 

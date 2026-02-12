@@ -20,6 +20,7 @@ import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.common.ActivityExtensions;
 import com.iti.mealmate.ui.common.DialogUtils;
 import com.iti.mealmate.ui.common.ErrorOverlayHelper;
+import com.iti.mealmate.ui.common.SnackBarUtils;
 import com.iti.mealmate.ui.mealdetail.view.MealDetailsActivity;
 import com.iti.mealmate.ui.plan.PlanPresenter;
 import com.iti.mealmate.ui.plan.PlanView;
@@ -127,12 +128,12 @@ public class PlanFragment extends Fragment implements PlanView {
 
     @Override
     public void showErrorMessage(String message) {
-        ActivityExtensions.showErrorSnackBar(requireActivity(), message);
+        SnackBarUtils.showHomeErrorSnackBar(requireActivity(), message);
     }
 
     @Override
     public void showSuccessMessage(String message) {
-        ActivityExtensions.showSuccessSnackBar(requireActivity(), message);
+        SnackBarUtils.showHomeSuccessSnackBar(requireActivity(), message);
     }
 
     @Override
