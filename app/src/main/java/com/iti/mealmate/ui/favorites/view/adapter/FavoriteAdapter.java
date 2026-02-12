@@ -6,8 +6,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.iti.mealmate.R;
+import com.iti.mealmate.ui.common.ImageLoader;
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.databinding.ItemFavoriteMealBinding;
 
@@ -48,11 +48,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
         holder.binding.tvFavoriteCategory.setText(meal.getCategory());
         holder.binding.tvFavoriteCountry.setText(meal.getArea());
 
-        Glide.with(holder.itemView.getContext())
-                .load(meal.getThumbnailUrl())
-                .placeholder(R.color.colorSkeleton)
-                .error(R.drawable.error_image)
-                .into(holder.binding.imageFavoriteMeal);
+        ImageLoader.loadWithMealPlaceHolder(holder.itemView.getContext(), meal.getThumbnailUrl(), holder.binding.imageFavoriteMeal);
 
         holder.binding.imageFavStatus.setImageResource(R.drawable.ic_fav_filled_primary);
 

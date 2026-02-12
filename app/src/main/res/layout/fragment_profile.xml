@@ -38,7 +38,7 @@
                     app:shapeAppearanceOverlay="@style/CircleImageView"
                     app:strokeColor="@color/colorSkeleton"
                     app:strokeWidth="2dp"
-                    tools:src="@drawable/onboarding_image_1" />
+                    tools:src="@drawable/user_image_placeholder" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/btn_edit_profile_image"

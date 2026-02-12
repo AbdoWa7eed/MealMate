@@ -34,7 +34,7 @@ public class ProfileUiStateHandler {
         binding.layoutStatsCard.setVisibility(View.INVISIBLE);
         binding.btnSync.setVisibility(View.INVISIBLE);
         binding.btnLogout.setVisibility(View.INVISIBLE);
-        binding.btnUpdateProfileImage.setVisibility(View.INVISIBLE);
+        binding.btnUpdateProfileImage.setVisibility(View.GONE);
         binding.textVersion.setVisibility(View.INVISIBLE);
     }
 

@@ -6,8 +6,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.iti.mealmate.databinding.ItemDiscoverResultBinding;
+import com.iti.mealmate.ui.common.ImageLoader;
 import com.iti.mealmate.data.filter.model.entity.FilterItem;
 
 import java.util.ArrayList;
@@ -48,9 +48,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
             holder.binding.textDiscoverTitle.setText(item.getName());
 
             if (item.getImageUrl() != null && !item.getImageUrl().isEmpty()) {
-                Glide.with(holder.binding.getRoot().getContext())
-                        .load(item.getImageUrl())
-                        .into(holder.binding.imageDiscoverThumbnail);
+                ImageLoader.loadWithMealPlaceHolder(holder.binding.getRoot().getContext(), item.getImageUrl(), holder.binding.imageDiscoverThumbnail);
             }
 
             holder.binding.getRoot().setOnClickListener(v -> {

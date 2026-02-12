@@ -6,8 +6,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.iti.mealmate.data.meal.model.entity.Meal;
+import com.iti.mealmate.ui.common.ImageLoader;
 import com.iti.mealmate.data.meal.model.entity.PlannedMeal;
 import com.iti.mealmate.databinding.ItemPlanMealBinding;
 
@@ -57,9 +57,7 @@ public class PlannedMealsAdapter
         holder.binding.textMealName.setText(meal.getName());
         holder.binding.textMealCategory.setText(meal.getCategory());
         holder.binding.textMealCountry.setText(meal.getArea());
-        Glide.with(holder.itemView.getContext())
-                .load(meal.getThumbnailUrl())
-                .into(holder.binding.imageMealThumbnail);
+        ImageLoader.loadWithMealPlaceHolder(holder.itemView.getContext(), meal.getThumbnailUrl(), holder.binding.imageMealThumbnail);
 
         holder.binding.buttonRemoveMeal.setOnClickListener(v -> {
             if (removeListener != null) {

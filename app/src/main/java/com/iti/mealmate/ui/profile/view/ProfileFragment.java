@@ -12,8 +12,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.bumptech.glide.Glide;
 import com.iti.mealmate.R;
+import com.iti.mealmate.ui.common.ImageLoader;
 import com.iti.mealmate.core.util.AppUtils;
 import com.iti.mealmate.data.auth.model.UserModel;
 import com.iti.mealmate.databinding.FragmentProfileBinding;
@@ -103,10 +103,9 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
     @Override
     public void showPickedImage(Uri imageUri) {
-        Glide.with(this)
-                .load(imageUri)
-                .error(R.drawable.onboarding_image_1)
-                .into(binding.imageProfile);
+        ImageLoader.loadCircular(requireContext(),
+                imageUri, binding.imageProfile,
+                R.drawable.user_image_placeholder);
     }
 
     @Override
@@ -116,12 +115,9 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
     private void loadProfileImage(String imageUrl) {
         if (imageUrl != null && !imageUrl.isEmpty()) {
-            Glide.with(this)
-                    .load(imageUrl)
-                    .error(R.drawable.onboarding_image_1)
-                    .into(binding.imageProfile);
+            ImageLoader.loadWithMealPlaceHolder(requireContext(), imageUrl, binding.imageProfile);
         } else {
-            binding.imageProfile.setImageResource(R.drawable.onboarding_image_1);
+            binding.imageProfile.setImageResource(R.drawable.user_image_placeholder);
         }
     }
 

@@ -12,8 +12,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.bumptech.glide.Glide;
 import com.iti.mealmate.R;
+import com.iti.mealmate.ui.common.ImageLoader;
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.data.meal.model.entity.MealIngredient;
 import com.iti.mealmate.databinding.ActivityMealDetailsBinding;
@@ -129,11 +129,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
     @Override
     public void showMealImage(String url) {
-        Glide.with(this)
-                .load(url)
-                .placeholder(R.color.colorSkeleton)
-                .error(R.drawable.error_image)
-                .into(binding.ivMealImage);
+        ImageLoader.loadWithMealPlaceHolder(this, url, binding.ivMealImage);
     }
 
     @Override

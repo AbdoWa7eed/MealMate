@@ -6,8 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.iti.mealmate.R;
+import com.iti.mealmate.ui.common.ImageLoader;
 import com.iti.mealmate.data.meal.model.entity.MealIngredient;
 import com.iti.mealmate.databinding.ItemIngredientBinding;
 
@@ -53,11 +52,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
             binding.tvIngredientName.setText(ingredient.getName());
             binding.tvIngredientMeasure.setText(ingredient.getMeasure());
             
-            Glide.with(itemView.getContext())
-                    .load(ingredient.getImageUrl())
-                    .placeholder(R.color.colorSkeleton)
-                    .error(R.drawable.ic_breakfast)
-                    .into(binding.ivIngredientImage);
+            ImageLoader.loadWithMealPlaceHolder(itemView.getContext(), ingredient.getImageUrl(), binding.ivIngredientImage);
         }
     }
 }

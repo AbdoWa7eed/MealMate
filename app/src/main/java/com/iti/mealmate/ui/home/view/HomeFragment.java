@@ -9,8 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.bumptech.glide.Glide;
 import com.iti.mealmate.data.meal.model.entity.Meal;
+import com.iti.mealmate.ui.common.ImageLoader;
 import com.iti.mealmate.databinding.FragmentHomeBinding;
 import com.iti.mealmate.di.ServiceLocator;
 import com.iti.mealmate.ui.common.ActivityExtensions;
@@ -72,9 +72,7 @@ public class HomeFragment extends Fragment implements HomeView {
     @Override
     public void showMealOfTheDay(Meal meal) {
         if (meal != null) {
-            Glide.with(requireContext())
-                    .load(meal.getThumbnailUrl())
-                    .into(binding.imageMealOfDay);
+            ImageLoader.loadWithMealPlaceHolder(requireContext(), meal.getThumbnailUrl(), binding.imageMealOfDay);
             binding.textMealOfDayName.setText(meal.getName());
             binding.textMealOfDayCountry.setText(meal.getArea());
             uiStateHandler.showContent();

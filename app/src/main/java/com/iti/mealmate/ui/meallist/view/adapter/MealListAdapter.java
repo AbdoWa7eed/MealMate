@@ -6,8 +6,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.iti.mealmate.data.meal.model.entity.MealLight;
+import com.iti.mealmate.ui.common.ImageLoader;
 import com.iti.mealmate.databinding.ItemMealListBinding;
 
 import java.util.ArrayList;
@@ -48,9 +48,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
 
         holder.binding.textMealName.setText(meal.getName());
 
-        Glide.with(holder.itemView.getContext())
-                .load(meal.getThumbnailUrl())
-                .into(holder.binding.imageMealThumbnail);
+        ImageLoader.loadWithMealPlaceHolder(holder.itemView.getContext(), meal.getThumbnailUrl(), holder.binding.imageMealThumbnail);
 
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {

@@ -6,8 +6,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.iti.mealmate.R;
+import com.iti.mealmate.ui.common.ImageLoader;
 import com.iti.mealmate.data.meal.model.entity.Meal;
 import com.iti.mealmate.databinding.ItemTrendingRecipeBinding;
 
@@ -42,9 +42,7 @@ public class TrendingRecipeAdapter extends RecyclerView.Adapter<TrendingRecipeAd
         holder.binding.textTrendingCategory.setText(recipe.getCategory());
         holder.binding.textTrendingCountry.setText(recipe.getArea());
 
-        Glide.with(holder.itemView.getContext())
-                .load(recipe.getThumbnailUrl())
-                .into(holder.binding.imageTrendingThumbnail);
+        ImageLoader.loadWithMealPlaceHolder(holder.itemView.getContext(), recipe.getThumbnailUrl(), holder.binding.imageTrendingThumbnail);
 
         holder.binding.buttonFavImage.setImageResource(
                 recipe.isFavorite() ? R.drawable.ic_fav_filled_primary : R.drawable.ic_fav_filled
