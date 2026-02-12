@@ -95,7 +95,7 @@ public class RegistrationFragment extends Fragment implements RegistrationView {
     public void hideLoading() {
         binding.registerProgressBar.setVisibility(View.GONE);
         binding.registerButton.setEnabled(true);
-        binding.registerButton.setText(R.string.login);
+        binding.registerButton.setText(R.string.sign_up);
         binding.registerButton.setIcon(null);
     }
 
